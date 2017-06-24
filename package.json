@@ -1,7 +1,7 @@
 {
   "name": "twc-ng",
-  "author": "MakeAwesomeHappen",
-  "version": "1.0.0",
+  "author": "EEM",
+  "version": "0.0.0",
   "keywords": ["pebble-app"],
   "private": true,
   "dependencies": {},
@@ -12,12 +12,10 @@
     "enableMultiJS": true,
     "targetPlatforms": [
       "aplite",
-      "basalt",
-      "chalk",
-      "diorite"
+      "basalt"
     ],
     "watchapp": {
-      "watchface": false
+      "watchface": true
     },
     "messageKeys": [
       "dummy"

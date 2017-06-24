@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include "twc-ng.h"
 
 static Window *s_window;
 static TextLayer *s_text_layer;
@@ -19,6 +20,10 @@ static void prv_click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_SELECT, prv_select_click_handler);
   window_single_click_subscribe(BUTTON_ID_UP, prv_up_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, prv_down_click_handler);
+}
+
+static void tick_handler(struct tm *tick_time, TimeUnits units_chanhed) {
+  update_time();
 }
 
 static void prv_window_load(Window *window) {
@@ -44,6 +49,8 @@ static void prv_init(void) {
   });
   const bool animated = true;
   window_stack_push(s_window, animated);
+  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
+  update_time();
 }
 
 static void prv_deinit(void) {
@@ -57,4 +64,15 @@ int main(void) {
 
   app_event_loop();
   prv_deinit();
+}
+
+
+static void update_time() {
+    time_t temp = time(NULL);
+    struct tm *tick_time = localtime(&temp);
+
+    static char s_buffer[8];
+    strftime(s_buffer, sizeof(s_buffer), clock_is_24h_style() ?
+      "%M:%S" : "%M:%S", tick_time);
+    text_layer_set_text(s_text_layer, s_buffer);
 }
