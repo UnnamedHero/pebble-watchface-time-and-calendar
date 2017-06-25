@@ -21,7 +21,13 @@
       "dummy"
     ],
     "resources": {
-      "media": []
+      "media": [
+        {
+          "type": "bitmap",
+          "name": "BLUETOOTH_CONNECTED",
+          "file": "images/bluetooth_20_20.png"
+        }
+      ]
     }
   }
 }
