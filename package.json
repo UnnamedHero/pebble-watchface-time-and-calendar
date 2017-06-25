@@ -2,9 +2,15 @@
   "name": "twc-ng",
   "author": "EEM",
   "version": "0.0.0",
-  "keywords": ["pebble-app"],
+  "keywords": [
+    "pebble-watchface",
+    "twc",
+    "twc-ng"
+  ],
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "pebble-clay": "^1.0.4"
+  },
   "pebble": {
     "displayName": "twc-ng",
     "uuid": "2c40726c-adac-4d55-8ed2-c114030aa0d6",
@@ -14,10 +20,14 @@
       "aplite",
       "basalt"
     ],
+    "capabilities": [
+      "configurable"
+    ],
     "watchapp": {
       "watchface": true
     },
     "messageKeys": [
+      "ClockFormat",
       "dummy"
     ],
     "resources": {
