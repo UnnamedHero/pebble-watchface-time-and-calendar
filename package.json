@@ -27,6 +27,7 @@
       "watchface": true
     },
     "messageKeys": [
+      "PhoneConnectionState",
       "ClockFormat",
       "dummy"
     ],

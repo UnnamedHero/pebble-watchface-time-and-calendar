@@ -1,7 +1,8 @@
 #include <pebble.h>
 #include "twc-ng.h"
+//#include "localize.h"
+#include "settings.h"
 
-ClaySettings settings;
 
 static Window *s_main_window;
 static TextLayer *s_time_layer;
@@ -30,23 +31,15 @@ static GBitmap *s_bt_connected;
 //   window_single_click_subscribe(BUTTON_ID_UP, prv_up_click_handler);
 //   window_single_click_subscribe(BUTTON_ID_DOWN, prv_down_click_handler);
 // }
-static void prv_default_settings() {
-  settings.ClockFormat = true;
-}
 
-static void prv_load_settings() {
-  // Load the default settings
-  prv_default_settings();
-  // Read settings from persistent storage, if they exist
-  persist_read_data(SETTINGS_KEY, &settings, sizeof(settings));
-}
+
 
 // Save the settings to persistent storage
-static void prv_save_settings() {
-  persist_write_data(SETTINGS_KEY, &settings, sizeof(settings));
-  // Update the display based on new settings
-  prv_update_display();
-}
+// static void prv_save_settings() {
+//   save_settings();
+//   // Update the display based on new settings
+//   prv_update_display();
+// }
 
 static void prv_update_display() {
   update_time();
@@ -89,18 +82,16 @@ static void prv_window_unload(Window *window) {
   bitmap_layer_destroy(s_top_panel_layer_1);
 }
 
-static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) {
-  Tuple *is_clock_24h_t = dict_find(iter, MESSAGE_KEY_ClockFormat);
-  if(is_clock_24h_t) {
-    settings.ClockFormat= is_clock_24h_t->value->int32 == 1;
-  }
-  prv_save_settings();
+void settings_update_handler() {
+  prv_update_display();
 }
-static void prv_init(void) {
-  prv_load_settings();
 
-  app_message_register_inbox_received(prv_inbox_received_handler);
-  app_message_open(128, 128);
+static void prv_init() {
+  //locale_init();
+  // int (*handler_ptr)(void) = NULL;
+  // handler_ptr = &settings_update_handler;
+  // init_settings(handler_ptr);
+  init_settings(settings_update_handler);
 
   s_main_window = window_create();
 //  window_set_click_config_provider(s_window, prv_click_config_provider);
@@ -125,7 +116,7 @@ static void prv_deinit(void) {
 int main(void) {
   prv_init();
 
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Done initializing, pushed window: %p", s_main_window);
+
 
   app_event_loop();
   prv_deinit();
@@ -134,9 +125,8 @@ int main(void) {
 static void update_time() {
     time_t temp = time(NULL);
     struct tm *tick_time = localtime(&temp);
-
-    static char s_buffer[8];
-    strftime(s_buffer, sizeof(s_buffer), settings.ClockFormat ?
-      "%H:%M" : "%I:%M", tick_time);
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "time format:[%s]", settings_get_clockformat());
+    static char s_buffer[8];//    char format[5];
+    strftime(s_buffer, sizeof(s_buffer), settings_get_clockformat(), tick_time);
     text_layer_set_text(s_time_layer, s_buffer);
 }
