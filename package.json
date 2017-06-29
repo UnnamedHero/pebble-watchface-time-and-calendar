@@ -21,14 +21,20 @@
       "basalt"
     ],
     "capabilities": [
-      "configurable"
+      "configurable",
+      "location"
     ],
     "watchapp": {
       "watchface": true
     },
     "messageKeys": [
-      "PhoneConnectionState",
       "ClockFormat",
+      "ConfigMarker",
+      "JSReady",
+      "PhoneConnectionState",
+      "WeatherAPIKey",
+      "WeatherMarker",
+      "WeatherTemperature",
       "dummy"
     ],
     "resources": {

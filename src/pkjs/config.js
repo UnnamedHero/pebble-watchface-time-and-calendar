@@ -30,7 +30,33 @@ module.exports = [
           }
         ],
         "defaultValue": "cf_respect"
+      },
+      {
+        "type": "toggle",
+        "id": "ConfigMarker",
+        "messageKey": "ConfigMarker",
+        "defaultValue": "true"
       }
+    ]
+  },
+  {
+    "type": "section",
+    "items": [
+        {
+          "type": "heading",
+          "defaultValue": "Weather Configuration"
+        },
+        {
+          "type": "text",
+          "defaultValue": "get your own API key at <a href='http://home.openweathermap.org/users/sign_up'>OpenWWeatherMap site</a> for free and input in to a field below."
+        },
+        {
+          "type": "input",
+          "messageKey": "WeatherAPIKey",
+          "id": "WeatherAPIKey",
+          "label": "API Key",
+          "defaultValue": ""
+        }
     ]
   },
   {
