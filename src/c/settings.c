@@ -39,7 +39,7 @@ char* settings_get_weather_apikey() {
 static void prv_load_settings() {
   // Load the default settings
   prv_default_settings();
-APP_LOG(APP_LOG_LEVEL_DEBUG, "Loading persist settings");
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Loading persist settings");
   // Read settings from persistent storage, if they exist
   persist_read_data(SETTINGS_KEY, &settings, sizeof(settings));
 
