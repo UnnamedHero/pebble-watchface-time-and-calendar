@@ -31,7 +31,8 @@ function locationSuccess(pos) {
   // We will request the weather here
   // var apiKey = clay.getItemById('WeatherAPIKey').get();
   // console.log(apiKey);
-   if (weatherAPIKey == "not_set" ) {
+  return;
+   if (weatherAPIKey == "not_set" || weatherAPIKey == "invalid_api_key" ) {
      console.log("ERROR: Weather API key is not set.");
      return;
    }
@@ -44,7 +45,16 @@ function locationSuccess(pos) {
     // responseText contains a JSON object with weather info
       var json = JSON.parse(responseText);
     // Temperature in Kelvin requires adjustment
-//    console.log(responseText);
+      console.log(responseText);
+      if (json.cod === 401) {
+        console.log (json.message);
+        var dict = {
+          "ConfigMarker": true,
+          "WeatherAPIKey": "invalid_api_key"
+        };
+        Pebble.sendAppMessage(dict);
+        return;
+      }
       var temperature = Math.round(json.main.temp - 273.15);
       console.log('Temperature is ' + temperature);
     // Conditions
@@ -88,8 +98,6 @@ Pebble.addEventListener('ready',
   function(e) {
     console.log('PebbleKit JS ready!');
     Pebble.sendAppMessage({'JSReady': 1});
-    // Get the initial weather
-    //getWeather();
   }
 );
 
@@ -97,11 +105,7 @@ Pebble.addEventListener('appmessage', function(e) {
   var dict = e.payload;
   if (dict['WeatherAPIKey']) {
     weatherAPIKey = dict['WeatherAPIKey'];
-    console.log("REceived Weather API Key:", weatherAPIKey);
-    getWeather();
-  }  
-  if (dict['WeatherMarker']) {
+    console.log("Received Weather API Key:", weatherAPIKey);
     getWeather();
   }
-
 });

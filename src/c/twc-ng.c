@@ -5,8 +5,8 @@
 #include "weather.h"
 #include "layers/top-panel-layer.h"
 #include "windows/time-window.h"
-
-
+#include "utils/include/timeutils.h"
+#include "utils/include/vibe.h"
 
 static bool s_js_ready;
 
@@ -50,12 +50,20 @@ static void prv_update_display() {
   update_time();
 }
 
+static void prv_periodic_vibrate(struct tm *timer) {
+  if (timer->tm_sec % 10 == 0) {
+  if (settings_get_VibratePeriodic() && can_vibrate()) {
+    do_vibrate(settings_get_VibratePeriodicType());
+  }
+}
+}
 
-static void tick_handler(struct tm *tick_time, TimeUnits units_chanhed) {
-  update_time();
-
+static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
+  //update_time();
+  prv_periodic_vibrate(tick_time);
+//  change_pic(tick_time->tm_min);
   if (tick_time->tm_min % 15 == 0) {
-    update_weather();
+    //update_weather();
   }
 }
 
@@ -94,18 +102,14 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
 }
 
 static void prv_init() {
-  //locale_init();
-  // int (*handler_ptr)(void) = NULL;
-  // handler_ptr = &settings_update_handler;
-  // init_settings(handler_ptr);
   init_settings(settings_update_handler);
 
   app_message_register_inbox_received(prv_inbox_received_handler);
   app_message_open(128, 128);
   init_time_window();
-  //window_stack_push(get_time_window(), animated);
 
-  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+//  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
   update_time();
 }
 

@@ -31,7 +31,15 @@
       "ClockFormat",
       "ConfigMarker",
       "JSReady",
-      "PhoneConnectionState",
+      "RespectQuietTime",
+      "VibrateConnected",
+      "VibrateConnectedType",
+      "VibrateDisconnected",
+      "VibrateDisconnectedType",
+      "VibrateDuringCharging",
+      "VibratePeriodic",
+      "VibratePeriodicPeroid",
+      "VibratePeriodicType",
       "WeatherAPIKey",
       "WeatherMarker",
       "WeatherMarkerForecast",
@@ -44,6 +52,11 @@
           "type": "bitmap",
           "name": "BLUETOOTH_CONNECTED",
           "file": "images/bluetooth_20_20.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "BLUETOOTH_LOST",
+          "file": "images/bluetoothno.png"
         }
       ]
     }
