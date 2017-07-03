@@ -106,6 +106,12 @@ module.exports = [
       },
       {
         "type": "toggle",
+        "messageKey": "VibrateDuringCharged",
+        "label": "Vibe during Pebble charging",
+        "defaultValue": false
+      },
+      {
+        "type": "toggle",
         "messageKey": "VibrateConnected",
         "id": "VibrateConnected",
         "label": "Vibe on phone connect",

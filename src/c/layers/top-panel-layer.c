@@ -1,10 +1,12 @@
 #include <pebble.h>
 #include "top-panel-layer.h"
 #include "../modules/include/bluetooth.h"
+#include "../modules/include/battery.h"
 
 static Layer *layer;
 //static GBitmap *s_bt_icon;
-//static const GRect bt_rect = GRect(0,0, 20, 20);
+static const GRect bt_rect = GRect(0,0, 20, 20);
+static GRect batt_rect;
 
 static void populate_layer(Layer *, GContext *);
 //static void top_layer_update_handler(UPDATE_FLAG);
@@ -13,10 +15,13 @@ static void populate_layer(Layer *, GContext *);
 void init_top_panel_layer(GRect bounds) {
 //  s_bt_connected = gbitmap_create_with_resource(RESOURCE_ID_BLUETOOTH_CONNECTED);
   layer = layer_create(GRect(0, 0, bounds.size.w, TOP_LATER_HEIGHT));
+  batt_rect = GRect (bounds.size.w - 35, 0, 35, TOP_LATER_HEIGHT);
   layer_set_update_proc(layer, populate_layer);
-  init_bluetooh();
+  init_bluetooh(bt_rect);
+  init_battery_layer(batt_rect);
 
   layer_add_child(layer, get_layer_bluetooth());
+  layer_add_child(layer, get_layer_battery());
   // connection_service_subscribe((ConnectionHandlers) {
   //   .pebble_app_connection_handler = prv_bt_connection_status,
   //   .pebblekit_connection_handler = NULL,
@@ -27,6 +32,7 @@ void init_top_panel_layer(GRect bounds) {
 
 void deinit_top_panel_layer() {
   deinit_bluetooth();
+  deinit_battery_layer();
   if (layer) {
     layer_destroy(layer);
   }

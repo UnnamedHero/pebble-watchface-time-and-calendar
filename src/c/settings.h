@@ -33,6 +33,7 @@ char* settings_get_clockformat();
 char* settings_get_weather_apikey();
 
 bool settings_get_RespectQuietTime();
+bool settings_get_VibrateDuringCharging();
 bool settings_get_VibrateConnected();
 VIBE settings_get_VibrateConnectedType();
 bool settings_get_VibrateDisconnected();

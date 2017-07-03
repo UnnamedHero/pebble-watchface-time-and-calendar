@@ -32,6 +32,7 @@
       "ConfigMarker",
       "JSReady",
       "RespectQuietTime",
+      "VibrateDuringCharged",
       "VibrateConnected",
       "VibrateConnectedType",
       "VibrateDisconnected",

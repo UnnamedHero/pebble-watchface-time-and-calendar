@@ -24,7 +24,7 @@ void deinit_time_window() {
 static void prv_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
-
+  window_set_background_color(window, GColorBlack);
 //-----bitmaps
   init_top_panel_layer(bounds);
 

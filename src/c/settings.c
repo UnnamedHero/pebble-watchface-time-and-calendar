@@ -7,6 +7,7 @@ typedef struct ClaySettings {
   char WeatherAPIKey[33];
   char ClockFormat[6];
   uint8_t RespectQuietTime;
+  uint8_t VibrateDuringCharged;
   uint8_t VibrateConnected;
   VIBE VibrateConnectedType;
   uint8_t VibrateDisconnected;
@@ -26,6 +27,8 @@ static callback_ptr settings_update_handler = NULL;
 static void prv_default_settings() {
   strcpy(settings.ClockFormat, "%H:%M");
   strcpy(settings.WeatherAPIKey, "not_set");
+  settings.RespectQuietTime = 1;
+  settings.VibrateDuringCharged = 0;
   settings.VibrateConnected = 1;
   settings.VibrateConnectedType = VP_SHORT;
   settings.VibrateDisconnected = 1;
@@ -67,6 +70,10 @@ bool settings_get_RespectQuietTime() {
   return get_bool(settings.RespectQuietTime);
 }
 
+bool settings_get_VibrateDuringCharging() {
+  return get_bool(settings.VibrateDuringCharging);
+}
+
 bool settings_get_VibrateConnected() {
   return get_bool(settings.VibrateConnected);
 }
@@ -96,9 +103,9 @@ VIBE settings_get_VibrateDisconnectedType() {
   return settings.VibrateDisconnectedType;
 }
 
-bool settings_get_VibrateDuringCharging() {
-  return get_bool(settings.VibrateDuringCharging);
-};
+// bool settings_get_VibrateDuringCharging() {
+//   return get_bool(settings.VibrateDuringCharging);
+// };
 
 bool settings_get_VibratePeriodic() {
   return get_bool(settings.VibratePeriodic);
