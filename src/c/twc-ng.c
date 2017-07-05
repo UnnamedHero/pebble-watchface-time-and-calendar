@@ -118,6 +118,7 @@ static void prv_deinit(void) {
 }
 
 int main(void) {
+  //APP_LOG(APP_LOG_LEVEL_DEBUG, "Locale: %s", i18n_get_system_locale());
   prv_init();
   app_event_loop();
   prv_deinit();

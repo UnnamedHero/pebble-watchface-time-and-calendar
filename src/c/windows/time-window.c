@@ -1,6 +1,7 @@
 #include <pebble.h>
 #include "time-window.h"
 #include "../layers/top-panel-layer.h"
+#include "../layers/include/datetime-layer.h"
 #include "../settings.h"
 
 static Window *s_time_window;
@@ -26,8 +27,10 @@ static void prv_window_load(Window *window) {
   GRect bounds = layer_get_bounds(window_layer);
   window_set_background_color(window, GColorBlack);
 //-----bitmaps
-  init_top_panel_layer(bounds);
-
+  GRect toplayer_bounds = GRect (0, 0, bounds.size.w, 20);
+  GRect datetime_bounds = GRect (0, 20, bounds.size.w, 60);
+  init_top_panel_layer(toplayer_bounds);
+  init_datetime_layer(datetime_bounds);
 //----bitmap layers
 
   //bitmap_layer_create((GRect(0, 0, bounds.size.w, 20)));
@@ -48,6 +51,7 @@ static void prv_window_load(Window *window) {
 
 //---adding layers
   layer_add_child(window_layer, get_top_panel_layer());
+  layer_add_child(window_layer, get_datetime_layer());
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
   layer_add_child(window_layer, text_layer_get_layer(s_weather_layer));
   prv_update_window();
@@ -58,6 +62,7 @@ static void prv_window_unload(Window *window) {
   text_layer_destroy(s_weather_layer);
   //layer_destroy(s_top_panel_layer_1);
   deinit_top_panel_layer();
+  deinit_datetime_layer();
 }
 
 void init_time_window() {

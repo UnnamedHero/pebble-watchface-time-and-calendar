@@ -22,6 +22,10 @@ typedef enum Periods {
   P_6H
 } PERIOD;
 
+typedef enum DateTimeFormat {
+  YYYY_MM_DD
+} DT_FORMAT;
+
 typedef void (*callback_ptr)(UPDATE_FLAG);
 
 void init_settings(callback_ptr callback);
