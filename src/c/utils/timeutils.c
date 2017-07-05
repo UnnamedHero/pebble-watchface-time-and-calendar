@@ -24,7 +24,10 @@ char* get_currect_time(DT_FORMAT dtf) {
 
   switch (dtf) {
     case YYYY_MM_DD:
-      strcpy(format, "%b.%Y.%m.%d");
+      strcpy(format, "%Y.%m.%d");
+      break;
+    case CLOCK_FORMAT:
+      strcpy(format, settings_get_clockformat());
       break;
     }
   strftime(d_buffer, sizeof(d_buffer), format, tick_time);

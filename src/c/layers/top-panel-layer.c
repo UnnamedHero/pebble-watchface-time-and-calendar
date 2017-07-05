@@ -39,3 +39,7 @@ static void populate_layer(Layer *layer, GContext *ctx) {
   //graphics_draw_bitmap_in_rect(ctx, s_bt_icon, GRect(0,0, 20, 20));
   APP_LOG(APP_LOG_LEVEL_DEBUG, "redraw top-panel-layer");
  }
+
+// void layer_update_time(struct tm *timer) {
+//
+// }

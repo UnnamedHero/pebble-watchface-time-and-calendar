@@ -23,7 +23,8 @@ typedef enum Periods {
 } PERIOD;
 
 typedef enum DateTimeFormat {
-  YYYY_MM_DD
+  YYYY_MM_DD,
+  CLOCK_FORMAT
 } DT_FORMAT;
 
 typedef void (*callback_ptr)(UPDATE_FLAG);

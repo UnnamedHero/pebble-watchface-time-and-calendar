@@ -47,7 +47,7 @@ static bool s_js_ready;
 // }
 
 static void prv_update_display() {
-  update_time();
+  //update_time();
 }
 
 static void prv_periodic_vibrate(struct tm *timer) {
@@ -61,6 +61,8 @@ static void prv_periodic_vibrate(struct tm *timer) {
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   //update_time();
   prv_periodic_vibrate(tick_time);
+
+  window_update_time();
 //  change_pic(tick_time->tm_min);
   if (tick_time->tm_min % 15 == 0) {
     //update_weather();
@@ -109,8 +111,8 @@ static void prv_init() {
   init_time_window();
 
 //  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
-tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
-  update_time();
+  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
+//  update_time();
 }
 
 static void prv_deinit(void) {
