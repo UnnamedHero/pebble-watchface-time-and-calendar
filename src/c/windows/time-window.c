@@ -2,6 +2,7 @@
 #include "time-window.h"
 #include "../layers/top-panel-layer.h"
 #include "../layers/include/datetime-layer.h"
+#include "../modules/include/calendar_m.h"
 #include "../settings.h"
 
 static Window *s_time_window;
@@ -29,8 +30,11 @@ static void prv_window_load(Window *window) {
 //-----bitmaps
   GRect toplayer_bounds = GRect (0, 0, bounds.size.w, 20);
   GRect datetime_bounds = GRect (0, 20, bounds.size.w, 60);
+  GRect calendar_bounds = GRect (0, 80, bounds.size.w, bounds.size.h - 80);
   init_top_panel_layer(toplayer_bounds);
   init_datetime_layer(datetime_bounds);
+  init_calendar_layer(calendar_bounds);
+
 //----bitmap layers
 
   //bitmap_layer_create((GRect(0, 0, bounds.size.w, 20)));
@@ -45,13 +49,14 @@ static void prv_window_load(Window *window) {
   // text_layer_set_text(s_time_layer, "00:00");
   // text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
 
-  text_layer_set_text(s_weather_layer, "n/a");
-  text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
+  //text_layer_set_text(s_weather_layer, "n/a");
+  //text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
 
 
 //---adding layers
   layer_add_child(window_layer, get_top_panel_layer());
   layer_add_child(window_layer, get_datetime_layer());
+  layer_add_child(window_layer, get_layer_calendar());
 //  layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
   //layer_add_child(window_layer, text_layer_get_layer(s_weather_layer));
 //  prv_update_window();
@@ -63,7 +68,9 @@ static void prv_window_unload(Window *window) {
   //layer_destroy(s_top_panel_layer_1);
   deinit_top_panel_layer();
   deinit_datetime_layer();
+  deinit_calendar_layer();
 }
+
 
 void init_time_window() {
   s_time_window = window_create();

@@ -31,7 +31,7 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
     GRect bb = layer_get_bounds(me);
     int width = s_battery_level.charge_percent * 3 / 10;
     APP_LOG(APP_LOG_LEVEL_DEBUG, "State is %d, width is %d", s_battery_level.charge_percent, width);
-    GRect battery_inner_bar = GRect(2, 2, width - 4, bb.size.h -4);
+    GRect battery_inner_bar = GRect(2, 2, width, bb.size.h -4);
 //    GRect battery_pin = GRect(bb.size.w - 5, bb.origin.y -10, 3, 10);
     graphics_draw_rect(ctx, layer_get_bounds(me));
     graphics_fill_rect(ctx, battery_inner_bar, 0, GCornerNone);

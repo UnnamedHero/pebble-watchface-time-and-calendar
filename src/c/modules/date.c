@@ -5,7 +5,7 @@
 
 static Layer *s_this_layer;
 static void prv_populate_date_layer(Layer *, GContext *);
-static char
+//static char
 
 void init_date_layer(GRect rect) {
   s_this_layer = layer_create(rect);
