@@ -58,6 +58,16 @@
           "type": "bitmap",
           "name": "BLUETOOTH_LOST",
           "file": "images/bluetoothno.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "BATTERY_CHARGING",
+          "file": "images/battery_charging.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "BATTERY_CHARGED",
+          "file": "images/battery_charged.png"
         }
       ]
     }

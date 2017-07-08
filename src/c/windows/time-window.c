@@ -1,9 +1,10 @@
 #include <pebble.h>
 #include "time-window.h"
-#include "../layers/top-panel-layer.h"
+//#include "../layers/top-panel-layer.h"
 #include "../layers/include/datetime-layer.h"
 #include "../modules/include/calendar_m.h"
 #include "../modules/include/bluetooth_m.h"
+#include "../modules/include/battery_m.h"
 #include "../settings.h"
 
 static Window *s_time_window;
@@ -33,9 +34,10 @@ static void prv_window_load(Window *window) {
   GRect bluetooth_bounds = GRect (0, 0, 20, 20);
   GRect datetime_bounds = GRect (0, 20, bounds.size.w, 60);
   GRect calendar_bounds = GRect (0, 80, bounds.size.w, bounds.size.h - 80);
-
-  init_top_panel_layer(toplayer_bounds);
+  GRect battery_bounds = GRect (bounds.size.w - 45, 0, 45, 20);
+//  init_top_panel_layer(toplayer_bounds);
   init_bluetooh_layer(bluetooth_bounds);
+  init_battery_layer(battery_bounds);
   init_datetime_layer(datetime_bounds);
   init_calendar_layer(calendar_bounds);
 
@@ -58,8 +60,9 @@ static void prv_window_load(Window *window) {
 
 
 //---adding layers
-  layer_add_child(window_layer, get_top_panel_layer());
+//  layer_add_child(window_layer, get_top_panel_layer());
   layer_add_child(window_layer, get_layer_bluetooth());
+  layer_add_child(window_layer, get_layer_battery());
   layer_add_child(window_layer, get_datetime_layer());
   layer_add_child(window_layer, get_layer_calendar());
 //  layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
@@ -71,8 +74,9 @@ static void prv_window_unload(Window *window) {
 //  text_layer_destroy(s_time_layer);
   text_layer_destroy(s_weather_layer);
   //layer_destroy(s_top_panel_layer_1);
-  deinit_top_panel_layer();
+//  deinit_top_panel_layer();
   deinit_bluetooth_layer();
+  deinit_battery_layer();
   deinit_datetime_layer();
   deinit_calendar_layer();
 }

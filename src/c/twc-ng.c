@@ -3,7 +3,7 @@
 //#include "localize.h"
 #include "settings.h"
 #include "weather.h"
-#include "layers/top-panel-layer.h"
+//#include "layers/top-panel-layer.h"
 #include "windows/time-window.h"
 #include "utils/include/timeutils.h"
 #include "utils/include/vibe.h"
