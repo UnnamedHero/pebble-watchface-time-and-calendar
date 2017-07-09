@@ -1,7 +1,7 @@
 #include <pebble.h>
 #include "time-window.h"
 //#include "../layers/top-panel-layer.h"
-#include "../layers/include/datetime-layer.h"
+//#include "../layers/include/datetime-layer.h"
 #include "../modules/include/calendar_m.h"
 #include "../modules/include/bluetooth_m.h"
 #include "../modules/include/battery_m.h"
@@ -32,7 +32,7 @@ static void prv_window_load(Window *window) {
   GRect bounds = layer_get_bounds(window_layer);
   window_set_background_color(window, GColorBlack);
 //-----bitmaps
-  GRect toplayer_bounds = GRect (0, 0, bounds.size.w, 20);
+//  GRect toplayer_bounds = GRect (0, 0, bounds.size.w, 20);
   GRect bluetooth_bounds = GRect (0, 0, 20, 20);
   GRect battery_bounds = GRect (bounds.size.w - 45, 0, 45, 20);
   GRect date_bounds = GRect(0, 13, bounds.size.w, 24);
@@ -111,7 +111,8 @@ void init_time_window() {
 // }
 
 void window_update_time() {
-  layer_update_time();
+  //layer_update_time();
+  time_layer_update_time();
 }
 
 // void update_time() {
