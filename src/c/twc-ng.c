@@ -2,7 +2,7 @@
 #include "twc-ng.h"
 //#include "localize.h"
 #include "settings.h"
-#include "weather.h"
+//#include "weather.h"
 //#include "layers/top-panel-layer.h"
 #include "windows/time-window.h"
 #include "utils/include/timeutils.h"
@@ -74,7 +74,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 
 void settings_update_handler(UPDATE_FLAG f) {
   if (f == UF_WEATHER) {
-    init_weather(settings_get_weather_apikey());
+//    init_weather(settings_get_weather_apikey());
   }
   prv_update_display();
 }
@@ -83,7 +83,8 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
   Tuple *js_ready_t = dict_find(iter, MESSAGE_KEY_JSReady);
   if (js_ready_t) {
     s_js_ready = true;
-    init_weather(settings_get_weather_apikey());
+    ready_for_weather();
+    //init_weather(settings_get_weather_apikey());
   }
 
   Tuple *config_marker = dict_find(iter, MESSAGE_KEY_ConfigMarker);

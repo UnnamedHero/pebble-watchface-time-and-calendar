@@ -7,6 +7,7 @@
 #include "../modules/include/battery_m.h"
 #include "../modules/include/date_m.h"
 #include "../modules/include/time_m.h"
+#include "../modules/include/weather_m.h"
 #include "../settings.h"
 
 static Window *s_time_window;
@@ -39,7 +40,7 @@ static void prv_window_load(Window *window) {
   //GRect datetime_bounds = GRect (0, 20, bounds.size.w, 60);
   GRect time_bounds = GRect (0, 28, bounds.size.w, 42);
   GRect calendar_bounds = GRect (2, 70, bounds.size.w, 73);
-
+  GRect weather_bounds = GRect (0, 143, bounds.size.w, bounds.size.h - 123);
 //  init_top_panel_layer(toplayer_bounds);
   init_bluetooh_layer(bluetooth_bounds);
   init_battery_layer(battery_bounds);
@@ -47,7 +48,7 @@ static void prv_window_load(Window *window) {
   init_time_layer(time_bounds);
   //init_datetime_layer(datetime_bounds);
   init_calendar_layer(calendar_bounds);
-
+  init_weather_layer(weather_bounds);
 //----bitmap layers
 
   //bitmap_layer_create((GRect(0, 0, bounds.size.w, 20)));
@@ -74,6 +75,7 @@ static void prv_window_load(Window *window) {
   layer_add_child(window_layer, get_layer_time());
   //layer_add_child(window_layer, get_datetime_layer());
   layer_add_child(window_layer, get_layer_calendar());
+  layer_add_child(window_layer, get_layer_weather());
 //  layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
   //layer_add_child(window_layer, text_layer_get_layer(s_weather_layer));
 //  prv_update_window();
@@ -89,6 +91,7 @@ static void prv_window_unload(Window *window) {
   deinit_date_layer();
   deinit_time_layer();
   deinit_calendar_layer();
+  deinit_weather_layer();
 }
 
 
@@ -124,12 +127,10 @@ void window_update_time() {
 //     text_layer_set_text(s_time_layer, s_buffer);
 // }
 
+void ready_for_weather() {
+  update_weather();
+}
 
 void simple_weather_update(DictionaryIterator *iter, void *context) {
-  Tuple *w_temp = dict_find(iter, MESSAGE_KEY_WeatherTemperature);
-  if (w_temp) {
-    static char w_tempbuffer[4];
-    snprintf(w_tempbuffer, sizeof(w_tempbuffer), "%dC", (int)w_temp->value->int32);
-    text_layer_set_text(s_weather_layer, w_tempbuffer);
-  }
+  get_weather(iter, context);
 }

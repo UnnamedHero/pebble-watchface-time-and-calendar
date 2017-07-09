@@ -5,4 +5,5 @@ void deinit_time_window();
 Window* get_time_window();
 
 void window_update_time();
+void ready_for_weather();
 void simple_weather_update(DictionaryIterator *iter, void *context);

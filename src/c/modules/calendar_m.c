@@ -46,26 +46,19 @@ static void fill_dates() {
   time_t now, previous_week_start, filler;
   now = time(NULL);
 
-  //int current_date = ct->tm_mday;
   int current_week_day = ct->tm_wday;
-  //int current_week = ct->tm_yday % 7 + 1;
-  //int current_month = ct->tm_mon;
   struct tm *filler_t;
-  previous_week_start = now - (6 + current_week_day) * SECONDS_PER_DAY;
-  if (settings_get_SundayFirst()) {
-    previous_week_start -= SECONDS_PER_DAY;
+  previous_week_start = now - (7 + current_week_day) * SECONDS_PER_DAY;
+  if (!settings_get_SundayFirst()) {
+    previous_week_start -= 6 * SECONDS_PER_DAY;
   }
+  
   filler = previous_week_start;
-  //next_week_end = now + (14 - current_week_day) * SECONDS_PER_DAY;
   filler_t = localtime(&filler);
-
-  //nwe_t = localtime(&next_week_end);
-  //APP_LOG(APP_LOG_LEVEL_DEBUG, "prev monday is:%i", pws_t->tm_mday);
   for (int i = 0; i < 21; i++) {
     days[i] = filler_t->tm_mday;
     filler += SECONDS_PER_DAY;
     filler_t = localtime(&filler);
-    //APP_LOG(APP_LOG_LEVEL_DEBUG, "day [%i] is [%i]", i+1, days[i]);
   }
 }
 
@@ -139,7 +132,7 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
    prv_update_time();
    int current_week_day_abbr_index;
    if (settings_get_SundayFirst()) {
-    current_week_day_abbr_index = ct->tm_wday; 
+    current_week_day_abbr_index = ct->tm_wday;
    } else {
     current_week_day_abbr_index = ct->tm_wday == 0 ? 6 : ct->tm_wday - 1;
   }

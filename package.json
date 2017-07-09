@@ -45,6 +45,11 @@
       "WeatherMarker",
       "WeatherMarkerForecast",
       "WeatherTemperature",
+      "WeatherDesc",
+      "WeatherHumidity",
+      "WeatherPressure",
+      "WeatherWindSpeed",
+      "WeatherWindDirection",   
       "SundayFirst",
       "dummy"
     ],
