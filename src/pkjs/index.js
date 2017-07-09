@@ -14,7 +14,7 @@ var clay = new Clay(clayConfig, customFunctions);
 // });
 var messageKeys = require('message_keys');
 
-var weatherAPIKey = "not_set";
+var weatherAPIKey = "ad68120f127506277ac967b76c4ae687";
 // var settings = clay.getSettings();
 // console.log(settings[messageKey.WeatherAPIKey]);
 
@@ -31,7 +31,8 @@ function locationSuccess(pos) {
   // We will request the weather here
   // var apiKey = clay.getItemById('WeatherAPIKey').get();
   // console.log(apiKey);
-  return;
+  weatherAPIKey = "ad68120f127506277ac967b76c4ae687";
+  //return;
    if (weatherAPIKey == "not_set" || weatherAPIKey == "invalid_api_key" ) {
      console.log("ERROR: Weather API key is not set.");
      return;
@@ -55,6 +56,7 @@ function locationSuccess(pos) {
         Pebble.sendAppMessage(dict);
         return;
       }
+      console.log (json.message);
       var temperature = Math.round(json.main.temp - 273.15);
       console.log('Temperature is ' + temperature);
     // Conditions

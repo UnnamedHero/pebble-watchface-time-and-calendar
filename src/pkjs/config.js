@@ -62,6 +62,22 @@ module.exports = [
         "defaultValue": "cf_respect"
       },
       {
+        "type": "select",
+        "label": "Week starts on...",
+        "messageKey": "SundayFirst",
+        "options": [
+          {
+            "label": "Sunday",
+            "value": "sun"
+          },
+          {
+            "label": "Monday",
+            "value": "mon"
+          }
+        ],
+        "defaultValue": "mon"
+      },
+      {
         "type": "toggle",
         "id": "ConfigMarker",
         "messageKey": "ConfigMarker",

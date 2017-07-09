@@ -45,6 +45,7 @@
       "WeatherMarker",
       "WeatherMarkerForecast",
       "WeatherTemperature",
+      "SundayFirst",
       "dummy"
     ],
     "resources": {

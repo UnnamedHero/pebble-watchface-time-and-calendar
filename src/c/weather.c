@@ -16,6 +16,7 @@ void init_weather(char *apiKey) {
     APP_LOG(APP_LOG_LEVEL_ERROR, "Error preparing_outbox: %d", (int)result);
   }
 }
+
 void update_weather() {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Let's get weather!");
   // Begin dictionary

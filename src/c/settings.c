@@ -16,6 +16,7 @@ typedef struct ClaySettings {
   uint8_t VibratePeriodic;
   PERIOD VibratePeriodicPeroid;
   VIBE VibratePeriodicType;
+  uint8_t SundayFirst;
   // bool showPebbleConnection;
   // bool showPebbleBattery;
   // bool showPebbleBatteryPercents;
@@ -37,6 +38,7 @@ static void prv_default_settings() {
   settings.VibratePeriodic = 1;
   settings.VibratePeriodicPeroid = P_1H;
   settings.VibratePeriodicType = VP_LONG;
+  settings.SundayFirst = 0;
   // settings.showPebbleBattery = true;
   // settings.showPebbleConnection = true;
   // settings.showPebbleBatteryPercents = true;
@@ -101,6 +103,10 @@ bool settings_get_VibrateDisconnected() {
 
 VIBE settings_get_VibrateDisconnectedType() {
   return settings.VibrateDisconnectedType;
+}
+
+bool settings_get_SundayFirst() {
+  return get_bool(settings.SundayFirst);
 }
 
 // bool settings_get_VibrateDuringCharging() {
@@ -229,6 +235,11 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     settings.VibratePeriodicType = get_vibe(vibr_per_type->value->cstring);
   }
 
+  Tuple *sunday_first = dict_find(iter, MESSAGE_KEY_SundayFirst);
+  if (vibr_per_type) {
+    //char sf_option[4] = sunday_first->value->cstring;
+    settings.SundayFirst = strcmp(sunday_first->value->cstring, "sun") == 0 ? 1 : 0;
+  }
   save_settings();
 }
 

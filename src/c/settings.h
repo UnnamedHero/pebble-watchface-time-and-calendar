@@ -49,3 +49,4 @@ bool settings_get_VibrateDuringCharging();
 bool settings_get_VibratePeriodic();
 PERIOD settings_get_VibratePeriodicPeroid();
 VIBE settings_get_VibratePeriodicType();
+bool settings_get_SundayFirst();
