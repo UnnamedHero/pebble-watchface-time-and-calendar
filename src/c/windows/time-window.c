@@ -5,6 +5,8 @@
 #include "../modules/include/calendar_m.h"
 #include "../modules/include/bluetooth_m.h"
 #include "../modules/include/battery_m.h"
+#include "../modules/include/date_m.h"
+#include "../modules/include/time_m.h"
 #include "../settings.h"
 
 static Window *s_time_window;
@@ -32,13 +34,18 @@ static void prv_window_load(Window *window) {
 //-----bitmaps
   GRect toplayer_bounds = GRect (0, 0, bounds.size.w, 20);
   GRect bluetooth_bounds = GRect (0, 0, 20, 20);
-  GRect datetime_bounds = GRect (0, 20, bounds.size.w, 60);
-  GRect calendar_bounds = GRect (0, 80, bounds.size.w, bounds.size.h - 80);
   GRect battery_bounds = GRect (bounds.size.w - 45, 0, 45, 20);
+  GRect date_bounds = GRect(0, 13, bounds.size.w, 24);
+  //GRect datetime_bounds = GRect (0, 20, bounds.size.w, 60);
+  GRect time_bounds = GRect (0, 28, bounds.size.w, 42);
+  GRect calendar_bounds = GRect (2, 70, bounds.size.w, 73);
+
 //  init_top_panel_layer(toplayer_bounds);
   init_bluetooh_layer(bluetooth_bounds);
   init_battery_layer(battery_bounds);
-  init_datetime_layer(datetime_bounds);
+  init_date_layer(date_bounds);
+  init_time_layer(time_bounds);
+  //init_datetime_layer(datetime_bounds);
   init_calendar_layer(calendar_bounds);
 
 //----bitmap layers
@@ -63,7 +70,9 @@ static void prv_window_load(Window *window) {
 //  layer_add_child(window_layer, get_top_panel_layer());
   layer_add_child(window_layer, get_layer_bluetooth());
   layer_add_child(window_layer, get_layer_battery());
-  layer_add_child(window_layer, get_datetime_layer());
+  layer_add_child(window_layer, get_layer_date());
+  layer_add_child(window_layer, get_layer_time());
+  //layer_add_child(window_layer, get_datetime_layer());
   layer_add_child(window_layer, get_layer_calendar());
 //  layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
   //layer_add_child(window_layer, text_layer_get_layer(s_weather_layer));
@@ -77,7 +86,8 @@ static void prv_window_unload(Window *window) {
 //  deinit_top_panel_layer();
   deinit_bluetooth_layer();
   deinit_battery_layer();
-  deinit_datetime_layer();
+  deinit_date_layer();
+  deinit_time_layer();
   deinit_calendar_layer();
 }
 

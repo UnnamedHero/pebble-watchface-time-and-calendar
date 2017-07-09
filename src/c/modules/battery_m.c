@@ -35,8 +35,9 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
     int battery_bar_level;
 
     GRect bb = layer_get_bounds(me);
+    GRect percent_text_rect = GRect (0, 5, 30, bb.size.h);
     GRect battery_bar_rect = GRect (30, 0, 15, bb.size.h);
-    GRect percent_text_rect = GRect (0, 0, 30, bb.size.h);
+
     GRect battery_inner_bar_rect;
 
     APP_LOG(APP_LOG_LEVEL_DEBUG, "REDRAW: Battery Layer");
@@ -70,6 +71,7 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
 //*/
     graphics_draw_rect(ctx, battery_bar_rect);
     graphics_fill_rect(ctx, battery_inner_bar_rect, 0, GCornerNone);
+
     if (s_battery_level.is_plugged || s_battery_level.is_charging) {
       graphics_draw_bitmap_in_rect (ctx, s_battery_state_icon, battery_bar_rect);
     }

@@ -1,5 +1,5 @@
 #include <pebble.h>
-#include "include/date.h"
+#include "include/date_m.h"
 #include "../settings.h"
 #include "../utils/include/timeutils.h"
 
@@ -24,7 +24,7 @@ Layer* get_layer_date() {
 
 static void prv_populate_date_layer(Layer *me, GContext *ctx) {
   graphics_draw_text(ctx, get_currect_time(YYYY_MM_DD), \
-      fonts_get_system_font(FONT_KEY_GOTHIC_18), \
+      fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD), \
       layer_get_bounds(s_this_layer), \
       GTextOverflowModeWordWrap, \
       GTextAlignmentCenter, \

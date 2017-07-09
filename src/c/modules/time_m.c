@@ -29,7 +29,7 @@ Layer* get_layer_time() {
 static void prv_populate_time_layer(Layer *me, GContext *ctx) {
 
   graphics_draw_text(ctx, get_currect_time(CLOCK_FORMAT), \
-      fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49), \
+      fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD), \
       layer_get_bounds(s_this_layer), \
       GTextOverflowModeWordWrap, \
       GTextAlignmentCenter, \
