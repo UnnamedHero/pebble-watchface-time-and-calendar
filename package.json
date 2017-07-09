@@ -1,24 +1,27 @@
 {
-  "name": "twc-ng",
+  "name": "tcw",
   "author": "EEM",
   "version": "0.0.0",
   "keywords": [
-    "pebble-watchface",
-    "twc",
-    "twc-ng"
+    "pebble watchface",
+    "Time",
+    "Calendar",
+    "Weather"
   ],
   "private": true,
   "dependencies": {
     "pebble-clay": "^1.0.4"
   },
   "pebble": {
-    "displayName": "twc-ng",
+    "displayName": "T.C.W.",
     "uuid": "2c40726c-adac-4d55-8ed2-c114030aa0d6",
     "sdkVersion": "3",
     "enableMultiJS": true,
     "targetPlatforms": [
       "aplite",
-      "basalt"
+      "basalt",
+      "diorite",
+      "emery"
     ],
     "capabilities": [
       "configurable",
@@ -49,12 +52,18 @@
       "WeatherHumidity",
       "WeatherPressure",
       "WeatherWindSpeed",
-      "WeatherWindDirection",   
+      "WeatherWindDirection",
       "SundayFirst",
       "dummy"
     ],
     "resources": {
       "media": [
+        {
+          "menuIcon": true,
+          "type": "png",
+          "name": "IMAGE_MENU_ICON",
+          "file": "images/bluetooth_20_20.png"
+        },
         {
           "type": "bitmap",
           "name": "BLUETOOTH_CONNECTED",
