@@ -13,7 +13,7 @@
 static Window *s_time_window;
 
 //static TextLayer *s_time_layer;
-static TextLayer *s_weather_layer;
+//static TextLayer *s_weather_layer;
 
 //static void prv_update_window();
 
@@ -36,11 +36,11 @@ static void prv_window_load(Window *window) {
 //  GRect toplayer_bounds = GRect (0, 0, bounds.size.w, 20);
   GRect bluetooth_bounds = GRect (0, 0, 20, 20);
   GRect battery_bounds = GRect (bounds.size.w - 45, 0, 45, 20);
-  GRect date_bounds = GRect(0, 13, bounds.size.w, 24);
+  GRect date_bounds = GRect(0, 13, bounds.size.w, 18);
   //GRect datetime_bounds = GRect (0, 20, bounds.size.w, 60);
-  GRect time_bounds = GRect (0, 28, bounds.size.w, 42);
-  GRect calendar_bounds = GRect (2, 70, bounds.size.w, 73);
-  GRect weather_bounds = GRect (0, 143, bounds.size.w, bounds.size.h - 123);
+  GRect time_bounds = GRect (0, 24, bounds.size.w, 42);
+  GRect calendar_bounds = GRect (2, 67, bounds.size.w, 73);
+  GRect weather_bounds = GRect (2, 137, bounds.size.w, bounds.size.h - 123);
 //  init_top_panel_layer(toplayer_bounds);
   init_bluetooh_layer(bluetooth_bounds);
   init_battery_layer(battery_bounds);
@@ -55,8 +55,7 @@ static void prv_window_load(Window *window) {
 
 
 //----text layers
-//  s_time_layer = text_layer_create(GRect(0, 52, bounds.size.w, 20));
-  s_weather_layer = text_layer_create(GRect(0, 72, bounds.size.w, 20));
+//  s_weather_layer = text_layer_create(GRect(0, 72, bounds.size.w, 20));
 //----set bitmaps
 //  bitmap_layer_set_bitmap(s_top_panel_layer_1, s_bt_connected);
 //----set text
@@ -83,7 +82,7 @@ static void prv_window_load(Window *window) {
 
 static void prv_window_unload(Window *window) {
 //  text_layer_destroy(s_time_layer);
-  text_layer_destroy(s_weather_layer);
+//  text_layer_destroy(s_weather_layer);
   //layer_destroy(s_top_panel_layer_1);
 //  deinit_top_panel_layer();
   deinit_bluetooth_layer();
@@ -102,18 +101,14 @@ void init_time_window() {
     .load = prv_window_load,
     .unload = prv_window_unload,
   });
-  const bool animated = true;
 
-  // Open AppMessage connection
-
-  window_stack_push(s_time_window, animated);
 }
 
 // static void prv_update_window() {
 //   update_time();
 // }
 
-void window_update_time() {
+void window_update_time(struct tm *tick_time, TimeUnits units_changed) {
   //layer_update_time();
   time_layer_update_time();
 }

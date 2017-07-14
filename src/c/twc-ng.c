@@ -61,8 +61,8 @@ static void prv_periodic_vibrate(struct tm *timer) {
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   //update_time();
   prv_periodic_vibrate(tick_time);
-
-  window_update_time();
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "unit changed: %d", units_changed);
+  window_update_time(tick_time, units_changed);
 //  change_pic(tick_time->tm_min);
   if (tick_time->tm_min % 15 == 0) {
     //update_weather();
@@ -103,17 +103,24 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
   }
 
 }
+static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "SHAKE IT BABY!!!");
+}
 
 static void prv_init() {
   init_settings(settings_update_handler);
 
   app_message_register_inbox_received(prv_inbox_received_handler);
-  app_message_open(128, 128);
+  app_message_open(256, 128);
   init_time_window();
 
+  const bool animated = true;
+  window_stack_push(get_time_window(), animated);
+
 //  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
-  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
+  tick_timer_service_subscribe(SECOND_UNIT|MINUTE_UNIT, tick_handler);
 //  update_time();
+  accel_tap_service_subscribe(accel_tap_handler);
 }
 
 static void prv_deinit(void) {

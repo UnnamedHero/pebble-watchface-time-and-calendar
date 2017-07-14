@@ -3,7 +3,8 @@
 
 static Layer *s_this_layer;
 static void prv_populate_weather_layer(Layer *, GContext *);
-
+//static GBitmap *s_arrow_bitmap;
+static char* wind_directions[] = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"};
 typedef struct WeatherData {
   uint8_t WeatherReady;
   int WeatherTemperature;
@@ -20,9 +21,20 @@ void prv_default_weather_data() {
   weather.WeatherReady = 0;
 }
 
+int prv_get_wind_direction(int azim) {
+  int normalized = azim + 11;
+  int azimuth = normalized > 360 ? normalized - 360 : normalized;
+  return (int)(azimuth / 22.5);
+  //int big_azumuth = azumith * 10;
+  //int init = (azimuth + 110) > 3600 ? 3600 - 110 : azimuth - 11;
+//    float m = round(3.7);
+//    return init / 16;360
+}
+
 void init_weather_layer(GRect bounds) {
   s_this_layer = layer_create(bounds);
   layer_set_update_proc(s_this_layer, prv_populate_weather_layer);
+  // s_arrow_bitmap = gbitmap_create_with_resource(RESOURCE_ID_ARROW);
   // DictionaryIterator *out_iter;
   // APP_LOG(APP_LOG_LEVEL_DEBUG, "sending apikey: %s", apiKey);
   // AppMessageResult result = app_message_outbox_begin(&out_iter);
@@ -42,6 +54,9 @@ void deinit_weather_layer() {
   if (s_this_layer) {
     layer_destroy(s_this_layer);
   }
+  // if (s_arrow_bitmap) {
+  //   gbitmap_destroy(s_arrow_bitmap);
+  // }
 }
 
 Layer* get_layer_weather() {
@@ -63,19 +78,28 @@ void update_weather() {
 
 void prv_populate_weather_layer(Layer *me, GContext *ctx) {
   if (weather.WeatherReady == 1) {
+    GRect this_bounds = layer_get_bounds(s_this_layer);
+    //int wind_direction = prv_get_wind_direction()
     static char weather_text[64];
-    snprintf(weather_text, sizeof(weather_text), "%d°, %s, %d%%", \
-        weather.WeatherTemperature, \
-        weather.WeatherDesc, \
-        weather.WeatherHumidity \
+//    APP_LOG(APP_LOG_LEVEL_DEBUG, "az is %d, wind is %d", weather.WeatherWindDirection, prv_get_wind_direction(weather.WeatherWindDirection));
+    snprintf(weather_text, sizeof(weather_text), "%d°, %s,\n%s, %d m/s, %d mm Hg", \
+        weather.WeatherTemperature,\
+        weather.WeatherDesc,\
+        wind_directions[prv_get_wind_direction(weather.WeatherWindDirection)],\
+        weather.WeatherWindSpeed, \
+        (int)(weather.WeatherPressure * 0.75) \
       );
     graphics_draw_text(ctx, weather_text, \
         fonts_get_system_font(FONT_KEY_GOTHIC_14), \
-        layer_get_bounds(s_this_layer), \
+        this_bounds, \
         GTextOverflowModeWordWrap, \
         GTextAlignmentLeft, \
         NULL);
+    // GPoint wind_p = GPoint(140, 10);
+  //  graphics_draw_bitmap_in_rect(ctx, s_arrow_bitmap, GRect (2, 18, 10, 10));
   }
+
+
 }
 
 void get_weather(DictionaryIterator *iter, void *context) {

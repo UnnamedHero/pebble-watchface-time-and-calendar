@@ -40,7 +40,7 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
 
     GRect battery_inner_bar_rect;
 
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "REDRAW: Battery Layer");
+  //  APP_LOG(APP_LOG_LEVEL_DEBUG, "REDRAW: Battery Layer");
     // if (s_battery_state_icon) {
     //   APP_LOG(APP_LOG_LEVEL_DEBUG, "remove battery bitmap in redraw");
     //   gbitmap_destroy(s_battery_state_icon);

@@ -42,17 +42,24 @@ Layer* get_layer_calendar() {
 
 static void fill_dates() {
   //update_timer();
-  prv_update_time();
+
   time_t now, previous_week_start, filler;
   now = time(NULL);
-
+  prv_update_time();
   int current_week_day = ct->tm_wday;
-  struct tm *filler_t;
+  setlocale(LC_ALL, "ru_RU");
+  struct tm *filler_t;//;, *now_test;
+  //now_test = localtime(&now);
+//  APP_LOG(APP_LOG_LEVEL_DEBUG, "today is %d", now_test->tm_mday);
   previous_week_start = now - (7 + current_week_day) * SECONDS_PER_DAY;
   if (!settings_get_SundayFirst()) {
-    previous_week_start -= 6 * SECONDS_PER_DAY;
+    previous_week_start += SECONDS_PER_DAY;
   }
-  
+  // } else {
+  //   previous_week_start -= 6 * SECONDS_PER_DAY;
+  //
+  // }
+
   filler = previous_week_start;
   filler_t = localtime(&filler);
   for (int i = 0; i < 21; i++) {

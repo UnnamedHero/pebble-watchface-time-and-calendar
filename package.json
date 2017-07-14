@@ -83,6 +83,11 @@
           "type": "bitmap",
           "name": "BATTERY_CHARGED",
           "file": "images/battery_charged.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "ARROW",
+          "file": "images/arrow.png"
         }
       ]
     }
