@@ -19,7 +19,9 @@ function getLang() {
 }
 
 function getWeatherAPIKey() {
-  return JSON.parse(localStorage.getItem('clay-settings')).WeatherAPIKey;
+  return localStorage.getItem('clay-settings') ?
+   JSON.parse(localStorage.getItem('clay-settings')).WeatherAPIKey :
+   "not_set";
 }
 
 var xhrRequest = function (url, type, callback) {
