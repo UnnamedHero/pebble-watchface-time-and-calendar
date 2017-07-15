@@ -26,10 +26,14 @@ void deinit_battery_layer() {
 }
 
 static void prv_battery_handler(BatteryChargeState state) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "battery_changed");
-  s_battery_level = state;
 
-  layer_mark_dirty(s_battery_layer);
+if ((state.charge_percent != s_battery_level.charge_percent) || \
+    (state.is_charging != s_battery_level.is_charging) || \
+    (state.is_plugged != s_battery_level.is_plugged)) {
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "battery_changed");
+      s_battery_level = state;
+      layer_mark_dirty(s_battery_layer);
+  }
 }
 
 static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
