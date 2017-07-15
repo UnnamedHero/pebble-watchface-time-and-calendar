@@ -79,7 +79,7 @@ function locationSuccess(pos) {
         "WeatherMarker": true,
         "WeatherTemperature": temperature,
         "WeatherDesc": json.weather[0].description,
-        "WeatherHumidity": json.main.humidity,
+//        "WeatherHumidity": json.main.humidity,
         "WeatherPressure": json.main.pressure,
         "WeatherWindSpeed": json.wind.speed,
         "WeatherWindDirection": json.wind.deg
