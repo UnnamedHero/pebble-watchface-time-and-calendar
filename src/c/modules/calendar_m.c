@@ -100,11 +100,11 @@ static void prv_set_dark_theme(GContext *ctx) {
 }
 
 static void prv_populate_this_layer(Layer *me, GContext *ctx) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: CALENDAR");
   //  static char* weekdays_abbr[] = {"пн", "вт", "ср", "чт", "пт", "сб"};
   //  static char* special_day = "вс";
    //
   //  static char* days[20];
-
 
   populate_calendar_values();
   GRect bounds = layer_get_bounds(s_this_layer);

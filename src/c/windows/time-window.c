@@ -36,10 +36,10 @@ static void prv_window_load(Window *window) {
 //  GRect toplayer_bounds = GRect (0, 0, bounds.size.w, 20);
   GRect bluetooth_bounds = GRect (0, 0, 20, 20);
   GRect battery_bounds = GRect (bounds.size.w - 45, 0, 45, 20);
-  GRect date_bounds = GRect(0, 13, bounds.size.w, 18);
+  GRect date_bounds = GRect(0, 20, bounds.size.w, 14);
   //GRect datetime_bounds = GRect (0, 20, bounds.size.w, 60);
-  GRect time_bounds = GRect (0, 24, bounds.size.w, 42);
-  GRect calendar_bounds = GRect (2, 67, bounds.size.w, 73);
+  GRect time_bounds = GRect (0, 34, bounds.size.w, 34);
+  GRect calendar_bounds = GRect (2, 69, bounds.size.w, 73);
   GRect weather_bounds = GRect (2, 137, bounds.size.w, bounds.size.h - 123);
 //  init_top_panel_layer(toplayer_bounds);
   init_bluetooh_layer(bluetooth_bounds);
@@ -110,7 +110,7 @@ void init_time_window() {
 
 void window_update_time(struct tm *tick_time, TimeUnits units_changed) {
   //layer_update_time();
-  time_layer_update_time();
+  //time_layer_update_time();
 }
 
 // void update_time() {

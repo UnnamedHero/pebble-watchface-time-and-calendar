@@ -118,7 +118,7 @@ static void prv_init() {
   window_stack_push(get_time_window(), animated);
 
 //  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
-  tick_timer_service_subscribe(SECOND_UNIT|MINUTE_UNIT, tick_handler);
+  tick_timer_service_subscribe(SECOND_UNIT|MINUTE_UNIT|HOUR_UNIT|DAY_UNIT, tick_handler);
 //  update_time();
   accel_tap_service_subscribe(accel_tap_handler);
 }

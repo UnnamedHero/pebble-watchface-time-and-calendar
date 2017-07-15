@@ -78,6 +78,7 @@ void update_weather() {
 
 void prv_populate_weather_layer(Layer *me, GContext *ctx) {
   if (weather.WeatherReady == 1) {
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: WEATHER");
     GRect this_bounds = layer_get_bounds(s_this_layer);
     //int wind_direction = prv_get_wind_direction()
     static char weather_text[64];

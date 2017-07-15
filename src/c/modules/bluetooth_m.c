@@ -37,6 +37,7 @@ static void prv_bt_connection_status(bool state) {
 }
 
 static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: BLUETOOTH");
   graphics_draw_bitmap_in_rect(ctx, s_bt_icon, GRect(0,0, 20, 20));
 //  APP_LOG(APP_LOG_LEVEL_DEBUG, "REDRAW: BT-layer");
 }

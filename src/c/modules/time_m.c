@@ -2,6 +2,7 @@
 #include "include/time_m.h"
 #include "../settings.h"
 #include "../utils/include/timeutils.h"
+#include "../utils/include/textutils.h"
 
 static Layer *s_this_layer;
 static void prv_populate_time_layer(Layer *, GContext *);
@@ -27,10 +28,12 @@ Layer* get_layer_time() {
 }
 
 static void prv_populate_time_layer(Layer *me, GContext *ctx) {
-
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: TIME");
+  GFont font = fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD);
+  GRect pretty_rect = get_pretty_rect_for_text(layer_get_bounds(me), font);
   graphics_draw_text(ctx, get_currect_time(CLOCK_FORMAT), \
-      fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD), \
-      layer_get_bounds(s_this_layer), \
+      font, \
+      pretty_rect, \
       GTextOverflowModeWordWrap, \
       GTextAlignmentCenter, \
       NULL);

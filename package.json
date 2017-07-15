@@ -44,6 +44,7 @@
       "VibratePeriodic",
       "VibratePeriodicPeroid",
       "VibratePeriodicType",
+      "WeatherUpdatePeriod",
       "WeatherAPIKey",
       "WeatherMarker",
       "WeatherMarkerForecast",

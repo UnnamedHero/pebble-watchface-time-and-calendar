@@ -31,6 +31,7 @@ static void prv_battery_handler(BatteryChargeState state) {
 }
 
 static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: BATTERY");
     static char percent_text[5];
     int battery_bar_level;
 
