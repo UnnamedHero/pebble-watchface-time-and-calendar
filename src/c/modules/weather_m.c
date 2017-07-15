@@ -83,9 +83,10 @@ void prv_populate_weather_layer(Layer *me, GContext *ctx) {
     //int wind_direction = prv_get_wind_direction()
     static char weather_text[64];
 //    APP_LOG(APP_LOG_LEVEL_DEBUG, "az is %d, wind is %d", weather.WeatherWindDirection, prv_get_wind_direction(weather.WeatherWindDirection));
-    snprintf(weather_text, sizeof(weather_text), "%d°, %s,\n%s, %d m/s, %d mm Hg", \
+    snprintf(weather_text, sizeof(weather_text), "%d°, %s, hm: %d%%, %s, %d m/s, %d mmHg", \
         weather.WeatherTemperature,\
         weather.WeatherDesc,\
+        weather.WeatherHumidity,\
         wind_directions[prv_get_wind_direction(weather.WeatherWindDirection)],\
         weather.WeatherWindSpeed, \
         (int)(weather.WeatherPressure * 0.75) \

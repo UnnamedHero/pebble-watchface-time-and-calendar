@@ -41,8 +41,8 @@ static void prv_window_load(Window *window) {
   GRect date_bounds = GRect(0, 20, bounds.size.w, 14);
   //GRect datetime_bounds = GRect (0, 20, bounds.size.w, 60);
   GRect time_bounds = GRect (0, 34, bounds.size.w, 34);
-  GRect calendar_bounds = GRect (2, 69, bounds.size.w, 73);
-  GRect weather_bounds = GRect (2, 137, bounds.size.w, bounds.size.h - 123);
+  GRect calendar_bounds = GRect (2, 68, bounds.size.w, 73);
+  GRect weather_bounds = GRect (2, 138, bounds.size.w, bounds.size.h - 123);
 //  init_top_panel_layer(toplayer_bounds);
   init_bluetooh_layer(bluetooth_bounds);
   init_battery_layer(battery_bounds);
