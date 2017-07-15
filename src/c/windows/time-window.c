@@ -18,6 +18,7 @@ static Window *s_time_window;
 //static void prv_update_window();
 
 Window* get_time_window() {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Request time window");
   if (!s_time_window) {
     init_time_window();
   }
@@ -29,6 +30,7 @@ void deinit_time_window() {
 }
 
 static void prv_window_load(Window *window) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window loading");
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
   window_set_background_color(window, GColorBlack);
@@ -95,6 +97,7 @@ static void prv_window_unload(Window *window) {
 
 
 void init_time_window() {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window init");
   s_time_window = window_create();
 //  window_set_click_config_provider(s_window, prv_click_config_provider);
   window_set_window_handlers(s_time_window, (WindowHandlers) {
@@ -109,6 +112,14 @@ void init_time_window() {
 // }
 
 void window_update_time(struct tm *tick_time, TimeUnits units_changed) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window update time handler");
+  //SECOND_UNIT, MINUTE_UNIT, HOUR_UNIT, DAY_UNIT, MONTH_UNIT, YEAR_UNIT
+  //APP_LOG(APP_LOG_LEVEL_DEBUG, "SECOND: %d,\nMINUTE: %d,\nHOUR: %d,\nDAY: %d", SECOND_UNIT, MINUTE_UNIT, HOUR_UNIT, DAY_UNIT);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "unit changed: %d", units_changed);
+  if ((units_changed & MINUTE_UNIT) == MINUTE_UNIT) {
+    layer_mark_dirty(get_layer_time());
+  }
+
   //layer_update_time();
   //time_layer_update_time();
 }

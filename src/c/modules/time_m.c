@@ -18,7 +18,7 @@ void deinit_time_layer() {
   }
 }
 
-void time_layer_update_time() {
+void update_layer_time() {
   layer_mark_dirty(s_this_layer);
 }
 

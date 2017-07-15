@@ -1,57 +1,14 @@
 #include <pebble.h>
 #include "twc-ng.h"
-//#include "localize.h"
 #include "settings.h"
-//#include "weather.h"
-//#include "layers/top-panel-layer.h"
 #include "windows/time-window.h"
 #include "utils/include/timeutils.h"
 #include "utils/include/vibe.h"
 
 static bool s_js_ready;
 
-//---------bitmaps
-
-
-
-
-
-//---------functions
-
-
-// static void prv_select_click_handler(ClickRecognizerRef recognizer, void *context) {
-//   text_layer_set_text(s_time_layer, "Select");
-// }
-//
-// static void prv_up_click_handler(ClickRecognizerRef recognizer, void *context) {
-//   text_layer_set_text(s_text_layer, "Up");
-// }
-//
-// static void prv_down_click_handler(ClickRecognizerRef recognizer, void *context) {
-//   text_layer_set_text(s_text_layer, "Down");
-// }
-//
-// static void prv_click_config_provider(void *context) {
-//   window_single_click_subscribe(BUTTON_ID_SELECT, prv_select_click_handler);
-//   window_single_click_subscribe(BUTTON_ID_UP, prv_up_click_handler);
-//   window_single_click_subscribe(BUTTON_ID_DOWN, prv_down_click_handler);
-// }
-
-
-
-// Save the settings to persistent storage
-// static void prv_save_settings() {
-//   save_settings();
-//   // Update the display based on new settings
-//   prv_update_display();
-// }
-
-static void prv_update_display() {
-  //update_time();
-}
-
 static void prv_periodic_vibrate(struct tm *timer) {
-  if (timer->tm_sec % 10 == 0) {
+  if (timer->tm_sec % 10 == 1) {
   if (settings_get_VibratePeriodic() && can_vibrate()) {
     do_vibrate(settings_get_VibratePeriodicType());
   }
@@ -61,12 +18,12 @@ static void prv_periodic_vibrate(struct tm *timer) {
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   //update_time();
   prv_periodic_vibrate(tick_time);
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "unit changed: %d", units_changed);
+
   window_update_time(tick_time, units_changed);
 //  change_pic(tick_time->tm_min);
-  if (tick_time->tm_min % 15 == 0) {
+//  if (tick_time->tm_min % 15 == 0) {
     //update_weather();
-  }
+//  }
 }
 
 
@@ -76,10 +33,10 @@ void settings_update_handler(UPDATE_FLAG f) {
   if (f == UF_WEATHER) {
 //    init_weather(settings_get_weather_apikey());
   }
-  prv_update_display();
 }
 
 static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Inbox message received");
   Tuple *js_ready_t = dict_find(iter, MESSAGE_KEY_JSReady);
   if (js_ready_t) {
     s_js_ready = true;

@@ -170,3 +170,7 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
 
  }
 }
+
+void update_layer_calendar() {
+  layer_mark_dirty(s_this_layer);
+}

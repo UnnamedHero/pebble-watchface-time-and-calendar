@@ -11,6 +11,7 @@ static void prv_bt_connection_status(bool state);
 static void prv_populate_bt_layer(Layer *, GContext *);
 
 void init_bluetooh_layer(GRect rect) {
+
   this_layer = layer_create(rect);
   layer_set_update_proc(this_layer, prv_populate_bt_layer);
   connection_service_subscribe((ConnectionHandlers) {

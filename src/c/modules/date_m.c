@@ -34,3 +34,7 @@ static void prv_populate_date_layer(Layer *me, GContext *ctx) {
       GTextAlignmentCenter, \
       NULL);
 }
+
+void update_layer_date() {
+  layer_mark_dirty(s_this_layer);
+}

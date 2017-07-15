@@ -3,6 +3,6 @@
 
 void init_time_layer(GRect);
 void deinit_time_layer();
-void time_layer_update_time();
+//void update_layer_time();
 
 Layer* get_layer_time();
