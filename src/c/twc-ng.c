@@ -8,12 +8,33 @@
 static bool s_js_ready;
 
 static void prv_periodic_vibrate(struct tm *timer) {
-  if (timer->tm_sec % 10 == 1) {
-  if (settings_get_VibratePeriodic() && can_vibrate()) {
+  if (!(settings_get_VibratePeriodic() && can_vibrate())) {
+    return;
+  }
+  bool do_vibr = false;
+
+  switch (settings_get_VibratePeriodicPeroid()) {
+    case P_15MIN:
+      do_vibr = timer->tm_min % 15 == 0;
+      break;
+    case P_30MIN:
+      do_vibr = timer->tm_min % 30 == 0;
+      break;
+    case P_1H:
+      do_vibr = timer->tm_min == 0;
+      break;
+    case P_3H:
+      do_vibr = timer->tm_hour % 3 == 0;
+      break;
+    default:
+      break;
+  }
+
+  if (do_vibr) {
     do_vibrate(settings_get_VibratePeriodicType());
   }
 }
-}
+
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   //update_time();
@@ -75,7 +96,7 @@ static void prv_init() {
   window_stack_push(get_time_window(), animated);
 
 //  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
-  tick_timer_service_subscribe(SECOND_UNIT|MINUTE_UNIT|HOUR_UNIT|DAY_UNIT, tick_handler);
+  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 //  update_time();
   accel_tap_service_subscribe(accel_tap_handler);
 }
