@@ -20,6 +20,14 @@ module.exports = function(minified) {
     masterItem.trigger('change');
   }
 
+  // clayConfig.on(clayConfig.EVENTS.BEFORE_BUILD, function () {
+  //   console.log("before build");
+    //var items = clayConfig.getAllItems();
+    //console.log ("Len:"+items.length);
+     //items.forEach(fucntion(item) {
+    //   console.log(item.keys());
+     //});
+  // });
 
   clayConfig.on(clayConfig.EVENTS.AFTER_BUILD, function() {
 

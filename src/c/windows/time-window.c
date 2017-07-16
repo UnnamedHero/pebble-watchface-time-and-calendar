@@ -104,34 +104,15 @@ void init_time_window() {
     .load = prv_window_load,
     .unload = prv_window_unload,
   });
-
 }
-
-// static void prv_update_window() {
-//   update_time();
-// }
 
 void window_update_time(struct tm *tick_time) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window update time handler");
-  //SECOND_UNIT, MINUTE_UNIT, HOUR_UNIT, DAY_UNIT, MONTH_UNIT, YEAR_UNIT
-  //APP_LOG(APP_LOG_LEVEL_DEBUG, "SECOND: %d,\nMINUTE: %d,\nHOUR: %d,\nDAY: %d", SECOND_UNIT, MINUTE_UNIT, HOUR_UNIT, DAY_UNIT);
 
-    layer_mark_dirty(get_layer_time());
-    update_weather();
-  
-
-  //layer_update_time();
-  //time_layer_update_time();
+  layer_mark_dirty(get_layer_time());
+  update_weather();
 }
 
-// void update_time() {
-//     time_t temp = time(NULL);
-//     struct tm *tick_time = localtime(&temp);
-//     APP_LOG(APP_LOG_LEVEL_DEBUG, "time format:[%s]", settings_get_clockformat());
-//     static char s_buffer[8];//    char format[5];
-//     strftime(s_buffer, sizeof(s_buffer), settings_get_clockformat(), tick_time);
-//     text_layer_set_text(s_time_layer, s_buffer);
-// }
 
 void ready_for_weather() {
   update_weather();

@@ -4,11 +4,12 @@ var Clay = require('pebble-clay');
 var clayConfig = require('./config');
 var customFunctions = require('./functions');
 // Initialize Clay
+clayConfig[1].items[0].defaultValue = 'Тестовый перевод';
 var clay = new Clay(clayConfig, customFunctions);
 
 var messageKeys = require('message_keys');
 
-
+clayConfig[1].items[0].defaultValue = 'пидаристика';
 function getLang() {
   var countryCodes = {
     'ru-RU' : 'ru',
@@ -123,12 +124,12 @@ function fakeWeather() {
 
 function getWeather() {
 
-  //fakeWeather();
-  navigator.geolocation.getCurrentPosition(
-    locationSuccess,
-    locationError,
-    {timeout: 5000, maximumAge: 0}
-  );
+  fakeWeather();
+  // navigator.geolocation.getCurrentPosition(
+  //   locationSuccess,
+  //   locationError,
+  //   {timeout: 5000, maximumAge: 0}
+  // );
 
 }
 
