@@ -4,12 +4,51 @@ var Clay = require('pebble-clay');
 var clayConfig = require('./config');
 var customFunctions = require('./functions');
 // Initialize Clay
-clayConfig[1].items[0].defaultValue = 'Тестовый перевод';
-var clay = new Clay(clayConfig, customFunctions);
+//clayConfig[1].items[0].defaultValue = 'Тестовый перевод';
 
 var messageKeys = require('message_keys');
+var locale = require('./locales/'+getLang());
+//console.log("test:"+locale["{{ Heading }}"]);
+//console.log("test:"+clayConfig[1].items[0]['defaultValue']);
+function localizator(config) {
 
-clayConfig[1].items[0].defaultValue = 'пидаристика';
+  if (!locale) {
+    return;
+  }
+
+  function transaleValue(val) {
+
+    var localizedstring = locale[val];
+
+  //  console.log("Working with ''"+val+"'', try to change to:"+localizedstring);
+    return localizedstring ? localizedstring : val;
+  }
+
+  var newConfig = config.map(function(item) {
+    //var newItem
+    //console.log(item.value)
+    if (item.value) {
+      item.value = transaleValue(item.value);
+    }
+    if (item.label) {
+      item.label = transaleValue(item.label);
+    }
+    if (item.defaultValue) {
+      item.defaultValue = transaleValue(item.defaultValue);
+    }
+    if (item.items) {
+      item.items = localizator(item.items);
+    }
+    if (item.options) {
+      item.options = localizator(item.options);
+    }
+    return item;
+  });
+  return newConfig;
+}
+
+var clay = new Clay(localizator(clayConfig), customFunctions);
+
 function getLang() {
   var countryCodes = {
     'ru-RU' : 'ru',
@@ -124,12 +163,12 @@ function fakeWeather() {
 
 function getWeather() {
 
-  fakeWeather();
-  // navigator.geolocation.getCurrentPosition(
-  //   locationSuccess,
-  //   locationError,
-  //   {timeout: 5000, maximumAge: 0}
-  // );
+  //fakeWeather();
+  navigator.geolocation.getCurrentPosition(
+    locationSuccess,
+    locationError,
+    {timeout: 5000, maximumAge: 0}
+  );
 
 }
 
