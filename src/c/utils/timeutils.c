@@ -1,7 +1,7 @@
 #include <pebble.h>
 #include "include/timeutils.h"
 
-struct tm *tick_time;
+static struct tm *tick_time;
 
 bool can_vibrate() {
   bool res = settings_get_RespectQuietTime() ? !quiet_time_is_active() : true;
@@ -24,23 +24,30 @@ void update_timer() {
 //   tm_ptr = tick_time;
 // }
 
-char* get_currect_time(DT_FORMAT dtf) {
-  static char d_buffer[32];
+void get_currect_time(DT_FORMAT dtf, char *buffer) {
+  time_t temp = time(NULL);
+  tick_time = localtime(&temp);
+  char d_buffer[32];
   char format[12];
-  update_timer();
-
+  //update_timer();
+  //char fmt[] = "%Y.%m.%d";
   switch (dtf) {
     case YYYY_MM_DD:
       strcpy(format, "%Y.%m.%d");
       break;
     case CLOCK_FORMAT:
-      strcpy(format, settings_get_clockformat());
+      strcpy(format, "%H:%M");
       break;
     }
   strftime(d_buffer, sizeof(d_buffer), format, tick_time);
-  return d_buffer;
+  strcpy(buffer, d_buffer);
+//  return d_buffer;
 }
 
+// int get_unixtime() {
+//   update_timer();
+//
+// }
 
 static int isleap(int year) {
     return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
@@ -53,4 +60,26 @@ int get_days_in_month(int month, int year) {
     };
     int leap = isleap(year);
     return days[leap][month - 1];
+}
+
+int period_to_mins(PERIOD per) {
+  int mins = 0;
+  switch (per) {
+    case P_15MIN:
+      mins = 15;
+      break;
+    case P_30MIN:
+      mins = 30;
+      break;
+    case P_1H:
+      mins = 60;
+      break;
+    case P_3H:
+      mins = 180;
+      break;
+     case P_6H:
+      mins = 360;
+      break;
+  }
+  return mins;
 }

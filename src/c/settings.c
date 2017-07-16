@@ -4,8 +4,9 @@
 
 
 typedef struct ClaySettings {
-  char WeatherAPIKey[33];
-  char ClockFormat[6];
+//  char WeatherAPIKey[33];
+  PERIOD WeatherUpdatePeriod;
+  char ClockFormat[8];
   uint8_t RespectQuietTime;
   uint8_t VibrateDuringCharged;
   uint8_t VibrateConnected;
@@ -17,6 +18,7 @@ typedef struct ClaySettings {
   PERIOD VibratePeriodicPeroid;
   VIBE VibratePeriodicType;
   uint8_t SundayFirst;
+
   // bool showPebbleConnection;
   // bool showPebbleBattery;
   // bool showPebbleBatteryPercents;
@@ -26,8 +28,9 @@ static ClaySettings settings;
 static callback_ptr settings_update_handler = NULL;
 
 static void prv_default_settings() {
-  strcpy(settings.ClockFormat, "%H:%M");
-  strcpy(settings.WeatherAPIKey, "not_set");
+  strcpy(settings.ClockFormat, "%H:%M\0");
+  //strcpy(settings.WeatherAPIKey, "not_set");
+  settings.WeatherUpdatePeriod = P_1H;
   settings.RespectQuietTime = 1;
   settings.VibrateDuringCharged = 0;
   settings.VibrateConnected = 1;
@@ -60,9 +63,9 @@ char* settings_get_clockformat() {
   return settings.ClockFormat;
 }
 
-char* settings_get_weather_apikey() {
-  return settings.WeatherAPIKey;
-}
+// char* settings_get_weather_apikey() {
+//   return settings.WeatherAPIKey;
+// }
 
 static bool get_bool (uint8_t settings_bool) {
     return settings_bool == 1;
@@ -140,6 +143,10 @@ PERIOD settings_get_VibratePeriodicPeroid() {
   return settings.VibratePeriodicPeroid;
 }
 
+PERIOD settings_get_WeatherUpdatePeriod() {
+  return settings.WeatherUpdatePeriod;
+}
+
 VIBE settings_get_VibratePeriodicType() {
   return settings.VibratePeriodicType;
 }
@@ -189,11 +196,11 @@ void populate_settings(DictionaryIterator *iter, void *context) {
   // APP_LOG(APP_LOG_LEVEL_DEBUG, "opt are : %i and %i", settings.showPebbleConnection, settings.showPebbleBattery);
 
 
-  Tuple *weather_apikey_t = dict_find(iter, MESSAGE_KEY_WeatherAPIKey);
-  if (weather_apikey_t) {
-    strcpy(settings.WeatherAPIKey, weather_apikey_t->value->cstring);
-    settings_update_handler(UF_WEATHER);
-  }
+  // Tuple *weather_apikey_t = dict_find(iter, MESSAGE_KEY_WeatherAPIKey);
+  // if (weather_apikey_t) {
+  //   strcpy(settings.WeatherAPIKey, weather_apikey_t->value->cstring);
+  //   settings_update_handler(UF_WEATHER);
+  // }
 
   Tuple *vibr_conn = dict_find(iter, MESSAGE_KEY_VibrateConnected);
   if (vibr_conn) {
@@ -228,6 +235,11 @@ void populate_settings(DictionaryIterator *iter, void *context) {
   Tuple *vibr_per_per = dict_find(iter, MESSAGE_KEY_VibratePeriodicPeroid);
   if (vibr_per_per) {
     settings.VibratePeriodicPeroid = get_period(vibr_per_per->value->cstring);
+  }
+
+  Tuple *w_per = dict_find(iter, MESSAGE_KEY_WeatherUpdatePeriod);
+  if (w_per) {
+    settings.WeatherUpdatePeriod = get_period(w_per->value->cstring);
   }
 
   Tuple *vibr_per_type = dict_find(iter, MESSAGE_KEY_VibratePeriodicType);

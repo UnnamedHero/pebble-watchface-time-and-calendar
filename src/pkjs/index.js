@@ -16,6 +16,7 @@ function getLang() {
   }
   var lang = countryCodes[navigator.language];
   return lang ? lang : 'en';
+  //return "en";
 }
 
 function getWeatherAPIKey() {
@@ -79,7 +80,7 @@ function locationSuccess(pos) {
         "WeatherMarker": true,
         "WeatherTemperature": temperature,
         "WeatherDesc": json.weather[0].description,
-//        "WeatherHumidity": json.main.humidity,
+        "WeatherTimeStamp": json.dt,
         "WeatherPressure": json.main.pressure,
         "WeatherWindSpeed": json.wind.speed,
         "WeatherWindDirection": json.wind.deg

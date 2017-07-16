@@ -5,5 +5,6 @@
 
 bool can_vibrate();
 void update_timer();
-char* get_currect_time(DT_FORMAT);
+void get_currect_time(DT_FORMAT, char *buffer);
+int period_to_mins(PERIOD);
 //void get_raw_time_ptr(struct tm *);

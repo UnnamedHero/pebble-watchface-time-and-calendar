@@ -40,7 +40,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   //update_time();
   prv_periodic_vibrate(tick_time);
 
-  window_update_time(tick_time, units_changed);
+  window_update_time(tick_time);
 //  change_pic(tick_time->tm_min);
 //  if (tick_time->tm_min % 15 == 0) {
     //update_weather();
@@ -89,7 +89,7 @@ static void prv_init() {
   init_settings(settings_update_handler);
 
   app_message_register_inbox_received(prv_inbox_received_handler);
-  app_message_open(256, 128);
+  app_message_open(400, 128);
   init_time_window();
 
   const bool animated = true;

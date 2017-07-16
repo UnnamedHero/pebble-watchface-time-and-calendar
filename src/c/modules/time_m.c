@@ -29,9 +29,13 @@ Layer* get_layer_time() {
 
 static void prv_populate_time_layer(Layer *me, GContext *ctx) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: TIME");
+  //APP_LOG(APP_LOG_LEVEL_DEBUG, "memory: %d", heap_bytes_free());
   GFont font = fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD);
   GRect pretty_rect = get_pretty_rect_for_text(layer_get_bounds(me), font);
-  graphics_draw_text(ctx, get_currect_time(CLOCK_FORMAT), \
+  static char time_txt[33];
+  get_currect_time(CLOCK_FORMAT, time_txt);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "time to show: %s", time_txt);
+  graphics_draw_text(ctx, time_txt, \
       font, \
       pretty_rect, \
       GTextOverflowModeWordWrap, \

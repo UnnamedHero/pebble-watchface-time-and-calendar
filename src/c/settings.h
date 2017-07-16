@@ -19,7 +19,7 @@ typedef enum Periods {
   P_30MIN,
   P_1H,
   P_3H,
-  P_6H
+  P_6H,
 } PERIOD;
 
 typedef enum DateTimeFormat {
@@ -37,8 +37,8 @@ void save_settings();
 
 
 char* settings_get_clockformat();
-char* settings_get_weather_apikey();
-
+//char* settings_get_weather_apikey();
+PERIOD settings_get_WeatherUpdatePeriod();
 bool settings_get_RespectQuietTime();
 bool settings_get_VibrateDuringCharging();
 bool settings_get_VibrateConnected();

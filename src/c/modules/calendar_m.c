@@ -54,6 +54,9 @@ static void fill_dates() {
   previous_week_start = now - (7 + current_week_day) * SECONDS_PER_DAY;
   if (!settings_get_SundayFirst()) {
     previous_week_start += SECONDS_PER_DAY;
+    if (current_week_day ==0) {
+      previous_week_start -= 7 * SECONDS_PER_DAY;
+    }
   }
   // } else {
   //   previous_week_start -= 6 * SECONDS_PER_DAY;

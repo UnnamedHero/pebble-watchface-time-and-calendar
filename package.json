@@ -54,6 +54,7 @@
       "WeatherPressure",
       "WeatherWindSpeed",
       "WeatherWindDirection",
+      "WeatherTimeStamp",
       "SundayFirst",
       "dummy"
     ],

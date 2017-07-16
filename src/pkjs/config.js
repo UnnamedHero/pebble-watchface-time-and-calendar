@@ -102,6 +102,30 @@ module.exports = [
           "id": "WeatherAPIKey",
           "label": "API Key",
           "defaultValue": ""
+        },
+        {
+          "type": "select",
+          "messageKey": "WeatherUpdatePeriod",
+          "label": "Period",
+          "options" : [
+            {
+              "label": "every 15 min",
+              "value": "15"
+            },
+            {
+              "label": "every 30 min",
+              "value": "30"
+            },
+            {
+              "label": "every hour",
+              "value": "60"
+            },
+            {
+              "label": "every 3 hours",
+              "value": "3h"
+            }
+          ],
+          "defaultValue": "60"
         }
     ]
   },

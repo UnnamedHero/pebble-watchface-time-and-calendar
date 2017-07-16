@@ -111,14 +111,14 @@ void init_time_window() {
 //   update_time();
 // }
 
-void window_update_time(struct tm *tick_time, TimeUnits units_changed) {
+void window_update_time(struct tm *tick_time) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window update time handler");
   //SECOND_UNIT, MINUTE_UNIT, HOUR_UNIT, DAY_UNIT, MONTH_UNIT, YEAR_UNIT
   //APP_LOG(APP_LOG_LEVEL_DEBUG, "SECOND: %d,\nMINUTE: %d,\nHOUR: %d,\nDAY: %d", SECOND_UNIT, MINUTE_UNIT, HOUR_UNIT, DAY_UNIT);
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "unit changed: %d", units_changed);
-  if ((units_changed & MINUTE_UNIT) == MINUTE_UNIT) {
+
     layer_mark_dirty(get_layer_time());
-  }
+    update_weather();
+  
 
   //layer_update_time();
   //time_layer_update_time();

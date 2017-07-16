@@ -25,9 +25,11 @@ Layer* get_layer_date() {
 
 static void prv_populate_date_layer(Layer *me, GContext *ctx) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: DATE");
+  static char date_txt[33];
+  get_currect_time(YYYY_MM_DD, date_txt);
   GFont font = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
   GRect pretty_rect = get_pretty_rect_for_text(layer_get_bounds(me), font);
-  graphics_draw_text(ctx, get_currect_time(YYYY_MM_DD), \
+  graphics_draw_text(ctx, date_txt, \
       font, \
       pretty_rect, \
       GTextOverflowModeWordWrap, \
