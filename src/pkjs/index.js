@@ -7,9 +7,16 @@ var customFunctions = require('./functions');
 //clayConfig[1].items[0].defaultValue = 'Тестовый перевод';
 
 var messageKeys = require('message_keys');
-var locale = require('./locales/'+getLang());
-//console.log("test:"+locale["{{ Heading }}"]);
-//console.log("test:"+clayConfig[1].items[0]['defaultValue']);
+var currentLocaleModulePath = './locales/'+getLang();
+var defaultLocaleModulePath = './locales/en';
+try {
+  var locale = require(currentLocaleModulePath);
+} catch (ex) {
+  var locale = require(defaultLocaleModulePath);
+}
+// var locale = require.defined(currentLocaleModulePath) ?
+//   require (currentLocaleModulePath) :
+//   require(defaultLocaleModulePath);
 
 function localizator(config) {
   function transaleValue(val) {
@@ -38,7 +45,36 @@ function localizator(config) {
   return newConfig;
 }
 
-var clay = new Clay(localizator(clayConfig), customFunctions);
+var clay = new Clay(localizator(clayConfig), customFunctions, { autoHandleEvents: false });
+
+
+Pebble.addEventListener('showConfiguration', function(e) {
+  Pebble.openURL(clay.generateUrl());
+});
+
+Pebble.addEventListener('webviewclosed', function(e) {
+
+  if (e && !e.response) {
+    return;
+  }
+
+  var dict = clay.getSettings(e.response);
+  //We need to extract hours and minutes to a separate messagekeys,
+  //becase pebble SDK do not work with sscanf C func.
+  var qtb = dict[messageKeys.QuietTimeBegin].split(":",2);
+  var qte = dict[messageKeys.QuietTimeEnd].split(":",2);;
+  //console.log("00 is:"+parseInt(qtb[1], 10));
+  dict[messageKeys.QuietTimeBegin] = parseInt(qtb[0], 10);
+  dict[messageKeys.QuietTimeBegin + 1] = parseInt(qtb[1], 10);
+  dict[messageKeys.QuietTimeEnd] = parseInt(qte[0], 10);
+  dict[messageKeys.QuietTimeEnd + 1] = parseInt(qte[1], 10);
+
+  Pebble.sendAppMessage(dict, function(e) {
+    console.log('Sent config data to Pebble');
+  }, function(e) {
+    console.log('Failed to send config data!');
+  });
+});
 
 function getLang() {
   var countryCodes = {
@@ -67,11 +103,7 @@ var xhrRequest = function (url, type, callback) {
 
 function locationSuccess(pos) {
   // We will request the weather here
-  // var apiKey = clay.getItemById('WeatherAPIKey').get();
-  // console.log(apiKey);
   var weatherAPIKey = getWeatherAPIKey();
-//  console.log(weatherAPIKey);
-  //"ad68120f127506277ac967b76c4ae687";
 //  return;
    if (weatherAPIKey == "not_set" || weatherAPIKey == "invalid_api_key" ) {
      console.log("ERROR: Weather API key is not set.");
@@ -102,10 +134,6 @@ function locationSuccess(pos) {
       }
       console.log (json.message);
       var temperature = Math.round(json.main.temp - 273.15);
-    //   console.log('Temperature is ' + temperature);
-    // // Conditions
-    //   var conditions = json.weather[0].main;
-    //   console.log('Conditions are ' + conditions);
 
       var weather = {
         "WeatherMarker": true,

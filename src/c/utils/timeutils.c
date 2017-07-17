@@ -3,8 +3,20 @@
 
 static struct tm *tick_time;
 
+#if defined (PBL_PLATFORM_APLITE)
+bool aplite_quiet_time_is_active() {
+  return true;
+}
+#endif
+
 bool can_vibrate() {
-  bool res = settings_get_RespectQuietTime() ? !quiet_time_is_active() : true;
+#if defined (PBL_PLATFORM_APLITE)
+  bool qt = !aplite_quiet_time_is_active();
+#else
+  bool qt = !quiet_time_is_active();
+#endif
+  bool res = settings_get_RespectQuietTime() ? qt : true;
+
   // APP_LOG(APP_LOG_LEVEL_DEBUG, "quet time?: %s", quiet_time_is_active() ? "true" : "false");
   // APP_LOG(APP_LOG_LEVEL_DEBUG, "can bzzzz: %s", res ? "true" : "false");
   BatteryChargeState cs = battery_state_service_peek();
@@ -82,4 +94,15 @@ int period_to_mins(PERIOD per) {
       break;
   }
   return mins;
+}
+
+uint8_t get_hour_from_str(char* str) {
+  // int hour;
+  // sscanf(str, "%d", &hour);
+  // APP_LOG(APP_LOG_LEVEL_DEBUG, "STRING: %d", hour);
+   return 0;
+}
+
+uint8_t get_mins_from_str(char* str) {
+  return 0;
 }

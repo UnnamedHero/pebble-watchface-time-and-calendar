@@ -1,6 +1,6 @@
 #include <pebble.h>
 #include "settings.h"
-
+#include "utils/include/timeutils.h"
 
 
 typedef struct ClaySettings {
@@ -8,6 +8,13 @@ typedef struct ClaySettings {
   PERIOD WeatherUpdatePeriod;
   char ClockFormat[8];
   uint8_t RespectQuietTime;
+#if defined (PBL_PLATFORM_APLITE)
+  uint8_t QT;
+  uint8_t QTHourBegin;
+  uint8_t QTHourEnd;
+  uint8_t QTMinBegin;
+  uint8_t QTMinEnd;
+#endif
   uint8_t VibrateDuringCharged;
   uint8_t VibrateConnected;
   VIBE VibrateConnectedType;
@@ -31,7 +38,14 @@ static void prv_default_settings() {
   strcpy(settings.ClockFormat, "%H:%M\0");
   //strcpy(settings.WeatherAPIKey, "not_set");
   settings.WeatherUpdatePeriod = P_1H;
-  settings.RespectQuietTime = 1;
+  settings.RespectQuietTime = 0;
+#if defined (PBL_PLATFORM_APLITE)
+  settings.QT = 0;
+  settings.QTHourBegin = 23;
+  settings.QTHourEnd = 6;
+  settings.QTMinBegin = 0;
+  settings.QTMinEnd = 0;
+#endif
   settings.VibrateDuringCharged = 0;
   settings.VibrateConnected = 1;
   settings.VibrateConnectedType = VP_SHORT;
@@ -177,30 +191,34 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     }
   }
 
-  // Tuple *peb_conn_t = dict_find(iter, MESSAGE_KEY_PebbleConnection);
-  // if (peb_conn_t) {
-  //   settings.showPebbleConnection = peb_conn_t->value->int32 == 1;
-  // }
-  //
-  // Tuple *peb_battery_t = dict_find(iter, MESSAGE_KEY_PebbleBatteryStatus);
-  // if (peb_battery_t) {
-  //   settings.showPebbleBattery = peb_battery_t->value->int32 == 1;
-  // }
-  //
-  // Tuple *peb_battery_pc_t = dict_find(iter, MESSAGE_KEY_PebbleBatteryPercents);
-  // if (peb_battery_pc_t) {
-  //   settings.showPebbleBatteryPercents = peb_battery_pc_t->value->int32 == 1;
-  // }
-  //
-  //
-  // APP_LOG(APP_LOG_LEVEL_DEBUG, "opt are : %i and %i", settings.showPebbleConnection, settings.showPebbleBattery);
+#if defined (PBL_PLATFORM_APLITE)
+  Tuple *qt = dict_find(iter, MESSAGE_KEY_QuietTime);
+  if (qt) {
+      settings.QT = qt->value->uint8;
+  }
 
+   Tuple *qthb = dict_find(iter, MESSAGE_KEY_QuietTimeBegin);
+   if (qthb) {
+//       settings.QTHourBegin = qthb->value->int32;
+       APP_LOG(APP_LOG_LEVEL_DEBUG, "GET HOUR: %d", qthb->value->uint8);
+   }
+   Tuple *qthb1 = dict_find(iter, MESSAGE_KEY_QuietTimeBegin + 1);
+   if (qthb1) {
+       APP_LOG(APP_LOG_LEVEL_DEBUG, "GET MIN: %d", qthb1->value->uint8);
+   }
 
-  // Tuple *weather_apikey_t = dict_find(iter, MESSAGE_KEY_WeatherAPIKey);
-  // if (weather_apikey_t) {
-  //   strcpy(settings.WeatherAPIKey, weather_apikey_t->value->cstring);
-  //   settings_update_handler(UF_WEATHER);
+  // Tuple *qtb = dict_find(iter, MESSAGE_KEY_QuietTimeBegin);
+  // if (qtb) {
+  //     settings.QTHourBegin = get_hour_from_str(qtb->value->cstring);
+  //     settings.QTMinBegin = get_mins_from_str(qtb->value->cstring);
   // }
+  //
+  // Tuple *qte = dict_find(iter, MESSAGE_KEY_QuietTimeEnd);
+  // if (qte) {
+  //     settings.QTHourEnd = get_hour_from_str(qte->value->cstring);
+  //     settings.QTMinEnd = get_mins_from_str(qte->value->cstring);
+  // }
+#endif
 
   Tuple *vibr_conn = dict_find(iter, MESSAGE_KEY_VibrateConnected);
   if (vibr_conn) {
