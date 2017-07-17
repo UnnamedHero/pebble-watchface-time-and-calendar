@@ -1,7 +1,7 @@
 module.exports = [
   {
     "type": "heading",
-    "defaultValue": "{{ Heading }}"
+    "defaultValue": "T.C.W configuration"
   },
   // {
   //   "type": "section",
@@ -39,23 +39,23 @@ module.exports = [
     [
       {
         "type": "heading",
-        "defaultValue": "{{ DateTimeSettings }}"
+        "defaultValue": "Date and time settings"
       },
       {
         "type": "select",
         "messageKey": "ClockFormat",
-        "label": "{{ Clock format }}",
+        "label": "Clock format",
         "options" : [
           {
-            "label": "{{ 24h format }}",
+            "label": "24h format",
             "value": "%H:%M"
           },
           {
-            "label": "{{ AM/PM format }}",
+            "label": "AM/PM format",
             "value": "%I:%M"
           },
           {
-            "label": "{{ Use watch settings }}",
+            "label": "Use watch settings",
             "value": "cf_respect"
           }
         ],
@@ -63,7 +63,7 @@ module.exports = [
       },
       {
         "type": "select",
-        "label": "{{ Week starts on... }}",
+        "label": "Week starts on...",
         "messageKey": "SundayFirst",
         "options": [
           {
@@ -71,7 +71,7 @@ module.exports = [
             "value": "sun"
           },
           {
-            "label": "Monday",
+            "label": "Sunday",
             "value": "mon"
           }
         ],
@@ -90,7 +90,7 @@ module.exports = [
     "items": [
         {
           "type": "heading",
-          "defaultValue": "Weather Configuration"
+          "defaultValue": "Weather configuration"
         },
         {
           "type": "text",
@@ -106,7 +106,7 @@ module.exports = [
         {
           "type": "select",
           "messageKey": "WeatherUpdatePeriod",
-          "label": "Period",
+          "label": "Update period",
           "options" : [
             {
               "label": "every 15 min",

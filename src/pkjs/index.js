@@ -10,23 +10,14 @@ var messageKeys = require('message_keys');
 var locale = require('./locales/'+getLang());
 //console.log("test:"+locale["{{ Heading }}"]);
 //console.log("test:"+clayConfig[1].items[0]['defaultValue']);
+
 function localizator(config) {
-
-  if (!locale) {
-    return;
-  }
-
   function transaleValue(val) {
-
     var localizedstring = locale[val];
-
-  //  console.log("Working with ''"+val+"'', try to change to:"+localizedstring);
     return localizedstring ? localizedstring : val;
   }
 
   var newConfig = config.map(function(item) {
-    //var newItem
-    //console.log(item.value)
     if (item.value) {
       item.value = transaleValue(item.value);
     }
