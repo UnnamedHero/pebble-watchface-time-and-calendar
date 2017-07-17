@@ -35,6 +35,8 @@ module.exports = function(minified) {
     registerToggle ('VibrateDisconnected', 'VibrateDisconnectedType');
     registerToggle ('VibratePeriodic', 'VibratePeriodicType');
     registerToggle ('VibratePeriodic', 'VibratePeriodicPeroid');
+    registerToggle ('QuietTime', 'QuietTimeBegin');
+    registerToggle ('QuietTime', 'QuietTimeEnd');
 
     clayConfig.getItemById('ConfigMarker').hide();
   });

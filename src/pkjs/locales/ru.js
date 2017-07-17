@@ -8,6 +8,9 @@ module.exports = {
     "Week starts on..." : "Неделя начинается с...",
     "Sunday" : "воскресенья",
     "Monday" : "понедельника",
+    "Enable 'Quiet Time'" : "Включить функцию 'Тихий час'",
+    "start at:" : "начало с:",
+    "end at:" : "окончание в:",
     "Weather configuration": "Настройка погоды",
     "Get your own API key at <a href='http://home.openweathermap.org/users/sign_up'>OpenWeatherMap site</a> for free and input in to a field below." : "Получите свой личный API-ключ на <a href='http://home.openweathermap.org/users/sign_up'>сайте OpenWeatherMap</a> и пропишите его в поле ниже.",
     "API Key" : "API-ключ",
@@ -17,8 +20,8 @@ module.exports = {
     "every hour" : "каждый час",
     "every 3 hours" : "каждые 3 часа",
     "Vibration settings" : "Настройки вибрации",
-    "Do not vibe during Quiet Time" : "Не вибрировать в 'тихие часы'",
-    "Vibe during Pebble charging" : "Не вибрировать, пока часы заряжаются",
+    "Vibe during Quiet Time" : "Вибрировать в 'Тихий час'",
+    "Vibe during Pebble charging" : "Вибрировать, пока часы заряжаются",
     "Vibe on phone connect" : "Вибрировать при соединении часов с телефоном",
     "Vibe type" : "Тип вибрации",
     "short pulse" : "однократная короткая",
@@ -29,5 +32,4 @@ module.exports = {
     "Periodic Vibration" : "Периодическая вибрация",
     "Period" : "Периодичность",
     "Save Settings" : "Сохранить настройки"
-
   };

@@ -79,6 +79,33 @@ module.exports = [
       },
       {
         "type": "toggle",
+        "messageKey": "QuietTime",
+        "label": "Enable 'Quiet Time'",
+        "defaultValue": "true",
+        "capabilities": ["PLATFORM_APLITE"]
+      },
+      {
+        "type": "input",
+        "messageKey": "QuietTimeBegin",
+        "label": "start at:",
+        "defaultValue": "23:00:00",
+        "attributes" : {
+          "type" : "time"
+        },
+        "capabilities": ["PLATFORM_APLITE"]
+      },
+      {
+        "type": "input",
+        "messageKey": "QuietTimeEnd",
+        "label": "end at:",
+        "defaultValue": "06:30:00",
+        "attributes" : {
+          "type" : "time"
+        },
+        "capabilities": ["PLATFORM_APLITE"]
+      },
+      {
+        "type": "toggle",
         "id": "ConfigMarker",
         "messageKey": "ConfigMarker",
         "defaultValue": "true"
@@ -140,9 +167,8 @@ module.exports = [
       {
         "type": "toggle",
         "messageKey": "RespectQuietTime",
-        "label": "Do not vibe during Quiet Time",
-        "defaultValue": true,
-        "capabilities": ["NOT_PLATFORM_APLITE"]
+        "label": "Vibe during Quiet Time",
+        "defaultValue": false
       },
       {
         "type": "toggle",
