@@ -2,6 +2,7 @@
 #include "include/weather_m.h"
 #include "../utils/include/timeutils.h"
 #include "../settings.h"
+#include "../3rdparty/locale_framework/localize.h"
 
 static Layer *s_this_layer;
 static void prv_populate_weather_layer(Layer *, GContext *);
@@ -9,7 +10,7 @@ static void prv_save_weather();
 static void prv_load_weather();
 
 //static GBitmap *s_arrow_bitmap;
-static char* wind_directions[] = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"};
+//static const char* wind_directions[] = {_("N"), _("NNE"), _("NE"), _("ENE"), _("E"), _("ESE"), _("SE"), _("SSE"), _("S"), _("SSW"), _("SW"), _("WSW"), _("W"), _("WNW"), _("NW"), _("NNW")};
 typedef struct WeatherData {
   uint8_t WeatherReady;
   int WeatherTemperature;
@@ -73,12 +74,12 @@ Layer* get_layer_weather() {
 void update_weather() {
   int secs_to_wait = period_to_mins(settings_get_WeatherUpdatePeriod()) * SECONDS_PER_MINUTE;
   uint32_t elapsed = weather.WeatherTimeStamp + secs_to_wait;
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "sav: %ld, per: %d, el: %ld, cur: %ld",weather.WeatherTimeStamp, secs_to_wait, elapsed, time(NULL));
+  //APP_LOG(APP_LOG_LEVEL_DEBUG, "sav: %ld, per: %d, el: %ld, cur: %ld",weather.WeatherTimeStamp, secs_to_wait, elapsed, time(NULL));
   if (elapsed > (uint32_t)time(NULL)) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
+    //APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
     return;
   }
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Let's get weather!, %ld", (time(NULL)-elapsed)/60);
+  //APP_LOG(APP_LOG_LEVEL_DEBUG, "Let's get weather!, %ld", (time(NULL)-elapsed)/60);
 
   // Begin dictionary
   DictionaryIterator *iter;
@@ -92,18 +93,21 @@ void update_weather() {
 }
 
 void prv_populate_weather_layer(Layer *me, GContext *ctx) {
+  char* wind_directions[] = {_("N"), _("NNE"), _("NE"), _("ENE"), _("E"), _("ESE"), _("SE"), _("SSE"), _("S"), _("SSW"), _("SW"), _("WSW"), _("W"), _("WNW"), _("NW"), _("NNW")};
   if (weather.WeatherReady == 1) {
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: WEATHER");
     GRect this_bounds = layer_get_bounds(s_this_layer);
     //int wind_direction = prv_get_wind_direction()
     static char weather_text[64];
 //    APP_LOG(APP_LOG_LEVEL_DEBUG, "az is %d, wind is %d", weather.WeatherWindDirection, prv_get_wind_direction(weather.WeatherWindDirection));
-    snprintf(weather_text, sizeof(weather_text), "%d°, %s,\n%s, %d m/s, %d mmHg", \
+    snprintf(weather_text, sizeof(weather_text), "%d°, %s,\n%s, %d %s, %d %s", \
         weather.WeatherTemperature,\
         weather.WeatherDesc,\
         wind_directions[prv_get_wind_direction(weather.WeatherWindDirection)],\
         weather.WeatherWindSpeed, \
-        (int)(weather.WeatherPressure * 0.75) \
+        _("m/s"), \
+        (int)(weather.WeatherPressure * 0.75), \
+        _("mmHg") \
       );
     graphics_draw_text(ctx, weather_text, \
         fonts_get_system_font(FONT_KEY_GOTHIC_14), \
@@ -137,7 +141,7 @@ void get_weather(DictionaryIterator *iter, void *context) {
   // }
 
   weather.WeatherTimeStamp = time(NULL);
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "weather timestamp: %ld", weather.WeatherTimeStamp);
+  //APP_LOG(APP_LOG_LEVEL_DEBUG, "weather timestamp: %ld", weather.WeatherTimeStamp);
 
   Tuple *w_press = dict_find(iter, MESSAGE_KEY_WeatherPressure);
   if (w_press) {

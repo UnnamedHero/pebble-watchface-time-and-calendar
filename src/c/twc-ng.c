@@ -4,6 +4,7 @@
 #include "windows/time-window.h"
 #include "utils/include/timeutils.h"
 #include "utils/include/vibe.h"
+#include "3rdparty/locale_framework/localize.h"
 
 static bool s_js_ready;
 
@@ -109,6 +110,7 @@ static void prv_deinit(void) {
 
 int main(void) {
   //APP_LOG(APP_LOG_LEVEL_DEBUG, "Locale: %s", i18n_get_system_locale());
+  locale_init();
   prv_init();
   can_vibrate();
   app_event_loop();

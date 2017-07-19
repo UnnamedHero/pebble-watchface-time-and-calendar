@@ -2,18 +2,18 @@
 #include "include/calendar_m.h"
 #include "../utils/include/timeutils.h"
 #include "../settings.h"
-
+#include "../3rdparty/locale_framework/localize.h"
 
 static Layer *s_this_layer;
 static void prv_populate_this_layer(Layer *, GContext *);
 //static char
 // static char* weekdays_abbr[] = {"пн", "вт", "ср", "чт", "пт", "сб"};
 // static char* special_day = "вс";
-static char* weekdays_abbr[] = {"mo", "tu", "we", "th", "fr", "sa"};
-static char* special_day = "su";
+// static const char* weekdays_abbr[] = {_("mo"), _("tu"), _("we"), _("th"), _("fr"), _("sa")};
+// static const char* special_day = _("su");
 
 static int days[21];
-static char calendar_values[28][3];
+static char calendar_values[28][5];
 static struct tm *ct;
 static void prv_update_time();
 
@@ -47,7 +47,7 @@ static void fill_dates() {
   now = time(NULL);
   prv_update_time();
   int current_week_day = ct->tm_wday;
-  setlocale(LC_ALL, "ru_RU");
+  //setlocale(LC_ALL, "ru_RU");
   struct tm *filler_t;//;, *now_test;
   //now_test = localtime(&now);
 //  APP_LOG(APP_LOG_LEVEL_DEBUG, "today is %d", now_test->tm_mday);
@@ -74,15 +74,21 @@ static void fill_dates() {
 
 static void populate_calendar_values() {
   fill_dates();
+  char* weekdays_abbr[] = {_("mo"), _("tu"), _("we"), _("th"), _("fr"), _("sa")};
+  char* special_day = _("su");
+
   for (int row = 0; row < 4; row ++) {
     for (int col = 0; col < 7; col ++) {
       if (row == 0) {
         if (settings_get_SundayFirst()) {
-          col == 0 ? strcpy (calendar_values[col], special_day) : \
-                     strcpy (calendar_values[col], weekdays_abbr[col - 1]);
+          // col == 0 ? strcpy (calendar_values[col], special_day) : 
+          // strcpy (calendar_values[col], weekdays_abbr[col - 1]);
+
+          col == 0 ? snprintf(calendar_values[col], sizeof(calendar_values[col]), "%s", special_day) : \
+                     snprintf(calendar_values[col], sizeof(calendar_values[col]), "%s", weekdays_abbr[col - 1]);
         } else {
-          col < 6 ? strcpy (calendar_values[col], weekdays_abbr[col]) : \
-                    strcpy (calendar_values[col], special_day);
+          col < 6 ? snprintf(calendar_values[col], sizeof(calendar_values[col]), "%s", weekdays_abbr[col]) : \
+                    snprintf(calendar_values[col], sizeof(calendar_values[col]), "%s", special_day);
         }
       } else {
         int index = row * 7 + col;

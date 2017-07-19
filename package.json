@@ -88,6 +88,16 @@
           "type": "bitmap",
           "name": "BATTERY_CHARGED",
           "file": "images/battery_charged.png"
+        },
+        {
+          "type": "raw",
+          "name": "LOCALE_ENGLISH",
+          "file": "locale/locale_en.bin"
+        },
+        {
+          "type": "raw",
+          "name": "LOCALE_RUSSIAN",
+          "file": "locale/locale_ru.bin"
         }
       ]
     }
