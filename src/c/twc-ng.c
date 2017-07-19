@@ -42,16 +42,8 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   if (units_changed != SECOND_UNIT) {
     prv_periodic_vibrate(tick_time);
   }
-  can_vibrate();
   window_update_time(tick_time);
-//  change_pic(tick_time->tm_min);
-//  if (tick_time->tm_min % 15 == 0) {
-    //update_weather();
-//  }
 }
-
-
-
 
 void settings_update_handler(UPDATE_FLAG f) {
   if (f == UF_WEATHER) {
@@ -112,7 +104,6 @@ int main(void) {
   //APP_LOG(APP_LOG_LEVEL_DEBUG, "Locale: %s", i18n_get_system_locale());
   locale_init();
   prv_init();
-  can_vibrate();
   app_event_loop();
   prv_deinit();
 }

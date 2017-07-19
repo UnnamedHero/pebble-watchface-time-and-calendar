@@ -1,5 +1,5 @@
 module.exports = {
-    "T.C.W configuration" : "Настройка",
+    "Watchface configuration" : "Настройка",
     "Date and time settings" : "Настройка даты и времени",
     "Clock format" : "Настройка отображения времени",
     "24h format" : "24-часовой формат",

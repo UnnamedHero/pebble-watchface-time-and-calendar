@@ -9,8 +9,6 @@ static void prv_populate_weather_layer(Layer *, GContext *);
 static void prv_save_weather();
 static void prv_load_weather();
 
-//static GBitmap *s_arrow_bitmap;
-//static const char* wind_directions[] = {_("N"), _("NNE"), _("NE"), _("ENE"), _("E"), _("ESE"), _("SE"), _("SSE"), _("S"), _("SSW"), _("SW"), _("WSW"), _("W"), _("WNW"), _("NW"), _("NNW")};
 typedef struct WeatherData {
   uint8_t WeatherReady;
   int WeatherTemperature;
@@ -32,39 +30,18 @@ int prv_get_wind_direction(int azim) {
   int normalized = azim + 11;
   int azimuth = normalized > 360 ? normalized - 360 : normalized;
   return (int)(azimuth / 22.5);
-  //int big_azumuth = azumith * 10;
-  //int init = (azimuth + 110) > 3600 ? 3600 - 110 : azimuth - 11;
-//    float m = round(3.7);
-//    return init / 16;360
 }
 
 void init_weather_layer(GRect bounds) {
   s_this_layer = layer_create(bounds);
   prv_load_weather();
   layer_set_update_proc(s_this_layer, prv_populate_weather_layer);
-  // s_arrow_bitmap = gbitmap_create_with_resource(RESOURCE_ID_ARROW);
-  // DictionaryIterator *out_iter;
-  // APP_LOG(APP_LOG_LEVEL_DEBUG, "sending apikey: %s", apiKey);
-  // AppMessageResult result = app_message_outbox_begin(&out_iter);
-  // if (result == APP_MSG_OK) {
-  //   dict_write_cstring(out_iter, MESSAGE_KEY_WeatherAPIKey, apiKey);
-  //
-  //   result = app_message_outbox_send();
-  //   if (result != APP_MSG_OK) {
-  //     APP_LOG(APP_LOG_LEVEL_ERROR, "Error sending the outbox: %s", apiKey);
-  //   }
-  // } else {
-  //   APP_LOG(APP_LOG_LEVEL_ERROR, "Error preparing_outbox: %d", (int)result);
-  // }
 }
 
 void deinit_weather_layer() {
   if (s_this_layer) {
     layer_destroy(s_this_layer);
   }
-  // if (s_arrow_bitmap) {
-  //   gbitmap_destroy(s_arrow_bitmap);
-  // }
 }
 
 Layer* get_layer_weather() {
@@ -115,8 +92,6 @@ void prv_populate_weather_layer(Layer *me, GContext *ctx) {
         GTextOverflowModeWordWrap, \
         GTextAlignmentLeft, \
         NULL);
-    // GPoint wind_p = GPoint(140, 10);
-  //  graphics_draw_bitmap_in_rect(ctx, s_arrow_bitmap, GRect (2, 18, 10, 10));
   }
 
 
@@ -134,11 +109,6 @@ void get_weather(DictionaryIterator *iter, void *context) {
   if (w_desc) {
     snprintf(weather.WeatherDesc, sizeof(weather.WeatherDesc), w_desc->value->cstring);
   }
-
-  // Tuple *w_ts = dict_find(iter, MESSAGE_KEY_WeatherTimeStamp);
-  // if (w_ts) {
-  //   weather.WeatherTimeStamp = w_ts->value->uint32;
-  // }
 
   weather.WeatherTimeStamp = time(NULL);
   //APP_LOG(APP_LOG_LEVEL_DEBUG, "weather timestamp: %ld", weather.WeatherTimeStamp);

@@ -1,38 +1,8 @@
 module.exports = [
   {
     "type": "heading",
-    "defaultValue": "T.C.W configuration"
+    "defaultValue": "Watchface configuration"
   },
-  // {
-  //   "type": "section",
-  //   "items":
-  //     [
-  //       {
-  //       "type": "heading",
-  //       "defaultValue": "Main Window: top"
-  //       },
-  //       {
-  //         "type": "toggle",
-  //         "messageKey": "PebbleConnection",
-  //         "label": "Show Pebble connection status",
-  //         "defaultValue": true
-  //       },
-  //       {
-  //         "type": "toggle",
-  //         "messageKey": "PebbleBatteryStatus",
-  //         "label": "Show Pebble battery status",
-  //         "defaultValue": true
-  //       },
-  //
-  //       {
-  //         "type": "toggle",
-  //         "id": "PebbleBatteryBarPercents",
-  //         "messageKey": "PebbleBatteryBarPercents",
-  //         "label": "Show percent on battery bar",
-  //         "defaultValue": "true"
-  //       }
-  //     ]
-  // },
   {
     "type": "section",
     "items":
@@ -71,7 +41,7 @@ module.exports = [
             "value": "sun"
           },
           {
-            "label": "Sunday",
+            "label": "Monday",
             "value": "mon"
           }
         ],

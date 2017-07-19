@@ -47,11 +47,6 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
 
   GRect battery_inner_bar_rect;
 
-  //  APP_LOG(APP_LOG_LEVEL_DEBUG, "REDRAW: Battery Layer");
-    // if (s_battery_state_icon) {
-    //   APP_LOG(APP_LOG_LEVEL_DEBUG, "remove battery bitmap in redraw");
-    //   gbitmap_destroy(s_battery_state_icon);
-    // }
   if (s_battery_level.is_plugged || s_battery_level.is_charging) {
     battery_bar_level = bb.size.h;
     int res_id = s_battery_level.is_charging ? \
@@ -65,17 +60,12 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
   graphics_context_set_fill_color(ctx, GColorWhite);
   graphics_context_set_stroke_color(ctx, GColorWhite);
   battery_inner_bar_rect = GRect(30, bb.size.h - battery_bar_level, 15, battery_bar_level);
-  //GRect bb = layer_get_bounds(me);
-    //int width = s_battery_level.charge_percent * 3 / 10;
   snprintf(percent_text, sizeof(percent_text), "%d%%", s_battery_level.charge_percent);
-    //APP_LOG(APP_LOG_LEVEL_DEBUG, "State is %d, width is %d", s_battery_level.charge_percent, width);
-//    /*
   graphics_draw_text(ctx, percent_text, \
   fonts_get_system_font(FONT_KEY_GOTHIC_14), \
     percent_text_rect, \
     GTextOverflowModeWordWrap, \
     GTextAlignmentCenter, NULL);
-//*/
   graphics_draw_rect(ctx, battery_bar_rect);
   graphics_fill_rect(ctx, battery_inner_bar_rect, 0, GCornerNone);
 

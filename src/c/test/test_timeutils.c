@@ -37,7 +37,6 @@ int main() {
 	CU_initialize_registry();
 	CU_pSuite pSuite;
 	pSuite = CU_add_suite("timeutils_tests", suite_success_init, suite_success_clean);
-	//CU_add_test(pSuite, "test_is_between_numbers", test_is_between_numbers);
 	CU_register_suites(suites);
 	CU_basic_set_mode(CU_BRM_VERBOSE);
 	CU_set_error_action(CUEA_IGNORE);

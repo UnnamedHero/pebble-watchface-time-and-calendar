@@ -1,7 +1,9 @@
 {
-  "name": "tcw",
-  "author": "EEM",
-  "version": "0.0.0",
+  "name": "time-and-calendar",
+  "author": "Eugene 'EEM' Mikhaylov",
+  "description": "Another inplementation of functional watchface with time, calendar and weather",
+  "version": "0.9.0",
+  "license": "GPLv3",
   "keywords": [
     "pebble watchface",
     "Time",
@@ -13,7 +15,7 @@
     "pebble-clay": "^1.0.4"
   },
   "pebble": {
-    "displayName": "T.C.W.",
+    "displayName": "T a C",
     "uuid": "2c40726c-adac-4d55-8ed2-c114030aa0d6",
     "sdkVersion": "3",
     "enableMultiJS": true,
