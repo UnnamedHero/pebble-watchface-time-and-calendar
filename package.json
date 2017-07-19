@@ -15,7 +15,7 @@
     "pebble-clay": "^1.0.4"
   },
   "pebble": {
-    "displayName": "T a C",
+    "displayName": "Time and Calendar",
     "uuid": "2c40726c-adac-4d55-8ed2-c114030aa0d6",
     "sdkVersion": "3",
     "enableMultiJS": true,
@@ -69,7 +69,7 @@
           "menuIcon": true,
           "type": "png",
           "name": "IMAGE_MENU_ICON",
-          "file": "images/bluetooth_20_20.png"
+          "file": "images/tc.png"
         },
         {
           "type": "bitmap",

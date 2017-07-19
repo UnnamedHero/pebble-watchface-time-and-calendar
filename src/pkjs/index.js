@@ -1,10 +1,7 @@
-// Import the Clay package
+
 var Clay = require('pebble-clay');
-// Load our Clay configuration file
 var clayConfig = require('./config');
 var customFunctions = require('./functions');
-// Initialize Clay
-//clayConfig[1].items[0].defaultValue = 'Тестовый перевод';
 
 var messageKeys = require('message_keys');
 var currentLocaleModulePath = './locales/'+getLang();
@@ -14,9 +11,6 @@ try {
 } catch (ex) {
   var locale = require(defaultLocaleModulePath);
 }
-// var locale = require.defined(currentLocaleModulePath) ?
-//   require (currentLocaleModulePath) :
-//   require(defaultLocaleModulePath);
 
 function localizator(config) {
   function transaleValue(val) {
@@ -47,7 +41,6 @@ function localizator(config) {
 
 var clay = new Clay(localizator(clayConfig), customFunctions, { autoHandleEvents: false });
 
-
 Pebble.addEventListener('showConfiguration', function(e) {
   Pebble.openURL(clay.generateUrl());
 });
@@ -59,11 +52,9 @@ Pebble.addEventListener('webviewclosed', function(e) {
   }
 
   var dict = clay.getSettings(e.response);
-  //We need to extract hours and minutes to a separate messagekeys,
-  //becase pebble SDK do not work with sscanf C func.
   var qtb = dict[messageKeys.QuietTimeBegin].split(":",2);
   var qte = dict[messageKeys.QuietTimeEnd].split(":",2);;
-  //console.log("00 is:"+parseInt(qtb[1], 10));
+
   dict[messageKeys.QuietTimeBegin] = parseInt(qtb[0], 10);
   dict[messageKeys.QuietTimeBegin + 1] = parseInt(qtb[1], 10);
   dict[messageKeys.QuietTimeEnd] = parseInt(qte[0], 10);
@@ -89,7 +80,7 @@ function getLang() {
 function getWeatherAPIKey() {
   return localStorage.getItem('clay-settings') ?
    JSON.parse(localStorage.getItem('clay-settings')).WeatherAPIKey :
-   "ad68120f127506277ac967b76c4ae687";
+   "not_set";
 }
 
 var xhrRequest = function (url, type, callback) {
@@ -175,13 +166,9 @@ function fakeWeather() {
   }, function(data, err) {
       console.log('Error sending weather info to Pebble!, '+err);
     });
-
-
-
 }
 
 function getWeather() {
-
   //fakeWeather();
   navigator.geolocation.getCurrentPosition(
     locationSuccess,
@@ -195,18 +182,11 @@ function getWeather() {
 Pebble.addEventListener('ready',
   function(e) {
     console.log('PebbleKit JS ready!');
-//    weatherAPIKey = JSON.parse(localStorage.getItem('clay-settings')).WeatherAPIKey;
     Pebble.sendAppMessage({'JSReady': 1});
   }
-
 );
 
 Pebble.addEventListener('appmessage', function(e) {
   var dict = e.payload;
   getWeather();
-  // if (dict['WeatherAPIKey']) {
-  //   weatherAPIKey = dict['WeatherAPIKey'];
-  //   console.log("Received Weather API Key:", weatherAPIKey);
-  //   getWeather();
-  // }
 });

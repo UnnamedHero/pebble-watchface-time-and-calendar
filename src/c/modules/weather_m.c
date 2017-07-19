@@ -19,7 +19,7 @@ typedef struct WeatherData {
   int WeatherWindDirection;
 } __attribute__((__packed__)) WeatherData;
 
-WeatherData weather;
+static WeatherData weather;
 
 void prv_default_weather_data() {
   weather.WeatherReady = 0;

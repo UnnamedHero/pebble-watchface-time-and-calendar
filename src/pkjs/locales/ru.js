@@ -15,7 +15,7 @@ module.exports = {
     "Get your own API key at <a href='http://home.openweathermap.org/users/sign_up'>OpenWeatherMap site</a> for free and input in to a field below." : "Получите свой личный API-ключ на <a href='http://home.openweathermap.org/users/sign_up'>сайте OpenWeatherMap</a> и пропишите его в поле ниже.",
     "API Key" : "API-ключ",
     "Update period" : "Период обновления",
-    "every 15 min" : "каждый 15 минут",
+    "every 15 min" : "каждые 15 минут",
     "every 30 min" : "каждые 30 минут",
     "every hour" : "каждый час",
     "every 3 hours" : "каждые 3 часа",
