@@ -38,8 +38,10 @@ static void prv_periodic_vibrate(struct tm *timer) {
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   //update_time();
-  prv_periodic_vibrate(tick_time);
-
+  if (units_changed != SECOND_UNIT) {
+    prv_periodic_vibrate(tick_time);
+  }
+  can_vibrate();
   window_update_time(tick_time);
 //  change_pic(tick_time->tm_min);
 //  if (tick_time->tm_min % 15 == 0) {
@@ -95,8 +97,8 @@ static void prv_init() {
   const bool animated = true;
   window_stack_push(get_time_window(), animated);
 
-//  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+//  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
 //  update_time();
   accel_tap_service_subscribe(accel_tap_handler);
 }

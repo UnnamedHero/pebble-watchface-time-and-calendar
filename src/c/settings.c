@@ -164,6 +164,23 @@ PERIOD settings_get_WeatherUpdatePeriod() {
 VIBE settings_get_VibratePeriodicType() {
   return settings.VibratePeriodicType;
 }
+#if defined (PBL_PLATFORM_APLITE)
+uint8_t settings_get_QTHourBegin() {
+  return settings.QTHourBegin;
+}
+
+uint8_t settings_get_QTHourEnd() {
+  return settings.QTHourEnd;
+}
+
+uint8_t settings_get_QTMinBegin() {
+  return settings.QTMinBegin;
+}
+
+uint8_t settings_get_QTMinEnd() {
+  return settings.QTMinEnd;
+}
+#endif
 
 static void prv_load_settings() {
   // Load the default settings
@@ -199,13 +216,24 @@ void populate_settings(DictionaryIterator *iter, void *context) {
 
    Tuple *qthb = dict_find(iter, MESSAGE_KEY_QuietTimeBegin);
    if (qthb) {
-//       settings.QTHourBegin = qthb->value->int32;
-       APP_LOG(APP_LOG_LEVEL_DEBUG, "GET HOUR: %d", qthb->value->uint8);
+      settings.QTHourBegin = qthb->value->uint8;
    }
-   Tuple *qthb1 = dict_find(iter, MESSAGE_KEY_QuietTimeBegin + 1);
-   if (qthb1) {
-       APP_LOG(APP_LOG_LEVEL_DEBUG, "GET MIN: %d", qthb1->value->uint8);
+
+   Tuple *qtmb = dict_find(iter, MESSAGE_KEY_QuietTimeBegin + 1);
+   if (qtmb) {
+      settings.QTMinBegin = qtmb->value->uint8;
    }
+
+   Tuple *qthe = dict_find(iter, MESSAGE_KEY_QuietTimeEnd);
+   if (qthe) {
+      settings.QTHourEnd = qthe->value->uint8;
+   }
+   
+   Tuple *qtme = dict_find(iter, MESSAGE_KEY_QuietTimeEnd + 1);
+   if (qtme) {
+      settings.QTMinEnd = qtme->value->uint8;
+   }
+
 
   // Tuple *qtb = dict_find(iter, MESSAGE_KEY_QuietTimeBegin);
   // if (qtb) {

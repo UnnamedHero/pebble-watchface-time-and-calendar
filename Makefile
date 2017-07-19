@@ -1,17 +1,18 @@
 #simple automate 
 
+build:
+	pebble build
+
 test:	
 	gcc src/c/test/test_timeutils.c -lbcunit -o watchtest
 	./watchtest
 	@rm watchtest
 
-build:
-	pebble build
 
-emul:
+emul: build
 	pebble install --emulator aplite
 
-phone:
+phone: build
 	pebble install --phone ${PEBBLE_PHONE}
 
 loge:
@@ -20,4 +21,4 @@ loge:
 logp:
 	pebble logs --phone ${PEBBLE_PHONE}
 
-.PHONY: test
+.PHONY: test build

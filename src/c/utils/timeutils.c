@@ -1,11 +1,29 @@
 #include <pebble.h>
 #include "include/timeutils.h"
-
-static struct tm *tick_time;
+#include "../settings.h"
 
 #if defined (PBL_PLATFORM_APLITE)
+static int prv_get_mins(int hour, int min) {
+  return hour * MINUTES_PER_HOUR + min;
+}
+
+static bool prv_is_between_numbers(int begin, int end, int now) {
+  bool within_24h = begin < end;
+  if (within_24h) {    
+    return (now > begin) && (now < end);
+  } 
+  return (((now < begin) && (now < end)) || ((now > begin) && (now > end)));
+}
+
 bool aplite_quiet_time_is_active() {
-  return true;
+  struct tm *tick_time;
+  time_t temp = time(NULL);
+  tick_time = localtime(&temp);
+  
+  int current_min_of_a_day = prv_get_mins(tick_time->tm_hour, tick_time->tm_min);  
+  int qtmins_begin = prv_get_mins(settings_get_QTHourBegin(), settings_get_QTMinBegin());
+  int qtmins_end = prv_get_mins(settings_get_QTHourEnd(), settings_get_QTMinEnd());  
+  return prv_is_between_numbers(qtmins_begin, qtmins_end, current_min_of_a_day);
 }
 #endif
 
@@ -16,27 +34,14 @@ bool can_vibrate() {
   bool qt = !quiet_time_is_active();
 #endif
   bool res = settings_get_RespectQuietTime() ? qt : true;
-
-  // APP_LOG(APP_LOG_LEVEL_DEBUG, "quet time?: %s", quiet_time_is_active() ? "true" : "false");
-  // APP_LOG(APP_LOG_LEVEL_DEBUG, "can bzzzz: %s", res ? "true" : "false");
   BatteryChargeState cs = battery_state_service_peek();
   return res && !(cs.is_charging || cs.is_plugged);
-
 }
 
-
-
-void update_timer() {
-  time_t temp = time(NULL);
-  tick_time = localtime(&temp);
-}
-
-// void get_raw_time_ptr(struct tm *tm_ptr) {
-//   update_timer();
-//   tm_ptr = tick_time;
-// }
 
 void get_currect_time(DT_FORMAT dtf, char *buffer) {
+
+  struct tm *tick_time;
   time_t temp = time(NULL);
   tick_time = localtime(&temp);
   char d_buffer[32];

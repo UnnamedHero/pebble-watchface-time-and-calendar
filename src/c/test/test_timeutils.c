@@ -7,7 +7,7 @@ bool is_between_numbers(int begin, int end, int now) {
   if (within_24h) {    
     return (now > begin) && (now < end);
   } 
-  return ((now < begin) && (now < end) || (now > begin) && (now > end));
+  return (((now < begin) && (now < end)) || ((now > begin) && (now > end)));
 }
 
 void test_is_between_numbers(void) {

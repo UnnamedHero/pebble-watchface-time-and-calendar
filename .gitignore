@@ -5,3 +5,5 @@ pebble-screenshot*
 .*.swp
 Thumbs.db
 package-lock.json
+*.sublime-project
+*.sublime-workspace

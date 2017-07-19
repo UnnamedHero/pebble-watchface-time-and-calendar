@@ -1,5 +1,6 @@
 #pragma once
 
+#include <pebble.h>
 #define SETTINGS_KEY 1
 
 typedef enum Update_Flag {
@@ -50,3 +51,9 @@ bool settings_get_VibratePeriodic();
 PERIOD settings_get_VibratePeriodicPeroid();
 VIBE settings_get_VibratePeriodicType();
 bool settings_get_SundayFirst();
+#if defined (PBL_PLATFORM_APLITE)
+uint8_t settings_get_QTHourBegin();
+uint8_t settings_get_QTHourEnd();
+uint8_t settings_get_QTMinBegin();
+uint8_t settings_get_QTMinEnd();
+#endif
