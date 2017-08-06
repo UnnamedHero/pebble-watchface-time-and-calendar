@@ -1,5 +1,7 @@
 module.exports = function () {
 
+var fetchingWeather = false;
+
 function getWeatherAPIKey() {
   return localStorage.getItem('clay-settings') ?
    JSON.parse(localStorage.getItem('clay-settings')).WeatherAPIKey :
@@ -33,6 +35,7 @@ function locationSuccess(pos) {
 
   xhrRequest(url, 'GET',
     function(responseText) {
+      fetchingWeather = false;
     // responseText contains a JSON object with weather info
       var json = JSON.parse(responseText);
     // Temperature in Kelvin requires adjustment
@@ -69,6 +72,7 @@ function locationSuccess(pos) {
 
 function locationError(err) {
   console.log('Error requesting location!');
+  fetchingWeather = false;
 }
 
 function fakeWeather() {
@@ -93,12 +97,14 @@ function fakeWeather() {
 
 function getWeather() {
   fakeWeather();
-  // navigator.geolocation.getCurrentPosition(
-  //   locationSuccess,
-  //   locationError,
-  //   {timeout: 5000, maximumAge: 0}
-  // );
-
-}
+//   if (!fetchingWeather) {
+//   	  fetchingWeather = true;
+// 	  navigator.geolocation.getCurrentPosition(
+// 	    locationSuccess,
+// 	    locationError,
+// 	    {timeout: 5000, maximumAge: 0}
+// 	  );
+//   }	
+// }
 
 };
