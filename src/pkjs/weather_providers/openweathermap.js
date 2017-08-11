@@ -23,10 +23,18 @@ function sendWeather(weather_data) {
     });  
 }
 
+function isDayNow (sunrise, sunset) {
+  var now = Date.now();
+  return now > sunrise && now < sunset;
+}
+
 //http://openweathermap.org/weather-conditions
-function getCondition (owmCond) {
+function getCondition (owmCond, sunrise, sunset) {
+
+  var isDay = isDayNow(sunrise, sunset);
 //Thunderstorm
   switch (owmCond) {
+//    
     case 200:
     case 201:
     case 202:
@@ -93,14 +101,15 @@ function getCondition (owmCond) {
       return '<';
     case 761:
       return 'Б';
+//clear sky      
     case 800:
-      return 'I';
+      return isDay ? 'I' : 'N';
     case 801:
-      return 'b';
+      return isDay ? 'b' : '#';
     case 802:
-      return 'c';
+      return isDay ? 'c' : '#';
     case 803:
-      return '"';
+      return isDay ? '"' : '#';
     case 804:
       return '!';
     default:
@@ -139,7 +148,7 @@ function locationSuccess(pos) {
       	sendWeather ({
         "WeatherMarker": true,
         "WeatherTemperature": temperature,
-        "WeatherCondition": getCondition(json.weather[0].id),
+        "WeatherCondition": getCondition(json.weather[0].id, json.sys.sunrise, json.sys.sunset),
 //        "WeatherDesc": json.weather[0].description,
         "WeatherTimeStamp": json.dt,
         // "WeatherPressure": json.main.pressure,
