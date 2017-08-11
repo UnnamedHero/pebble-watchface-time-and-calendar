@@ -21,4 +21,7 @@ loge:
 logp:
 	pebble logs --phone ${PEBBLE_PHONE}
 
+config:
+	pebble emu-app-config
+	
 .PHONY: test build
