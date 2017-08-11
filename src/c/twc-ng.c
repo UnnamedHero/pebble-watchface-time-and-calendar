@@ -47,8 +47,9 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 
 void settings_update_handler(UPDATE_FLAG f) {
   if (f == UF_WEATHER) {
-//    init_weather(settings_get_weather_apikey());
+    ready_for_weather();
   }
+  time_window_force_redraw();
 }
 
 static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) {

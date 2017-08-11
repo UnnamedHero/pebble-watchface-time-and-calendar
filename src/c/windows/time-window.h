@@ -7,3 +7,4 @@ Window* get_time_window();
 void window_update_time(struct tm *);
 void ready_for_weather();
 void simple_weather_update(DictionaryIterator *iter, void *context);
+void time_window_force_redraw();
