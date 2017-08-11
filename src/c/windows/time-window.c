@@ -1,5 +1,5 @@
 #include <pebble.h>
-#include "time-window.h"
+#include "include/time-window.h"
 //#include "../layers/top-panel-layer.h"
 //#include "../layers/include/datetime-layer.h"
 #include "../modules/include/calendar_m.h"

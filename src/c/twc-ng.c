@@ -1,7 +1,7 @@
 #include <pebble.h>
 #include "twc-ng.h"
 #include "settings.h"
-#include "windows/time-window.h"
+#include "windows/include/time-window.h"
 #include "utils/include/timeutils.h"
 #include "utils/include/vibe.h"
 #include "3rdparty/locale_framework/localize.h"
