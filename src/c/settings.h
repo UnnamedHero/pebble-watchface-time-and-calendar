@@ -28,7 +28,11 @@ typedef enum DateTimeFormat {
   CLOCK_FORMAT
 } DT_FORMAT;
 
-
+typedef enum CalendarWeekView {
+  CAL_WV_PPC,
+  CAL_WV_PCN,
+  CAL_WV_CNN
+} CAL_WEEK_VIEW;
 
 typedef void (*callback_ptr)(UPDATE_FLAG);
 
@@ -51,6 +55,8 @@ bool settings_get_VibratePeriodic();
 PERIOD settings_get_VibratePeriodicPeroid();
 VIBE settings_get_VibratePeriodicType();
 bool settings_get_SundayFirst();
+CAL_WEEK_VIEW settings_get_CalendarWeekView();
+
 #if defined (PBL_PLATFORM_APLITE)
 uint8_t settings_get_QTHourBegin();
 uint8_t settings_get_QTHourEnd();

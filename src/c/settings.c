@@ -25,7 +25,7 @@ typedef struct ClaySettings {
   PERIOD VibratePeriodicPeroid;
   VIBE VibratePeriodicType;
   uint8_t SundayFirst;
-
+  CAL_WEEK_VIEW CalendarWeeks;
   // bool showPebbleConnection;
   // bool showPebbleBattery;
   // bool showPebbleBatteryPercents;
@@ -56,6 +56,7 @@ static void prv_default_settings() {
   settings.VibratePeriodicPeroid = P_1H;
   settings.VibratePeriodicType = VP_LONG;
   settings.SundayFirst = 0;
+  settings.CalendarWeeks = CAL_WV_PCN;
   // settings.showPebbleBattery = true;
   // settings.showPebbleConnection = true;
   // settings.showPebbleBatteryPercents = true;
@@ -108,6 +109,19 @@ static VIBE get_vibe(char *settings_vibe) {
       return VP_TRIPLE_SHORT;
   }
   return VP_LONG;
+}
+
+static CAL_WEEK_VIEW get_weekview(char *settings_weekview) {
+  if (strcmp(settings_weekview, "cal_ppc") == 0) {
+      return CAL_WV_PPC;
+  }
+  if (strcmp(settings_weekview, "cal_pcn") == 0) {
+      return CAL_WV_PCN;
+  }
+  if (strcmp(settings_weekview, "cal_cnn") == 0) {
+      return CAL_WV_CNN;
+  }
+  return CAL_WV_PCN;
 }
 
 VIBE settings_get_VibrateConnectedType() {
@@ -164,6 +178,11 @@ PERIOD settings_get_WeatherUpdatePeriod() {
 VIBE settings_get_VibratePeriodicType() {
   return settings.VibratePeriodicType;
 }
+
+CAL_WEEK_VIEW settings_get_CalendarWeekView() {
+  return settings.CalendarWeeks;
+}
+
 #if defined (PBL_PLATFORM_APLITE)
 uint8_t settings_get_QTHourBegin() {
   return settings.QTHourBegin;
@@ -298,6 +317,12 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     //char sf_option[4] = sunday_first->value->cstring;
     settings.SundayFirst = strcmp(sunday_first->value->cstring, "sun") == 0 ? 1 : 0;
   }
+
+  Tuple *cwv = dict_find(iter, MESSAGE_KEY_CalendarWeeks);
+  if (cwv) {
+     settings.CalendarWeeks = get_weekview(cwv->value->cstring);
+  }
+
   save_settings();
 }
 

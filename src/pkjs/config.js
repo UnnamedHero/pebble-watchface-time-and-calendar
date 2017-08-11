@@ -84,6 +84,36 @@ module.exports = [
   },
   {
     "type": "section",
+    "items":
+    [
+      {
+        "type": "heading",
+        "defaultValue": "Calendar settings"
+      },
+      {
+        "type": "select",
+        "messageKey": "CalendarWeeks",
+        "label": "Weeks view",
+        "options" : [
+          {
+            "label": "2 previous weeks, current",
+            "value": "cal_ppc"
+          },
+          {
+            "label": "prevoius, current, next",
+            "value": "cal_pcn"
+          },
+          {
+            "label": "current, next 2 weeks",
+            "value": "cal_cnn"
+          },
+        ],
+        "defaultValue": "cal_pcn"
+      },
+    ]
+  },
+  {
+    "type": "section",
     "items": [
         {
           "type": "heading",

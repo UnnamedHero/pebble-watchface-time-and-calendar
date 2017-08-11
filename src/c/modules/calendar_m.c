@@ -34,15 +34,27 @@ Layer* get_layer_calendar() {
   return s_this_layer;
 }
 
-static void fill_dates() {
+static int s_get_calendar_begin() {
+  switch (settings_get_CalendarWeekView()) {
+    case CAL_WV_PPC:
+      return 14;
+    case CAL_WV_PCN:
+      return 7;
+    case CAL_WV_CNN:
+      return 0;
+  }
+  return 7;
+}
 
+static void fill_dates() {
 
   time_t now, previous_week_start, filler;
   now = time(NULL);
   prv_update_time();
   int current_week_day = ct->tm_wday;
   struct tm *filler_t;//;, *now_test;
-  previous_week_start = now - (7 + current_week_day) * SECONDS_PER_DAY;
+  
+  previous_week_start = now - (s_get_calendar_begin() + current_week_day) * SECONDS_PER_DAY;
   if (!settings_get_SundayFirst()) {
     previous_week_start += SECONDS_PER_DAY;
     if (current_week_day ==0) {
@@ -108,7 +120,7 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
   } else {
    current_week_day_abbr_index = ct->tm_wday == 0 ? 6 : ct->tm_wday - 1;
  }
-  int current_date_index =current_week_day_abbr_index + 14;
+  int current_date_index =current_week_day_abbr_index + s_get_calendar_begin() + 7;
   //APP_LOG(APP_LOG_LEVEL_DEBUG, "DOW: %d, date: %d", ct->tm_wday, ct->tm_mday);
   GRect backgrnd = GRect (bounds.origin.x + 1, bounds.origin.y, bounds.size.w - 6, bounds.size.h - 1);
   graphics_fill_rect(ctx, backgrnd, 0, GCornerNone);

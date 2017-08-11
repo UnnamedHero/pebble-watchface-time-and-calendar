@@ -62,6 +62,7 @@
       "WeatherWindDirection",
       "WeatherTimeStamp",
       "SundayFirst",
+      "CalendarWeeks",
       "dummy"
     ],
     "resources": {

@@ -31,5 +31,10 @@ module.exports = {
     "Vide on phone disconnect" : "Вибрировать при потере связи с телефоном",
     "Periodic Vibration" : "Периодическая вибрация",
     "Period" : "Периодичность",
+    "Calendar settings" : "Настройка календаря",
+    "Weeks view" : "Показывать недели",
+    "2 previous weeks, current" : "2 предыдущие, текущая",
+    "prevoius, current, next" : "предыдущая, текущая, следующая",
+    "current, next 2 weeks" : "текущая, 2 следующих",
     "Save Settings" : "Сохранить настройки"
   };
