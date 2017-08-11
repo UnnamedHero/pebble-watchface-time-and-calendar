@@ -1,15 +1,26 @@
-module.exports = function () {
 
-function getLang() {
-  var countryCodes = {
+function getLang () {
+  const countryCodes = {
     'ru-RU' : 'ru',
     'en-US' : 'en'
-  }
-  var lang = countryCodes[navigator.language];
+  };
+  const lang = countryCodes[navigator.language];
   return lang ? lang : 'en';
 }
 
+exports.getLang = getLang;
+
+  var currentLocaleModulePath = './locales/' + getLang();
+  var defaultLocaleModulePath = './locales/en';
+
+  try {
+    var locale = require('./locales/'+getLang());
+  } catch (ex) {
+    var locale = require('./locales/en');
+  }
+
 function localizator(config) {
+
   function transaleValue(val) {
     var localizedstring = locale[val];
     return localizedstring ? localizedstring : val;
@@ -34,7 +45,9 @@ function localizator(config) {
     return item;
   });
   return newConfig;
-}
-
-
 };
+
+
+
+exports.translate = localizator;
+

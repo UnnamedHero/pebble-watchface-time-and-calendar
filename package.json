@@ -54,6 +54,7 @@
       "WeatherMarker",
       "WeatherMarkerForecast",
       "WeatherTemperature",
+      "WeatherCondition",
       "WeatherDesc",
       "WeatherHumidity",
       "WeatherPressure",
@@ -90,6 +91,17 @@
           "type": "bitmap",
           "name": "BATTERY_CHARGED",
           "file": "images/battery_charged.png"
+        },
+        {
+          "type": "font",
+          "name": "CLIMACONS_36",
+          "file": "fonts/Climacons-Font_mod.ttf"
+        },
+        {
+          "characterRegex": "[:0-9]",
+          "type": "font",
+          "name": "TIME_BOLD_54",
+          "file": "fonts/BebasNeue_Bold.ttf"
         },
         {
           "type": "raw",

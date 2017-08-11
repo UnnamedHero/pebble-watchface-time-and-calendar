@@ -5,18 +5,7 @@ var customFunctions = require('./functions');
 var messageKeys = require('message_keys');
 var i18n = require('./localizator');
 
-var currentLocaleModulePath = './locales/' + i18n.getLang();
-var defaultLocaleModulePath = './locales/en';
-
-try {
-  var locale = require(currentLocaleModulePath);
-} catch (ex) {
-  var locale = require(defaultLocaleModulePath);
-}
-
-var weather = require('./weather');
-
-var clay = new Clay(i18n.localizator(clayConfig), customFunctions, { autoHandleEvents: false });
+var clay = new Clay(i18n.translate(clayConfig), customFunctions, { autoHandleEvents: false });
 
 Pebble.addEventListener('showConfiguration', function(e) {
   Pebble.openURL(clay.generateUrl());
@@ -51,7 +40,11 @@ Pebble.addEventListener('ready',
   }
 );
 
+
 Pebble.addEventListener('appmessage', function(e) {
+  console.log("Go for a weather");
   var dict = e.payload;
-  weather.getWeather();
+  var provider = require('./weather_providers/openweathermap');
+//  var provider = require('./weather_providers/dummy');  
+  provider.getWeather();
 });

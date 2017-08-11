@@ -110,7 +110,7 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
  }
   int current_date_index =current_week_day_abbr_index + 14;
   //APP_LOG(APP_LOG_LEVEL_DEBUG, "DOW: %d, date: %d", ct->tm_wday, ct->tm_mday);
-  GRect backgrnd = GRect (bounds.origin.x + 1, bounds.origin.y, bounds.size.w -6, bounds.size.h);
+  GRect backgrnd = GRect (bounds.origin.x + 1, bounds.origin.y, bounds.size.w - 6, bounds.size.h - 1);
   graphics_fill_rect(ctx, backgrnd, 0, GCornerNone);
   prv_set_dark_theme(ctx);
   for (int iy = 0; iy < 4; iy ++) {

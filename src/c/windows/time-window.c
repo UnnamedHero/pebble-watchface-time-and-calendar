@@ -37,12 +37,13 @@ static void prv_window_load(Window *window) {
 //-----bitmaps
 //  GRect toplayer_bounds = GRect (0, 0, bounds.size.w, 20);
   GRect bluetooth_bounds = GRect (0, 0, 20, 20);
-  GRect battery_bounds = GRect (bounds.size.w - 45, 0, 45, 20);
-  GRect date_bounds = GRect(0, 20, bounds.size.w, 14);
+  GRect battery_bounds = GRect (bounds.size.w - 47, 0, 45, 20);
+  GRect date_bounds = GRect(0, 22, bounds.size.w, 14);
   //GRect datetime_bounds = GRect (0, 20, bounds.size.w, 60);
-  GRect time_bounds = GRect (0, 34, bounds.size.w, 34);
-  GRect calendar_bounds = GRect (2, 68, bounds.size.w, 73);
-  GRect weather_bounds = GRect (2, 138, bounds.size.w, bounds.size.h - 123);
+  GRect time_bounds = GRect (35, 32, bounds.size.w - 35, 54);
+  GRect calendar_bounds = GRect (2, 92, bounds.size.w, 73);
+//  GRect weather_bounds = GRect (2, 138, bounds.size.w, bounds.size.h - 123);
+  GRect weather_bounds = GRect (2, 34, 34, 54);
 //  init_top_panel_layer(toplayer_bounds);
   init_bluetooh_layer(bluetooth_bounds);
   init_battery_layer(battery_bounds);
@@ -51,42 +52,17 @@ static void prv_window_load(Window *window) {
   //init_datetime_layer(datetime_bounds);
   init_calendar_layer(calendar_bounds);
   init_weather_layer(weather_bounds);
-//----bitmap layers
-
-  //bitmap_layer_create((GRect(0, 0, bounds.size.w, 20)));
-
-
-//----text layers
-//  s_weather_layer = text_layer_create(GRect(0, 72, bounds.size.w, 20));
-//----set bitmaps
-//  bitmap_layer_set_bitmap(s_top_panel_layer_1, s_bt_connected);
-//----set text
-  // text_layer_set_text(s_time_layer, "00:00");
-  // text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
-
-  //text_layer_set_text(s_weather_layer, "n/a");
-  //text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
-
 
 //---adding layers
-//  layer_add_child(window_layer, get_top_panel_layer());
   layer_add_child(window_layer, get_layer_bluetooth());
   layer_add_child(window_layer, get_layer_battery());
   layer_add_child(window_layer, get_layer_date());
   layer_add_child(window_layer, get_layer_time());
-  //layer_add_child(window_layer, get_datetime_layer());
   layer_add_child(window_layer, get_layer_calendar());
   layer_add_child(window_layer, get_layer_weather());
-//  layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
-  //layer_add_child(window_layer, text_layer_get_layer(s_weather_layer));
-//  prv_update_window();
 }
 
 static void prv_window_unload(Window *window) {
-//  text_layer_destroy(s_time_layer);
-//  text_layer_destroy(s_weather_layer);
-  //layer_destroy(s_top_panel_layer_1);
-//  deinit_top_panel_layer();
   deinit_bluetooth_layer();
   deinit_battery_layer();
   deinit_date_layer();
@@ -110,7 +86,7 @@ void window_update_time(struct tm *tick_time) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window update time handler");
 
   layer_mark_dirty(get_layer_time());
-  update_weather();
+//  update_weather();
 }
 
 
