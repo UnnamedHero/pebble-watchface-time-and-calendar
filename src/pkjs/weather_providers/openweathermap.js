@@ -6,6 +6,20 @@ function getWeatherAPIKey() {
 		"not_set";
 	}
 
+function getTempUnits() {
+  var units = JSON.parse(localStorage.getItem('clay-settings')).WeatherUnits;
+  switch (units) {
+    case 'imperial':
+      return '&units=imperial';
+    case 'metric':
+      return '&units=metric';
+    case 'default':
+      return '';
+    default:
+      return '';
+  }
+}
+
 function xhrRequest (url, type, callback) {
   var xhr = new XMLHttpRequest();
   xhr.onload = function () {
@@ -130,6 +144,7 @@ function locationSuccess(pos) {
       pos.coords.latitude +
       '&lon=' + pos.coords.longitude +
       '&lang=' + i18n.getLang() +
+      getTempUnits() + 
       '&appid=' + weatherAPIKey;// + 'ru';
   
   return xhrRequest(url, 'GET',
@@ -142,12 +157,12 @@ function locationSuccess(pos) {
     		console.log("Waether ERROR: Invalid API key");
         return;
     	}
-		var temperature = Math.round(json.main.temp - 273.15);
+		//var temperature = Math.round(json.main.temp - 273.15);
     // Temperature in Kelvin requires adjustment
     
       	sendWeather ({
         "WeatherMarker": true,
-        "WeatherTemperature": temperature,
+        "WeatherTemperature": json.main.temp,
         "WeatherCondition": getCondition(json.weather[0].id, json.sys.sunrise, json.sys.sunset),
 //        "WeatherDesc": json.weather[0].description,
         "WeatherTimeStamp": json.dt,

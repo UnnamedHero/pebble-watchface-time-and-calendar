@@ -153,7 +153,27 @@ module.exports = [
             }
           ],
           "defaultValue": "60"
-        }
+        },
+        {
+          "type": "select",
+          "messageKey": "WeatherUnits",
+          "label": "Weather units",
+          "options" : [
+            {
+              "label": "Fahrenheit",
+              "value": "imperial"
+            },
+            {
+              "label": "Celsius",
+              "value": "metric"
+            },
+            {
+              "label": "Kelvin",
+              "value": "default"
+            },
+          ],
+          "defaultValue": "metric"
+        },      
     ]
   },
   {

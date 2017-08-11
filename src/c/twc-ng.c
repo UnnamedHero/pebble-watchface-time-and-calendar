@@ -46,9 +46,9 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 }
 
 void settings_update_handler(UPDATE_FLAG f) {
-  if (f == UF_WEATHER) {
+//  if (f == UF_WEATHER) {
     ready_for_weather();
-  }
+//  }
   time_window_force_redraw();
 }
 

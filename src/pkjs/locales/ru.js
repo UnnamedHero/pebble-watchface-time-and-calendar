@@ -19,6 +19,10 @@ module.exports = {
     "every 30 min" : "каждые 30 минут",
     "every hour" : "каждый час",
     "every 3 hours" : "каждые 3 часа",
+    "Weather units" : "Показывать температуру в ",
+    "Fahrenheit" : "фаренгейтах",
+    "Celsius" : "цельсиях",
+    "Kelvin" : "кельвинах",
     "Vibration settings" : "Настройки вибрации",
     "Vibe during Quiet Time" : "Вибрировать в 'Тихий час'",
     "Vibe during Pebble charging" : "Вибрировать, пока часы заряжаются",
@@ -36,5 +40,5 @@ module.exports = {
     "2 previous weeks, current" : "2 предыдущие, текущая",
     "prevoius, current, next" : "предыдущая, текущая, следующая",
     "current, next 2 weeks" : "текущая, 2 следующих",
-    "Save Settings" : "Сохранить настройки"
+    "Save Settings" : "Сохранить настройки",
   };

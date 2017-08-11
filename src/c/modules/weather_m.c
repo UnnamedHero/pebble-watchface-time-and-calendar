@@ -112,7 +112,7 @@ void prv_populate_weather_layer(Layer *me, GContext *ctx) {
     NULL);        
   graphics_draw_text(ctx, weather_text, \
     fonts_get_system_font(FONT_KEY_GOTHIC_24), \
-    GRect(4, 28, 30, 20), \
+    GRect(0, 28, 45, 20), \
     GTextOverflowModeWordWrap, \
     GTextAlignmentLeft, \
     NULL);        
