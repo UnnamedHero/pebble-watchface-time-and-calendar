@@ -29,4 +29,14 @@ Nearest plans:
 
 Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
+Lastest stable version is 0.9.0 (available in Pebble Store)
+
+Lastest development version is 0.10.0
+
 See CHANGELOG for more details.
+
+---
+
+Credits:
+- Time font: Bebas Neue, [official site](http://www.fontfabric.com/bebas-neue/)
+- Climate icons: based on [Climacons font](https://github.com/christiannaths/Climacons-Font) and [Weather-icons](https://github.com/erikflowers/weather-icons)

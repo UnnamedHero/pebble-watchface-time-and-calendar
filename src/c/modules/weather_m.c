@@ -53,15 +53,17 @@ Layer* get_layer_weather() {
   return s_this_layer;
 }
 
-void update_weather() {
+void update_weather(bool force) {
   int secs_to_wait = period_to_mins(settings_get_WeatherUpdatePeriod()) * SECONDS_PER_MINUTE;
   uint32_t elapsed = weather.WeatherTimeStamp + secs_to_wait;
-  //APP_LOG(APP_LOG_LEVEL_DEBUG, "sav: %ld, per: %d, el: %ld, cur: %ld",weather.WeatherTimeStamp, secs_to_wait, elapsed, time(NULL));
-  if (elapsed > (uint32_t)time(NULL)) {
-    //APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
-  //  return;
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "sav: %ld, per: %d, el: %ld, cur: %ld",weather.WeatherTimeStamp, secs_to_wait, elapsed, time(NULL));
+    if (!force) {
+     if (elapsed > (uint32_t)time(NULL)) {
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed, update in %ld", (uint32_t)time(NULL) - elapsed);
+      return;
+    }
   }
-  //APP_LOG(APP_LOG_LEVEL_DEBUG, "Let's get weather!, %ld", (time(NULL)-elapsed)/60);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Let's get weather!, %ld", (time(NULL)-elapsed)/60);
 
   // Begin dictionary
   DictionaryIterator *iter;
@@ -78,7 +80,7 @@ void prv_populate_weather_layer(Layer *me, GContext *ctx) {
   /*
   char* wind_directions[] = {_("N"), _("NNE"), _("NE"), _("ENE"), _("E"), _("ESE"), _("SE"), _("SSE"), _("S"), _("SSW"), _("SW"), _("WSW"), _("W"), _("WNW"), _("NW"), _("NNW")};
   
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: WEATHER");
+
     GRect this_bounds = layer_get_bounds(s_this_layer);
     //int wind_direction = prv_get_wind_direction()
     static char weather_text[64];
@@ -100,7 +102,9 @@ void prv_populate_weather_layer(Layer *me, GContext *ctx) {
         NULL);
   }
 */
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: WEATHER ?, %s", weather.WeatherCondition);
   if (weather.WeatherReady == 1) {
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: WEATHER READY");
   static char weather_text[64];
   APP_LOG(APP_LOG_LEVEL_DEBUG, "temp is %d", weather.WeatherTemperature);  
   snprintf(weather_text, sizeof(weather_text), "%d°", weather.WeatherTemperature);

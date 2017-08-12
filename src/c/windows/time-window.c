@@ -1,7 +1,5 @@
 #include <pebble.h>
 #include "include/time-window.h"
-//#include "../layers/top-panel-layer.h"
-//#include "../layers/include/datetime-layer.h"
 #include "../modules/include/calendar_m.h"
 #include "../modules/include/bluetooth_m.h"
 #include "../modules/include/battery_m.h"
@@ -11,11 +9,6 @@
 #include "../settings.h"
 
 static Window *s_time_window;
-
-//static TextLayer *s_time_layer;
-//static TextLayer *s_weather_layer;
-
-//static void prv_update_window();
 
 Window* get_time_window() {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Request time window");
@@ -86,12 +79,12 @@ void window_update_time(struct tm *tick_time) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window update time handler");
 
   layer_mark_dirty(get_layer_time());
-//  update_weather();
+  update_weather(false);
 }
 
 
-void ready_for_weather() {
-  update_weather();
+void ready_for_weather(bool force) {
+  update_weather(force);
 }
 
 void simple_weather_update(DictionaryIterator *iter, void *context) {

@@ -1,6 +1,10 @@
 # Changelog
 ---
+#### 0.10.0
+ - bug fixes
+ - weather is force updating after closing settings dialog
 
+---
 #### 0.9.1 (developer version)
 - Some redesign:
     - Increased battery percent text size

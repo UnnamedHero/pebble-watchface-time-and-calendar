@@ -38,13 +38,14 @@ function sendWeather(weather_data) {
 }
 
 function isDayNow (sunrise, sunset) {
-  var now = Date.now();
+  var now = Date.now() / 1000;
+  console.log ('now:'+now+' rise:'+sunrise+' set'+sunset);
   return now > sunrise && now < sunset;
 }
 
 //http://openweathermap.org/weather-conditions
 function getCondition (owmCond, sunrise, sunset) {
-
+  console.log(owmCond);
   var isDay = isDayNow(sunrise, sunset);
 //Thunderstorm
   switch (owmCond) {
@@ -127,6 +128,7 @@ function getCondition (owmCond, sunrise, sunset) {
     case 804:
       return '!';
     default:
+      console.log(owmCond);
       return 'h';
   }
 }

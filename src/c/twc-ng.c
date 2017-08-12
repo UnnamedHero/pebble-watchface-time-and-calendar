@@ -47,7 +47,8 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 
 void settings_update_handler(UPDATE_FLAG f) {
 //  if (f == UF_WEATHER) {
-    ready_for_weather();
+  bool force_weather_update = true;
+    ready_for_weather(force_weather_update);
 //  }
   time_window_force_redraw();
 }
@@ -57,7 +58,7 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
   Tuple *js_ready_t = dict_find(iter, MESSAGE_KEY_JSReady);
   if (js_ready_t) {
     s_js_ready = true;
-    ready_for_weather();
+    ready_for_weather(false);
     //init_weather(settings_get_weather_apikey());
   }
 
