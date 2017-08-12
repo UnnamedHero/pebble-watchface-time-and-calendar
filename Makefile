@@ -16,7 +16,7 @@ phone: build
 	pebble install --phone ${PEBBLE_PHONE}
 
 loge:
-	pebble logs
+	pebble logs --emulator aplite
 
 logp:
 	pebble logs --phone ${PEBBLE_PHONE}
