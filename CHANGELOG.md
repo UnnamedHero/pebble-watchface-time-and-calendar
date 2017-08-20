@@ -1,5 +1,9 @@
 # Changelog
 ---
+#### 0.20.0
+ - add initial forecast support (every 6 hours, 4 times, no configurable yet)
+ - forecast window autoclosing after 15 seconds;
+
 #### 0.10.0
  - bug fixes
  - weather is force updating after closing settings dialog

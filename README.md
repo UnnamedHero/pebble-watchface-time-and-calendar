@@ -21,7 +21,7 @@ Configurable with Clay for Pebble framework. It means - no external website is n
 Feel free to post any comments on GitHub page, report bugs, ask for features.
 
 Nearest plans:
-- add weather forecast for 3-5 days, switch between time and forecast with smartwatch shake;
+- add weather forecast for 3-5 days, switch between time and forecast with smartwatch shake (avail in dev vesrion);
 - add simple "pomodoro" vibration notifications(e.g. 25 mins of workong, 5 minutes rest, 25 min of working, 5 minutes of rest.);
 - add more configurable options;
 - support for color screens (color icons);
@@ -31,7 +31,7 @@ Development versions can be downloaded from [google drive](https://drive.google.
 
 Lastest stable version is 0.9.0 (available in Pebble Store)
 
-Lastest development version is 0.10.0
+Lastest development version is 0.20.0
 
 See CHANGELOG for more details.
 
