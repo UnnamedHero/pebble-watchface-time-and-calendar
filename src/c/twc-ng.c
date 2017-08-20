@@ -2,11 +2,17 @@
 #include "twc-ng.h"
 #include "settings.h"
 #include "windows/include/time-window.h"
+#include "windows/include/forecast-window.h"
 #include "utils/include/timeutils.h"
 #include "utils/include/vibe.h"
+#include "utils/include/messagesystem.h"
 #include "3rdparty/locale_framework/localize.h"
 
-static bool s_js_ready;
+
+static bool main_window_active = true;
+static AppTimer *s_timeout_timer;
+static const int timeout = 20000;
+static void prv_timer_timeout_handler(void*);
 
 static void prv_periodic_vibrate(struct tm *timer) {
   if (!(settings_get_VibratePeriodic() && can_vibrate())) {
@@ -36,6 +42,19 @@ static void prv_periodic_vibrate(struct tm *timer) {
   }
 }
 
+static void toggle_windows() {
+  bool now = main_window_active;
+  const bool animated = true;
+  //window_stack_push(get_time_window(), animated);
+  if (now) { 
+    window_stack_push(get_forecast_window(), animated);  
+    s_timeout_timer = app_timer_register(timeout, prv_timer_timeout_handler, NULL);
+  } else {
+    app_timer_cancel(s_timeout_timer);
+    window_stack_push(get_time_window(), animated);
+  }
+  main_window_active = !now;
+}
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   //update_time();
@@ -53,43 +72,23 @@ void settings_update_handler(UPDATE_FLAG f) {
   time_window_force_redraw();
 }
 
-static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Inbox message received");
-  Tuple *js_ready_t = dict_find(iter, MESSAGE_KEY_JSReady);
-  if (js_ready_t) {
-    s_js_ready = true;
-    ready_for_weather(false);
-    //init_weather(settings_get_weather_apikey());
-  }
 
-  Tuple *config_marker = dict_find(iter, MESSAGE_KEY_ConfigMarker);
-  if (config_marker) {
-    populate_settings(iter, context);
-  }
 
-  Tuple *weather_marker = dict_find(iter, MESSAGE_KEY_WeatherMarker);
-  if (weather_marker) {
-    Tuple *weather_forecast = dict_find(iter, MESSAGE_KEY_WeatherMarkerForecast);
-    if (weather_forecast) {
-
-    } else {
-      simple_weather_update(iter, context);
-    }
-  }
-
-}
 static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "SHAKE IT BABY!!!");
+  toggle_windows();
 }
 
 static void prv_init() {
+  init_message_system();
   init_settings(settings_update_handler);
 
-  app_message_register_inbox_received(prv_inbox_received_handler);
-  app_message_open(400, 128);
+
   init_time_window();
+  init_forecast_window();
 
   const bool animated = true;
+  //window_stack_push(get_time_window(), animated);
   window_stack_push(get_time_window(), animated);
 
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
@@ -100,6 +99,11 @@ static void prv_init() {
 
 static void prv_deinit(void) {
  deinit_time_window();
+ deinit_message_system();
+}
+
+static void prv_timer_timeout_handler (void *context) {
+  toggle_windows();
 }
 
 int main(void) {

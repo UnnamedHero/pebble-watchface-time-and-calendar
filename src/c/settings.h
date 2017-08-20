@@ -34,6 +34,13 @@ typedef enum CalendarWeekView {
   CAL_WV_CNN
 } CAL_WEEK_VIEW;
 
+typedef enum WeatherRequest {
+  W_DAY,
+  W_FORECAST,
+  W_BOTH
+} W_REQ;
+
+
 typedef void (*callback_ptr)(UPDATE_FLAG);
 
 void init_settings(callback_ptr callback);

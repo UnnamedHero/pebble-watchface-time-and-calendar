@@ -79,7 +79,7 @@ void window_update_time(struct tm *tick_time) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window update time handler");
 
   layer_mark_dirty(get_layer_time());
-  update_weather(false);
+  //update_weather(false);
 }
 
 

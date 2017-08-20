@@ -37,7 +37,7 @@ static void prv_populate_time_layer(Layer *me, GContext *ctx) {
   GRect pretty_rect = get_pretty_rect_for_text(layer_get_bounds(me), s_tfont);
   static char time_txt[33];
   get_currect_time(CLOCK_FORMAT, time_txt);
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "time to show: %s", time_txt);
+//  APP_LOG(APP_LOG_LEVEL_DEBUG, "time to show: %s", time_txt);
   graphics_draw_text(ctx, time_txt, \
       s_tfont, \
       layer_get_bounds(me), \

@@ -32,7 +32,7 @@ Pebble.addEventListener('webviewclosed', function(e) {
   });
 });
 
-// Listen for when the watchface is opened
+
 Pebble.addEventListener('ready',
   function(e) {
     console.log('PebbleKit JS ready!');
@@ -40,11 +40,21 @@ Pebble.addEventListener('ready',
   }
 );
 
-
 Pebble.addEventListener('appmessage', function(e) {
-  console.log("Go for a weather");
+
   var dict = e.payload;
-  var provider = require('./weather_providers/openweathermap');
+  console.log(dict.WeatherMarkerForecast);
+  console.log(dict.WeatherMarker);
 //  var provider = require('./weather_providers/dummy');  
-  provider.getWeather();
+  var provider = require('./weather_providers/openweathermap');
+  if (dict.WeatherMarkerForecast === 1) {
+    console.log("Go for a forecast");
+    provider.getWeather('forecast');
+    return;
+  }
+  if (dict.WeatherMarker === 1) {
+    console.log("Go for a weather");
+    provider.getWeather();
+    return;
+  }
 });

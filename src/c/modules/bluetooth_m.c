@@ -10,6 +10,7 @@ static Layer *this_layer;
 static void prv_bt_connection_status(bool state);
 static void prv_populate_bt_layer(Layer *, GContext *);
 static bool init = false;
+static bool bt_connected = false;
 
 void init_bluetooh_layer(GRect rect) {
   this_layer = layer_create(rect);
@@ -25,7 +26,7 @@ void init_bluetooh_layer(GRect rect) {
 static void prv_bt_connection_status(bool state) {
   //APP_LOG(APP_LOG_LEVEL_DEBUG, "bt state change");
 
-  //btstate = state;
+  bt_connected = state;
   gbitmap_destroy(s_bt_icon);
   int res_id = state ? RESOURCE_ID_BLUETOOTH_CONNECTED : RESOURCE_ID_BLUETOOTH_LOST;
   s_bt_icon = gbitmap_create_with_resource(res_id);
@@ -58,4 +59,9 @@ void deinit_bluetooth_layer() {
 
 Layer* get_layer_bluetooth() {
   return this_layer;
+}
+
+
+bool is_bt_connected() {
+  return bt_connected;
 }

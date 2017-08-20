@@ -1,24 +1,38 @@
 #include <pebble.h>
 #include "include/weather_m.h"
 #include "../utils/include/timeutils.h"
+#include "../utils/include/messagesystem.h"
 #include "../settings.h"
 #include "../3rdparty/locale_framework/localize.h"
 
+//static const uint8_t max_attempts = 5;
+
+//static AppTimer *s_timeout_timer;
 static Layer *s_this_layer;
 static GFont s_wfont;
 static void prv_populate_weather_layer(Layer *, GContext *);
 static void prv_save_weather();
 static void prv_load_weather();
+// static void outbox_sent_handler(DictionaryIterator *, void *);
+// static void send_with_timeout(uint_8, int, uint8_t );
+static void prv_send_data_failed();
+static void prv_timer_timeout_handler(void*);
+static AppTimer *s_timeout_timer;
+static const int timeout = 5000;
+
 
 typedef struct WeatherData {
   uint8_t WeatherReady;
   int WeatherTemperature;
   char WeatherCondition[4];
-//  char WeatherDesc[32];
+  char WeatherDesc[32];
   uint32_t WeatherTimeStamp;
-  // int WeatherPressure;
-  // uint8_t WeatherWindSpeed;
-  // int WeatherWindDirection;
+  int WeatherPressure;
+  uint8_t WeatherWindSpeed;
+  char WeatherWindDirection[4];
+  uint8_t WeatherHumidity;
+  char WeatherSunrise[8];
+  char WeatherSunset[8];  
 } __attribute__((__packed__)) WeatherData;
 
 static WeatherData weather;
@@ -27,12 +41,6 @@ void prv_default_weather_data() {
   weather.WeatherReady = 0;
   weather.WeatherTimeStamp = 0;
 //  weather.WeatherCondition = 'h';
-}
-
-int prv_get_wind_direction(int azim) {
-  int normalized = azim + 11;
-  int azimuth = normalized > 360 ? normalized - 360 : normalized;
-  return (int)(azimuth / 22.5);
 }
 
 void init_weather_layer(GRect bounds) {  
@@ -56,75 +64,45 @@ Layer* get_layer_weather() {
 void update_weather(bool force) {
   int secs_to_wait = period_to_mins(settings_get_WeatherUpdatePeriod()) * SECONDS_PER_MINUTE;
   uint32_t elapsed = weather.WeatherTimeStamp + secs_to_wait;
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "sav: %ld, per: %d, el: %ld, cur: %ld",weather.WeatherTimeStamp, secs_to_wait, elapsed, time(NULL));
     if (!force) {
      if (elapsed > (uint32_t)time(NULL)) {
       APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed, update in %ld", (uint32_t)time(NULL) - elapsed);
       return;
     }
   }
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Let's get weather!, %ld", (time(NULL)-elapsed)/60);
-
+//  APP_LOG(APP_LOG_LEVEL_DEBUG, "Let's get weather!, %ld", (time(NULL)-elapsed)/60);
+  //send_message(MESSAGE_KEY_WeatherMarker, 1);
   // Begin dictionary
-  DictionaryIterator *iter;
-  app_message_outbox_begin(&iter);
-
-  // Add a key-value pair
-  dict_write_uint8(iter, MESSAGE_KEY_WeatherMarker, 0);
-
-  // Send the message!
-  app_message_outbox_send();
+//return ;
+  Tuplet data_to_send[] = {
+    TupletInteger(MESSAGE_KEY_WeatherMarker, 1),
+  };
+  send_message(data_to_send, 1, prv_send_data_failed);
 }
 
 void prv_populate_weather_layer(Layer *me, GContext *ctx) {
-  /*
-  char* wind_directions[] = {_("N"), _("NNE"), _("NE"), _("ENE"), _("E"), _("ESE"), _("SE"), _("SSE"), _("S"), _("SSW"), _("SW"), _("WSW"), _("W"), _("WNW"), _("NW"), _("NNW")};
-  
-
-    GRect this_bounds = layer_get_bounds(s_this_layer);
-    //int wind_direction = prv_get_wind_direction()
-    static char weather_text[64];
-//    APP_LOG(APP_LOG_LEVEL_DEBUG, "az is %d, wind is %d", weather.WeatherWindDirection, prv_get_wind_direction(weather.WeatherWindDirection));
-    snprintf(weather_text, sizeof(weather_text), "%d°, %s,\n%s, %d %s, %d %s", \
-        weather.WeatherTemperature,\
-        weather.WeatherDesc,\
-        wind_directions[prv_get_wind_direction(weather.WeatherWindDirection)],\
-        weather.WeatherWindSpeed, \
-        _("m/s"), \
-        (int)(weather.WeatherPressure * 0.75), \
-        _("mmHg") \
-      );
-    graphics_draw_text(ctx, weather_text, \
-        fonts_get_system_font(FONT_KEY_GOTHIC_14), \
-        this_bounds, \
-        GTextOverflowModeWordWrap, \
-        GTextAlignmentLeft, \
-        NULL);
-  }
-*/
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: WEATHER ?, %s", weather.WeatherCondition);
   if (weather.WeatherReady == 1) {
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: WEATHER READY");
-  static char weather_text[64];
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "temp is %d", weather.WeatherTemperature);  
+
+  static char weather_text[8];
+
   snprintf(weather_text, sizeof(weather_text), "%d°", weather.WeatherTemperature);
   graphics_draw_text(ctx, weather.WeatherCondition, \
     s_wfont, \
     GRect (4, 0, 30, 30), \
     GTextOverflowModeWordWrap, \
-    GTextAlignmentLeft, \
+    GTextAlignmentCenter, \
     NULL);        
   graphics_draw_text(ctx, weather_text, \
     fonts_get_system_font(FONT_KEY_GOTHIC_24), \
-    GRect(0, 28, 45, 20), \
+    GRect(0, 28, 43, 20), \
     GTextOverflowModeWordWrap, \
-    GTextAlignmentLeft, \
+    GTextAlignmentCenter, \
     NULL);        
 }
 }
 
 void get_weather(DictionaryIterator *iter, void *context) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "parsing weather_text");
+//  APP_LOG(APP_LOG_LEVEL_DEBUG, "parsing weather_text");
 
   Tuple *w_temp = dict_find(iter, MESSAGE_KEY_WeatherTemperature);
   if (w_temp) {
@@ -133,10 +111,11 @@ void get_weather(DictionaryIterator *iter, void *context) {
     weather.WeatherReady = 1;
   }
 
-  // Tuple *w_desc = dict_find(iter, MESSAGE_KEY_WeatherDesc);
-  // if (w_desc) {
-  //   snprintf(weather.WeatherDesc, sizeof(weather.WeatherDesc), w_desc->value->cstring);
-  // }
+  Tuple *w_desc = dict_find(iter, MESSAGE_KEY_WeatherDesc);
+  if (w_desc) {
+    snprintf(weather.WeatherDesc, sizeof(weather.WeatherDesc), w_desc->value->cstring);
+  }
+  
   Tuple *w_cond = dict_find(iter, MESSAGE_KEY_WeatherCondition);
   if (w_cond) {
     snprintf(weather.WeatherCondition, sizeof(weather.WeatherCondition), w_cond->value->cstring);
@@ -145,20 +124,37 @@ void get_weather(DictionaryIterator *iter, void *context) {
   weather.WeatherTimeStamp = time(NULL);
   //APP_LOG(APP_LOG_LEVEL_DEBUG, "weather timestamp: %ld", weather.WeatherTimeStamp);
 
-  // Tuple *w_press = dict_find(iter, MESSAGE_KEY_WeatherPressure);
-  // if (w_press) {
-  //   weather.WeatherPressure = w_press->value->int32;
-  // }
+  Tuple *w_press = dict_find(iter, MESSAGE_KEY_WeatherPressure);
+  if (w_press) {
+    weather.WeatherPressure = w_press->value->int32;
+  }
 
-  // Tuple *w_ws = dict_find(iter, MESSAGE_KEY_WeatherWindSpeed);
-  // if (w_ws) {
-  //   weather.WeatherWindSpeed = w_ws->value->uint8;
-  // }
+  Tuple *w_ws = dict_find(iter, MESSAGE_KEY_WeatherWindSpeed);
+  if (w_ws) {
+    weather.WeatherWindSpeed = w_ws->value->uint8;
+  }
 
-  // Tuple *w_wdir = dict_find(iter, MESSAGE_KEY_WeatherWindDirection);
-  // if (w_wdir) {
-  //   weather.WeatherWindDirection = w_wdir->value->int32;
-  // }
+  Tuple *w_hum = dict_find(iter, MESSAGE_KEY_WeatherHumidity);
+  if (w_hum) {
+    weather.WeatherHumidity = w_hum->value->uint8;
+  }
+
+  Tuple *w_wdir = dict_find(iter, MESSAGE_KEY_WeatherWindDirection);
+  if (w_wdir) {
+    snprintf(weather.WeatherWindDirection, sizeof(weather.WeatherWindDirection), w_wdir->value->cstring);
+//    weather.WeatherWindDirection = w_wdir->value->int32;
+  }
+
+  Tuple *w_rise = dict_find(iter, MESSAGE_KEY_WeatherSunrise);
+  if (w_rise) {
+    snprintf(weather.WeatherSunrise, sizeof(weather.WeatherSunrise), w_rise->value->cstring);
+//    weather.WeatherWindDirection = w_wdir->value->int32;
+  }
+  Tuple *w_set = dict_find(iter, MESSAGE_KEY_WeatherSunset);
+  if (w_set) {
+    snprintf(weather.WeatherSunset, sizeof(weather.WeatherSunset), w_set->value->cstring);
+//    weather.WeatherWindDirection = w_wdir->value->int32;
+  }  
   prv_save_weather();
   layer_mark_dirty(s_this_layer);
 }
@@ -169,4 +165,57 @@ static void prv_save_weather() {
 static void prv_load_weather() {
   prv_default_weather_data();
   persist_read_data(WEATHER_KEY, &weather, sizeof(weather));
+}
+
+uint8_t get_weatherIsReady() {
+  return weather.WeatherReady;
+}
+
+int get_WeatherTemperature() {
+  return weather.WeatherTemperature;
+}
+
+char* get_WeatherCondition() {
+  return weather.WeatherCondition;
+}
+
+char* get_WeatherDesc() {
+  return weather.WeatherDesc;
+}
+
+char* get_WeatherSunrise() {
+  return weather.WeatherSunrise;
+}
+
+char* get_WeatherSunset() {
+  return weather.WeatherSunset;
+}
+
+uint32_t get_WeatherTimeStamp() {
+  return weather.WeatherTimeStamp;
+}
+
+int get_WeatherPressure() {
+  return weather.WeatherPressure;
+}
+
+uint8_t get_WeatherWindSpeed() {
+  return weather.WeatherWindSpeed;
+}
+
+char* get_WeatherWindDirection() {
+  return weather.WeatherWindDirection;
+}
+
+uint8_t get_WeatherHumidity() {
+  return weather.WeatherHumidity;
+}
+
+static void prv_send_data_failed() {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather send message failed, timeput 5 secs");
+  s_timeout_timer = app_timer_register(timeout, prv_timer_timeout_handler, NULL);
+}
+
+static void prv_timer_timeout_handler (void *context) {
+  update_weather(false);
 }

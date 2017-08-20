@@ -24,4 +24,7 @@ logp:
 config:
 	pebble emu-app-config
 	
+tap:
+	pebble emu-tap
+	
 .PHONY: test build

@@ -2,7 +2,7 @@
   "name": "time-and-calendar",
   "author": "Eugene 'EEM' Mikhaylov",
   "description": "Another inplementation of functional watchface with time, calendar and weather",
-  "version": "0.10.0",
+  "version": "0.20.0",
   "license": "GPLv3",
   "keywords": [
     "pebble watchface",
@@ -49,6 +49,11 @@
       "VibratePeriodic",
       "VibratePeriodicPeroid",
       "VibratePeriodicType",
+      "ForecastQty",
+      "ForecastTime",
+      "ForecastTimeStamp[5]",
+      "ForecastCondition[5]",
+      "ForecastTemperature[5]",
       "WeatherUnits",
       "WeatherUpdatePeriod",
       "WeatherAPIKey",
@@ -62,6 +67,8 @@
       "WeatherWindSpeed",
       "WeatherWindDirection",
       "WeatherTimeStamp",
+      "WeatherSunrise",
+      "WeatherSunset",
       "SundayFirst",
       "CalendarWeeks",
       "dummy"
@@ -97,6 +104,16 @@
         {
           "type": "font",
           "name": "CLIMACONS_36",
+          "file": "fonts/Climacons-Font_mod.ttf"
+        },
+        {
+          "type": "font",
+          "name": "CLIMACONS_42",
+          "file": "fonts/Climacons-Font_mod.ttf"
+        },
+        {
+          "type": "font",
+          "name": "CLIMACONS_26",
           "file": "fonts/Climacons-Font_mod.ttf"
         },
         {
