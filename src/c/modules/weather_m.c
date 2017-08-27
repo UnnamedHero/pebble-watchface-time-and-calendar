@@ -2,21 +2,18 @@
 #include "include/weather_m.h"
 #include "../utils/include/timeutils.h"
 #include "../utils/include/messagesystem.h"
+#include "../utils/include/ticktimerhelper.h"
 #include "../settings.h"
 #include "../3rdparty/locale_framework/localize.h"
 
-//static const uint8_t max_attempts = 5;
-
-//static AppTimer *s_timeout_timer;
 static Layer *s_this_layer;
 static GFont s_wfont;
 static void prv_populate_weather_layer(Layer *, GContext *);
 static void prv_save_weather();
 static void prv_load_weather();
-// static void outbox_sent_handler(DictionaryIterator *, void *);
-// static void send_with_timeout(uint_8, int, uint8_t );
 static void prv_send_data_failed();
 static void prv_timer_timeout_handler(void*);
+static void prv_ticktimer(struct tm*);
 static AppTimer *s_timeout_timer;
 static const int timeout = 5000;
 
@@ -48,6 +45,7 @@ void init_weather_layer(GRect bounds) {
   s_wfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
   prv_load_weather();
   layer_set_update_proc(s_this_layer, prv_populate_weather_layer);
+  ticktimerhelper_register(prv_ticktimer);
 }
 
 void deinit_weather_layer() {
@@ -61,19 +59,17 @@ Layer* get_layer_weather() {
   return s_this_layer;
 }
 
+static void prv_ticktimer(struct tm* unneeded) {
+  update_weather(false);
+}
+
 void update_weather(bool force) {
-  int secs_to_wait = period_to_mins(settings_get_WeatherUpdatePeriod()) * SECONDS_PER_MINUTE;
-  uint32_t elapsed = weather.WeatherTimeStamp + secs_to_wait;
     if (!force) {
-     if (elapsed > (uint32_t)time(NULL)) {
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed, update in %ld", (uint32_t)time(NULL) - elapsed);
+     if (is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
       return;
-    }
-  }
-//  APP_LOG(APP_LOG_LEVEL_DEBUG, "Let's get weather!, %ld", (time(NULL)-elapsed)/60);
-  //send_message(MESSAGE_KEY_WeatherMarker, 1);
-  // Begin dictionary
-//return ;
+    } 
+ }
   Tuplet data_to_send[] = {
     TupletInteger(MESSAGE_KEY_WeatherMarker, 1),
   };
