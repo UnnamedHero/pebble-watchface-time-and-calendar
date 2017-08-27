@@ -1,10 +1,17 @@
 # Changelog
 ---
-#### 0.20.0
+
+#### 0.21.0 (developer version)
+ - add calendar current day and day of a week visual options
+ - weather font fixes
+ 
+---
+#### 0.20.0 (developer version)
  - add initial forecast support (every 6 hours, 4 times, no configurable yet)
  - forecast window autoclosing after 15 seconds;
 
-#### 0.10.0
+---
+#### 0.10.0 (developer version)
  - bug fixes
  - weather is force updating after closing settings dialog
 

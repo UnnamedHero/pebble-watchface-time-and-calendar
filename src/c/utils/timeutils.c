@@ -36,9 +36,6 @@ bool is_quiet_time() {
   bool qt = !quiet_time_is_active();
 #endif
   return qt;
-  bool res = settings_get_RespectQuietTime() ? qt : true;
-  BatteryChargeState cs = battery_state_service_peek();
-  return res && !(cs.is_charging || cs.is_plugged);
 }
 
 

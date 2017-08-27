@@ -1,4 +1,4 @@
-#Time-and-Calendar watchface
+# Time-and-Calendar watchface
 
 Welcome to a "Time-and-Calendar" watchface for Pebble smartwatch. Watch was was created as a trubute to such watchfaces as TCW (https://github.com/alexsum/TCW) and Timely (https://github.com/cynorg/PebbleTimely). The main goal of watchface creation is self-education process on mine. 
 
@@ -31,7 +31,7 @@ Development versions can be downloaded from [google drive](https://drive.google.
 
 Lastest stable version is 0.9.0 (available in Pebble Store)
 
-Lastest development version is 0.20.0
+Lastest development version is 0.21.0
 
 See CHANGELOG for more details.
 
