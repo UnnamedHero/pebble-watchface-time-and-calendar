@@ -2,6 +2,8 @@
 #include "include/timeutils.h"
 #include "../settings.h"
 
+int period_to_mins(PERIOD per);
+
 #if defined (PBL_PLATFORM_APLITE)
 static int prv_get_mins(int hour, int min) {
   return hour * MINUTES_PER_HOUR + min;
@@ -61,23 +63,28 @@ void get_currect_time(DT_FORMAT dtf, char *buffer) {
 //  return d_buffer;
 }
 
+bool is_time_to(uint32_t timestamp, PERIOD period) {
+  int secs_to_wait = period_to_mins(period) * SECONDS_PER_MINUTE;
+  uint32_t elapsed = timestamp + secs_to_wait;    
+  return elapsed > (uint32_t)time(NULL);
+}
 // int get_unixtime() {
 //   update_timer();
 //
 // }
 
-static int isleap(int year) {
-    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-}
+// static int isleap(int year) {
+//     return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+// }
 
-int get_days_in_month(int month, int year) {
-    static const int days[2][12] = {
-        {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-        {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-    };
-    int leap = isleap(year);
-    return days[leap][month - 1];
-}
+// int get_days_in_month(int month, int year) {
+//     static const int days[2][12] = {
+//         {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+//         {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+//     };
+//     int leap = isleap(year);
+//     return days[leap][month - 1];
+// }
 
 int period_to_mins(PERIOD per) {
   int mins = 0;
@@ -101,13 +108,13 @@ int period_to_mins(PERIOD per) {
   return mins;
 }
 
-uint8_t get_hour_from_str(char* str) {
-  // int hour;
-  // sscanf(str, "%d", &hour);
-  // APP_LOG(APP_LOG_LEVEL_DEBUG, "STRING: %d", hour);
-   return 0;
-}
+// uint8_t get_hour_from_str(char* str) {
+//   // int hour;
+//   // sscanf(str, "%d", &hour);
+//   // APP_LOG(APP_LOG_LEVEL_DEBUG, "STRING: %d", hour);
+//    return 0;
+// }
 
-uint8_t get_mins_from_str(char* str) {
-  return 0;
-}
+// uint8_t get_mins_from_str(char* str) {
+//   return 0;
+// }
