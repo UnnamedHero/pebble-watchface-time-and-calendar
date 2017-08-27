@@ -3,7 +3,7 @@
 #include "../../settings.h"
 
 
-bool can_vibrate();
+bool is_quiet_time();
 //void update_timer();
 void get_currect_time(DT_FORMAT, char *buffer);
 bool is_time_to(uint32_t , PERIOD );

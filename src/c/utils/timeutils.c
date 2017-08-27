@@ -29,12 +29,13 @@ bool aplite_quiet_time_is_active() {
 }
 #endif
 
-bool can_vibrate() {
+bool is_quiet_time() {
 #if defined (PBL_PLATFORM_APLITE)
   bool qt = !aplite_quiet_time_is_active();
 #else
   bool qt = !quiet_time_is_active();
 #endif
+  return qt;
   bool res = settings_get_RespectQuietTime() ? qt : true;
   BatteryChargeState cs = battery_state_service_peek();
   return res && !(cs.is_charging || cs.is_plugged);
@@ -65,8 +66,9 @@ void get_currect_time(DT_FORMAT dtf, char *buffer) {
 
 bool is_time_to(uint32_t timestamp, PERIOD period) {
   int secs_to_wait = period_to_mins(period) * SECONDS_PER_MINUTE;
-  uint32_t elapsed = timestamp + secs_to_wait;    
-  return elapsed > (uint32_t)time(NULL);
+  uint32_t elapsed = timestamp + secs_to_wait;
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "elapsed %li <=> current %li", elapsed, (uint32_t)time(NULL));
+  return elapsed < (uint32_t)time(NULL);
 }
 // int get_unixtime() {
 //   update_timer();
