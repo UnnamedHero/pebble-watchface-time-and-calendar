@@ -43,8 +43,6 @@ Pebble.addEventListener('ready',
 Pebble.addEventListener('appmessage', function(e) {
 
   var dict = e.payload;
-  console.log(dict.WeatherMarkerForecast);
-  console.log(dict.WeatherMarker);
 //  var provider = require('./weather_providers/dummy');  
   var provider = require('./weather_providers/openweathermap');
   if (dict.WeatherMarkerForecast === 1) {

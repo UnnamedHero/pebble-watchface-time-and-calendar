@@ -127,23 +127,39 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
   prv_set_dark_theme(ctx);
   for (int iy = 0; iy < 4; iy ++) {
      for (int ix = 0; ix < 7; ix++) {
-    int x = ix * width;
-    int y = iy  * 18;
-    GRect fill = iy == 0 ? GRect (x, y, width, 18) : GRect (x + 1, y + 1, width -1 , 17);
-    GRect pos = GRect(x, y - 3, width, 18);
-    int index = iy * 7 + ix;
-    if (index == current_week_day_abbr_index || index == current_date_index) {
-      prv_set_light_theme(ctx);
+      int x = ix * width;
+      int y = iy  * 18;
+      GRect fill = iy == 0 ? GRect (x, y, width, 18) : GRect (x + 1, y + 1, width -1 , 17);
+      GRect pos = GRect(x, y - 3, width, 18);
+      int index = iy * 7 + ix;
+      GFont font = fonts_get_system_font(FONT_KEY_GOTHIC_18);
+      if (index == current_week_day_abbr_index) { 
+        if (settings_get_CalendarInvertWeekDay()) {
+          prv_set_light_theme(ctx);
+        }
+        if (settings_get_CalendarBoldWeekDay()) {
+          font = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
+        }
+      }
+
+      if (index == current_date_index) {
+        if (settings_get_CalendarInvertToday()) {
+          prv_set_light_theme(ctx);  
+        }      
+        if (settings_get_CalendarBoldToday()) {
+           font = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
+        }        
+      }
+
+      graphics_fill_rect(ctx, fill, 0, GCornerNone);
+      graphics_draw_text(ctx, calendar_values[index], \
+          font, \
+          pos, \
+          GTextOverflowModeWordWrap, \
+          GTextAlignmentCenter, \
+          NULL);
+       prv_set_dark_theme(ctx);
     }
-    graphics_fill_rect(ctx, fill, 0, GCornerNone);
-    graphics_draw_text(ctx, calendar_values[index], \
-        fonts_get_system_font(FONT_KEY_GOTHIC_18), \
-        pos, \
-        GTextOverflowModeWordWrap, \
-        GTextAlignmentCenter, \
-        NULL);
-     prv_set_dark_theme(ctx);
-  }
 
  }
 }

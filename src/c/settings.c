@@ -16,7 +16,7 @@ typedef struct ClaySettings {
   uint8_t QTMinEnd;
 #endif
   uint8_t VibrateDuringCharged;
-  uint8_t VibrateConnected;
+  uint8_t VibrateConnected;  
   VIBE VibrateConnectedType;
   uint8_t VibrateDisconnected;
   VIBE VibrateDisconnectedType;
@@ -26,6 +26,10 @@ typedef struct ClaySettings {
   VIBE VibratePeriodicType;
   uint8_t SundayFirst;
   CAL_WEEK_VIEW CalendarWeeks;
+  uint8_t CalendarBoldWeekDay;
+  uint8_t CalendarInvertWeekDay;
+  uint8_t CalendarBoldToday;
+  uint8_t CalendarInvertToday;
   // bool showPebbleConnection;
   // bool showPebbleBattery;
   // bool showPebbleBatteryPercents;
@@ -57,6 +61,10 @@ static void prv_default_settings() {
   settings.VibratePeriodicType = VP_LONG;
   settings.SundayFirst = 0;
   settings.CalendarWeeks = CAL_WV_PCN;
+  settings.CalendarBoldWeekDay = 1;
+  settings.CalendarInvertWeekDay = 0;
+  settings.CalendarBoldToday = 0;
+  settings.CalendarInvertToday = 1;
   // settings.showPebbleBattery = true;
   // settings.showPebbleConnection = true;
   // settings.showPebbleBatteryPercents = true;
@@ -201,14 +209,28 @@ uint8_t settings_get_QTMinEnd() {
 }
 #endif
 
+bool settings_get_CalendarBoldWeekDay() {
+  return get_bool(settings.CalendarBoldWeekDay);
+}
+
+bool settings_get_CalendarInvertWeekDay() {
+  return get_bool(settings.CalendarInvertWeekDay);
+}
+
+bool settings_get_CalendarBoldToday() {
+  return get_bool(settings.CalendarBoldToday);
+}
+
+bool settings_get_CalendarInvertToday() {
+  return get_bool(settings.CalendarInvertToday);
+}
+
 static void prv_load_settings() {
   // Load the default settings
   prv_default_settings();
-//  APP_LOG(APP_LOG_LEVEL_DEBUG, "Loading persist settings");
+
   // Read settings from persistent storage, if they exist
   persist_read_data(SETTINGS_KEY, &settings, sizeof(settings));
-
-//  APP_LOG(APP_LOG_LEVEL_DEBUG, "Loaded API Key is [%s]", settings.WeatherAPIKey);
 }
 
 void save_settings() {
@@ -323,7 +345,28 @@ void populate_settings(DictionaryIterator *iter, void *context) {
      settings.CalendarWeeks = get_weekview(cwv->value->cstring);
   }
 
+  Tuple *cal_boldwd = dict_find(iter, MESSAGE_KEY_CalendarWeekDayMark);
+  if (cal_boldwd) {
+     settings.CalendarBoldWeekDay = cal_boldwd->value->uint8;
+  }
+
+  Tuple *cal_invwd = dict_find(iter, MESSAGE_KEY_CalendarWeekDayMark + 1);
+  if (cal_invwd) {
+     settings.CalendarInvertWeekDay = cal_invwd->value->uint8;
+  }
+
+  Tuple *cal_boldtoday = dict_find(iter, MESSAGE_KEY_CalendarDayMark);
+  if (cal_boldtoday) {
+     settings.CalendarBoldToday = cal_boldtoday->value->uint8;
+  }
+
+  Tuple *cal_invtoday = dict_find(iter, MESSAGE_KEY_CalendarDayMark + 1);
+  if (cal_invtoday) {
+     settings.CalendarInvertToday = cal_invtoday->value->uint8;
+  }
+
   save_settings();
+  settings_update_handler();
 }
 
 void init_settings(callback_ptr callback) {

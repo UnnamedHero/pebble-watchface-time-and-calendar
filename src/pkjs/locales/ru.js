@@ -41,4 +41,8 @@ module.exports = {
     "prevoius, current, next" : "предыдущая, текущая, следующая",
     "current, next 2 weeks" : "текущая, 2 следующих",
     "Save Settings" : "Сохранить настройки",
+    "Mark current day of a week with" : "Выделить текущий день недели",
+    "Mark current day with" : "Выделить текущий день",
+    "Bold text" : "Жирным шрифтом",
+    "Inverted color": "Инвертированным цветом",
   };

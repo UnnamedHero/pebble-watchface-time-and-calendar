@@ -110,6 +110,20 @@ module.exports = [
         ],
         "defaultValue": "cal_pcn"
       },
+      {
+        "type": "checkboxgroup",
+        "messageKey": "CalendarWeekDayMark",
+        "label": "Mark current day of a week with",
+        "options": [ "Bold text", "Inverted color"],
+        "defaultValue" : [true, false]
+      },
+      {
+        "type": "checkboxgroup",
+        "messageKey": "CalendarDayMark",
+        "label": "Mark current day with",
+        "options": [ "Bold text", "Inverted color"],
+        "defaultValue" : [false, true]
+      }      
     ]
   },
   {

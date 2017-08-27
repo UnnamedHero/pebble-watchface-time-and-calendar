@@ -41,7 +41,7 @@ typedef enum WeatherRequest {
 } W_REQ;
 
 
-typedef void (*callback_ptr)(UPDATE_FLAG);
+typedef void (*callback_ptr)();
 
 void init_settings(callback_ptr callback);
 void populate_settings(DictionaryIterator *iter, void *context);
@@ -63,6 +63,12 @@ PERIOD settings_get_VibratePeriodicPeroid();
 VIBE settings_get_VibratePeriodicType();
 bool settings_get_SundayFirst();
 CAL_WEEK_VIEW settings_get_CalendarWeekView();
+bool settings_get_CalendarBoldWeekDay();
+bool settings_get_CalendarInvertWeekDay();
+bool settings_get_CalendarBoldToday();
+bool settings_get_CalendarInvertToday();
+
+
 
 #if defined (PBL_PLATFORM_APLITE)
 uint8_t settings_get_QTHourBegin();
