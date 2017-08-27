@@ -103,20 +103,20 @@ void forecast_update(DictionaryIterator *iter, void *context) {
 
   Tuple *f_mark = dict_find(iter, MESSAGE_KEY_WeatherMarkerForecast);
    if (f_mark) {
-      //forecast_ready = f_mark->value->uint8 == 1;
+
       forecast.ForecastReady = f_mark->value->uint8;
    }
 
   Tuple *f_qty = dict_find(iter, MESSAGE_KEY_ForecastQty);
    if (f_qty) {
-//      forecast_qty = f_qty->value->uint8;
+
       forecast.ForecastQty = f_qty->value->uint8;
    }
-//   APP_LOG(APP_LOG_LEVEL_DEBUG, "ready %d, qty %d", f_mark->value->uint8, forecast.ForecastQty);
+
    if (forecast.ForecastReady != 1 || forecast.ForecastQty == 0) {
       return;
    }
-   APP_LOG(APP_LOG_LEVEL_DEBUG, "Start filling forecast");
+
    Tuple *f_time = dict_find(iter, MESSAGE_KEY_ForecastTime);
    if (f_time) {
       forecast.ForecastTime = f_time->value->int32;
@@ -148,8 +148,7 @@ void forecast_update(DictionaryIterator *iter, void *context) {
       if (f_ts) {
         snprintf(forecast.ForecastTimeStamp[i], sizeof(forecast.ForecastTimeStamp[i]), f_ts->value->cstring);
       }      
-   }
-   APP_LOG(APP_LOG_LEVEL_DEBUG, "tuple done");
+   }   
    prv_save_forecast();
    if (s_forecast_layer) {
      layer_mark_dirty(s_forecast_layer);
@@ -171,8 +170,7 @@ void update_forecast(bool force) {
   }
 
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Let's get forecast!");
-
-    Tuplet data_to_send[] = {
+  Tuplet data_to_send[] = {
     TupletInteger(MESSAGE_KEY_WeatherMarkerForecast, 1),
   };
   send_message(data_to_send, 1, prv_send_data_failed);

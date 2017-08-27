@@ -65,7 +65,7 @@ static void prv_ticktimer(struct tm* unneeded) {
 
 void update_weather(bool force) {
     if (!force) {
-     if (is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
+     if (!is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
       APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
       return;
     } 
@@ -73,6 +73,7 @@ void update_weather(bool force) {
   Tuplet data_to_send[] = {
     TupletInteger(MESSAGE_KEY_WeatherMarker, 1),
   };
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Request weather");
   send_message(data_to_send, 1, prv_send_data_failed);
 }
 
@@ -82,6 +83,7 @@ void prv_populate_weather_layer(Layer *me, GContext *ctx) {
   static char weather_text[8];
 
   snprintf(weather_text, sizeof(weather_text), "%d°", weather.WeatherTemperature);
+  
   graphics_draw_text(ctx, weather.WeatherCondition, \
     s_wfont, \
     GRect (4, 0, 30, 30), \
@@ -154,6 +156,7 @@ void get_weather(DictionaryIterator *iter, void *context) {
   prv_save_weather();
   layer_mark_dirty(s_this_layer);
 }
+
 static void prv_save_weather() {
     persist_write_data(WEATHER_KEY, &weather, sizeof(weather));
 }
