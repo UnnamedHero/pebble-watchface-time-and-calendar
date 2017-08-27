@@ -4,10 +4,13 @@ build:
 	pebble build
 
 test:	
-	gcc src/c/test/test_timeutils.c -lbcunit -o watchtest
-	./watchtest
-	@rm watchtest
-
+	@gcc -c src/c/utils/linkedlist.c -DTESTS
+	@gcc -c src/c/utils/ticktimerhelper.c -DTESTS
+	@gcc -c src/c/test/tests.c -DTESTS
+	@gcc tests.o linkedlist.o ticktimerhelper.o -lbcunit -o lltest
+	@./lltest
+	@rm *.o
+	@rm lltest
 
 emul: build
 	pebble install --emulator aplite
