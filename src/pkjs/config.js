@@ -48,6 +48,52 @@ module.exports = [
         "defaultValue": "mon"
       },
       {
+        "type": "select",
+        "label": "Date format",
+        "messageKey": "DateFormat",
+        "options": [
+          {
+            "label" : "2017.12.31",
+            "value": "%Y.%m.%d"
+          },
+          {
+            "label" : "31.12.2017",
+            "value": "%d.%m.%Y"
+          },
+          {
+            "label" : "december 31, 2017",
+            "value": "%B %d, %Y"
+          }
+
+        ],
+        "defaultValue": "%Y.%m.%d"
+      },
+      {       
+        "type": "select",
+        "label": "Date separator",
+        "messageKey": "DateFormatSeparator",
+        "options": [
+          {
+            "label" : ".",
+            "value": "."
+          },
+          {
+            "label" : ",",
+            "value": ","
+          },
+          {
+            "label" : "-",
+            "value": "-"
+          },
+          {
+            "label" : "/",
+            "value": "/"
+          },
+        ],
+        "defaultValue": "."
+
+      },
+      {
         "type": "toggle",
         "messageKey": "QuietTime",
         "label": "Enable 'Quiet Time'",

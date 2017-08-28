@@ -25,6 +25,11 @@ Pebble.addEventListener('webviewclosed', function(e) {
   dict[messageKeys.QuietTimeEnd] = parseInt(qte[0], 10);
   dict[messageKeys.QuietTimeEnd + 1] = parseInt(qte[1], 10);
 
+  var dateFormat = dict[messageKeys.DateFormat];
+  var dateSeparator = dict[messageKeys.DateFormatSeparator];
+  var newDateFormat = dateFormat.replace(new RegExp ('\\.','g'), dateSeparator);
+  dict[messageKeys.DateFormat] = newDateFormat;
+
   Pebble.sendAppMessage(dict, function(e) {
     console.log('Sent config data to Pebble');
   }, function(e) {

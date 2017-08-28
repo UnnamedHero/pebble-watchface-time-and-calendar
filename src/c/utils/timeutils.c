@@ -1,6 +1,7 @@
 #include <pebble.h>
 #include "include/timeutils.h"
 #include "../settings.h"
+#include "../3rdparty/locale_framework/localize.h"
 
 int period_to_mins(PERIOD per);
 
@@ -46,8 +47,6 @@ void get_currect_time(DT_FORMAT dtf, char *buffer) {
   tick_time = localtime(&temp);
   char d_buffer[32];
   char format[12];
-  //update_timer();
-  //char fmt[] = "%Y.%m.%d";
   switch (dtf) {
     case YYYY_MM_DD:
       strcpy(format, "%Y.%m.%d");
@@ -58,32 +57,31 @@ void get_currect_time(DT_FORMAT dtf, char *buffer) {
     }
   strftime(d_buffer, sizeof(d_buffer), format, tick_time);
   strcpy(buffer, d_buffer);
-//  return d_buffer;
+}
+
+void get_current_date(char *format, char *out) {
+  char* rus_months[] = { _("jan"), _("feb"), _("mar"), _("apr"), _("may"), _("jun"), _("jul"), _("aug"), _("sep"), _("oct"), _("nov"), _("dec") };
+  const size_t out_size = 32;
+  struct tm *tick_time;
+  time_t temp = time(NULL);
+  tick_time = localtime(&temp);
+
+  const char* locale_str = i18n_get_system_locale();
+  const bool locale_ru = strcmp(locale_str, "ru_RU") == 0;
+  const bool is_special_format = strcmp(format, "%B %d, %Y") == 0;
+  if (locale_ru && is_special_format) {
+    snprintf(out, out_size, "%d %s, %d", tick_time->tm_mday, rus_months[tick_time->tm_mon], tick_time->tm_year + 1900);
+  } else {
+    strftime(out, out_size, format, tick_time);
+  } 
 }
 
 bool is_time_to(uint32_t timestamp, PERIOD period) {
   int secs_to_wait = period_to_mins(period) * SECONDS_PER_MINUTE;
   uint32_t elapsed = timestamp + secs_to_wait;
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "elapsed %li <=> current %li", elapsed, (uint32_t)time(NULL));
+//  APP_LOG(APP_LOG_LEVEL_DEBUG, "elapsed %li <=> current %li", elapsed, (uint32_t)time(NULL));
   return elapsed < (uint32_t)time(NULL);
 }
-// int get_unixtime() {
-//   update_timer();
-//
-// }
-
-// static int isleap(int year) {
-//     return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-// }
-
-// int get_days_in_month(int month, int year) {
-//     static const int days[2][12] = {
-//         {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-//         {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-//     };
-//     int leap = isleap(year);
-//     return days[leap][month - 1];
-// }
 
 int period_to_mins(PERIOD per) {
   int mins = 0;
@@ -106,14 +104,3 @@ int period_to_mins(PERIOD per) {
   }
   return mins;
 }
-
-// uint8_t get_hour_from_str(char* str) {
-//   // int hour;
-//   // sscanf(str, "%d", &hour);
-//   // APP_LOG(APP_LOG_LEVEL_DEBUG, "STRING: %d", hour);
-//    return 0;
-// }
-
-// uint8_t get_mins_from_str(char* str) {
-//   return 0;
-// }

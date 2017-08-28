@@ -45,4 +45,7 @@ module.exports = {
     "Mark current day with" : "Выделить текущий день",
     "Bold text" : "Жирным шрифтом",
     "Inverted color": "Инвертированным цветом",
+    "Date format": "Формат даты",
+    "december 31, 2017" : "31 декабря 2017",
+    "Date separator" : "Разделитель",
   };

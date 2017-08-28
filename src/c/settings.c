@@ -7,6 +7,7 @@ typedef struct ClaySettings {
 //  char WeatherAPIKey[33];
   PERIOD WeatherUpdatePeriod;
   char ClockFormat[8];
+  char DateFormat[12];
   uint8_t RespectQuietTime;
 #if defined (PBL_PLATFORM_APLITE)
   uint8_t QT;
@@ -39,7 +40,10 @@ static ClaySettings settings;
 static callback_ptr settings_update_handler = NULL;
 
 static void prv_default_settings() {
-  strcpy(settings.ClockFormat, "%H:%M\0");
+  //strcpy(settings.ClockFormat, "%H:%M\0");
+  //strcpy(settings.DateFormat, "%Y.%m.%d\0");
+  //snprintf(settings.ClockFormat, sizeof(settings.ClockFormat), "%H:%M");
+  //snprintf(settings.DateFormat, sizeof(settings.DateFormat), "%Y.%m.%d");
   //strcpy(settings.WeatherAPIKey, "not_set");
   settings.WeatherUpdatePeriod = P_1H;
   settings.RespectQuietTime = 0;
@@ -68,6 +72,16 @@ static void prv_default_settings() {
   // settings.showPebbleBattery = true;
   // settings.showPebbleConnection = true;
   // settings.showPebbleBatteryPercents = true;
+}
+
+static void prv_post_load_settings() {  
+  if (strlen(settings.DateFormat) == 0) {    
+    strcpy(settings.DateFormat, "%Y.%m.%d\0");
+  }
+
+  if (strlen(settings.ClockFormat) == 0) {
+  strcpy(settings.ClockFormat, "%H:%M\0");
+  }
 }
 
 char* settings_get_clockformat() {
@@ -225,12 +239,17 @@ bool settings_get_CalendarInvertToday() {
   return get_bool(settings.CalendarInvertToday);
 }
 
+char *settings_get_DateFormat() {
+  return settings.DateFormat;
+}
+
 static void prv_load_settings() {
   // Load the default settings
   prv_default_settings();
 
   // Read settings from persistent storage, if they exist
   persist_read_data(SETTINGS_KEY, &settings, sizeof(settings));
+  prv_post_load_settings();
 }
 
 void save_settings() {
@@ -247,6 +266,11 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     } else {
       strcpy(settings.ClockFormat, clock_format_t->value->cstring);
     }
+  }
+
+  Tuple *date_fmt = dict_find(iter, MESSAGE_KEY_DateFormat);
+  if (date_fmt) {
+    strcpy(settings.DateFormat, date_fmt->value->cstring);    
   }
 
 #if defined (PBL_PLATFORM_APLITE)
@@ -372,4 +396,5 @@ void populate_settings(DictionaryIterator *iter, void *context) {
 void init_settings(callback_ptr callback) {
   settings_update_handler = callback;
   prv_load_settings();
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "format :%s", settings_get_DateFormat());
 }

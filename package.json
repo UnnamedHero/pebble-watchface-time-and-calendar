@@ -34,6 +34,8 @@
     },
     "messageKeys": [
       "ClockFormat",
+      "DateFormat",
+      "DateFormatSeparator",
       "ConfigMarker",
       "JSReady",
       "RespectQuietTime",

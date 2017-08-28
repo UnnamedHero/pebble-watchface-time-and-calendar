@@ -67,7 +67,7 @@ bool settings_get_CalendarBoldWeekDay();
 bool settings_get_CalendarInvertWeekDay();
 bool settings_get_CalendarBoldToday();
 bool settings_get_CalendarInvertToday();
-
+char* settings_get_DateFormat();
 
 
 #if defined (PBL_PLATFORM_APLITE)
