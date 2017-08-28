@@ -42,8 +42,8 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
   int battery_bar_level;
 
   GRect bb = layer_get_bounds(me);
-  GRect percent_text_rect = GRect (0, 0, 30, bb.size.h);
-  GRect battery_bar_rect = GRect (30, 0, 15, bb.size.h);
+  GRect percent_text_rect = GRect (0, 0, 34, bb.size.h);
+  GRect battery_bar_rect = GRect (34, 1, 14, bb.size.h);
 
   GRect battery_inner_bar_rect;
 
@@ -59,7 +59,7 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
   }
   graphics_context_set_fill_color(ctx, GColorWhite);
   graphics_context_set_stroke_color(ctx, GColorWhite);
-  battery_inner_bar_rect = GRect(30, bb.size.h - battery_bar_level, 15, battery_bar_level);
+  battery_inner_bar_rect = GRect(34, bb.size.h - battery_bar_level + 1, 14, battery_bar_level);
   snprintf(percent_text, sizeof(percent_text), "%d%%", s_battery_level.charge_percent);
   graphics_draw_text(ctx, percent_text, \
   fonts_get_system_font(FONT_KEY_GOTHIC_18), \
