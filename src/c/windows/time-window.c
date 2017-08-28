@@ -30,8 +30,8 @@ static void prv_window_load(Window *window) {
 //-----bitmaps
 //  GRect toplayer_bounds = GRect (0, 0, bounds.size.w, 20);
   GRect bluetooth_bounds = GRect (0, 0, 20, 20);
-  GRect battery_bounds = GRect (bounds.size.w - 47, 0, 45, 20);
-  GRect date_bounds = GRect(0, 22, bounds.size.w, 14);
+  GRect battery_bounds = GRect (bounds.size.w - 52, 0, 50, 20);
+  GRect date_bounds = GRect(0, 22, bounds.size.w, 16);
   //GRect datetime_bounds = GRect (0, 20, bounds.size.w, 60);
   GRect time_bounds = GRect (35, 32, bounds.size.w - 35, 54);
   GRect calendar_bounds = GRect (2, 92, bounds.size.w, 73);

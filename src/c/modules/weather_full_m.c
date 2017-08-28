@@ -27,19 +27,12 @@ Layer* get_layer_weather_full() {
 	return s_weather_full_layer;
 }
 
-// static int prv_get_wind_direction(int azim) {
-//   int normalized = azim + 11;
-//   int azimuth = normalized > 360 ? normalized - 360 : normalized;
-//   return (int)(azimuth / 22.5);
-// }
-
 static void prv_populate_weather_full_layer(Layer *me, GContext *ctx) {
 
 	if (get_weatherIsReady() != 1) {
 		return;
 	}	
 	GRect bb = layer_get_bounds(me);
-//	char* wind_directions[] = {_("N"), _("NNE"), _("NE"), _("ENE"), _("E"), _("ESE"), _("SE"), _("SSE"), _("S"), _("SSW"), _("SW"), _("WSW"), _("W"), _("WNW"), _("NW"), _("NNW")};
 	GRect descline_rect = GRect (2, 0, bb.size.w, 20);	
 	static char descline[64];
 	snprintf(descline, sizeof(descline), "%d°, %s",\
@@ -140,16 +133,4 @@ static void prv_populate_weather_full_layer(Layer *me, GContext *ctx) {
     	GTextOverflowModeWordWrap, \
     	GTextAlignmentLeft, \
     	NULL);
-
-/*	
-		wind_directions[prv_get_wind_direction(get_WeatherWindDirection())],\
-		get_WeatherWindSpeed(), "m/s",\
-		(int)(get_WeatherPressure() * 0.75), "mmHg", get_WeatherHumidity());
-*/
-
-//	static char iconsline2[36] = " w x";
-
-//	GRect line1_rect = GRect (0, 0, bb.size.w, 20);
-//	GRect line2_rect = GRect (0, 20, bb.size.w, 20);
-
 }
