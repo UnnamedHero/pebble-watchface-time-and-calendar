@@ -1,6 +1,6 @@
 # Ignore build generated files
 build
-node-modules
+node_modules
 .lock-waf*
 pebble-screenshot*
 .*.swp
