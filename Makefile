@@ -12,20 +12,20 @@ test:
 	@rm *.o
 	@rm lltest
 
-emul: build
-	pebble install --emulator aplite
+emul: build	
+	PEBBLE_PHONE="" pebble install --emulator aplite
 
 phone: build
 	pebble install --phone ${PEBBLE_PHONE}
 
 loge:
-	pebble logs --emulator aplite
+	PEBBLE_PHONE="" pebble logs --emulator aplite 
 
 logp:
 	pebble logs --phone ${PEBBLE_PHONE}
 
 config:
-	pebble emu-app-config
+	PEBBLE_PHONE="" pebble emu-app-config
 	
 tap:
 	pebble emu-tap

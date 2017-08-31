@@ -254,7 +254,7 @@ static void prv_load_settings() {
 
 void save_settings() {
     persist_write_data(SETTINGS_KEY, &settings, sizeof(settings));
-    settings_update_handler(UF_NOTHING);
+    settings_update_handler();
 }
 
 void populate_settings(DictionaryIterator *iter, void *context) {
@@ -390,11 +390,10 @@ void populate_settings(DictionaryIterator *iter, void *context) {
   }
 
   save_settings();
-  settings_update_handler();
+//  settings_update_handler();
 }
 
 void init_settings(callback_ptr callback) {
   settings_update_handler = callback;
-  prv_load_settings();
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "format :%s", settings_get_DateFormat());
+  prv_load_settings();  
 }

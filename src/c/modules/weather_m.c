@@ -60,7 +60,7 @@ Layer* get_layer_weather() {
 }
 
 static void prv_ticktimer(struct tm* unneeded) {
-  update_weather(false);
+  update_weather(false); 
 }
 
 void update_weather(bool force) {
@@ -216,5 +216,5 @@ static void prv_send_data_failed() {
 }
 
 static void prv_timer_timeout_handler (void *context) {
-  update_weather(false);
+  update_weather(true);
 }

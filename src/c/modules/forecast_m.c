@@ -2,6 +2,7 @@
 #include "include/forecast_m.h"
 #include "../settings.h"
 #include "../utils/include/messagesystem.h"
+#include "../utils/include/ticktimerhelper.h"
 
 static Layer *s_forecast_layer;
 static GFont s_wfont_sm;
@@ -10,6 +11,7 @@ static void prv_send_data_failed();
 static void prv_timer_timeout_handler(void*);
 static void prv_load_forecast();
 static void prv_save_forecast();
+static void prv_ticktimer(struct tm*);
 
 static AppTimer *s_timeout_timer;
 static const int timeout = 5000;
@@ -30,6 +32,7 @@ void init_forecast_layer(GRect rect) {
   s_wfont_sm = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
   prv_load_forecast();
   layer_set_update_proc(s_forecast_layer, prv_populate_forecast_layer);
+  ticktimerhelper_register(prv_ticktimer);
 }
 
 void prv_default_forecast_data() {
@@ -182,14 +185,19 @@ static void prv_send_data_failed() {
 }
 
 static void prv_timer_timeout_handler (void *context) {
-  update_forecast(false);
+  update_forecast(true);
 }
 
 static void prv_save_forecast() {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "save:%d", persist_write_data(FORECAST_KEY, &forecast, sizeof(forecast)));
+  persist_write_data(FORECAST_KEY, &forecast, sizeof(forecast));
 }
 
 static void prv_load_forecast() {
   prv_default_forecast_data();
   persist_read_data(FORECAST_KEY, &forecast, sizeof(forecast));
+}
+
+static void prv_ticktimer(struct tm* unneeded) {
+    update_forecast(false);
+
 }

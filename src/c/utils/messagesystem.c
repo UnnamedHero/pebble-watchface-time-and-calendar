@@ -31,6 +31,8 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
   Tuple *config_marker = dict_find(iter, MESSAGE_KEY_ConfigMarker);
   if (config_marker) {
     populate_settings(iter, context);
+    ready_for_weather(true);
+    ready_for_forecast(true);
   }
 
   Tuple *weather_marker = dict_find(iter, MESSAGE_KEY_WeatherMarker);

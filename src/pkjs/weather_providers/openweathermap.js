@@ -4,6 +4,8 @@ var messageKeys = require('message_keys');
 isForecast = false;
 
 exports.getWeather = function(type) {  
+  isForecast = false;
+
   var success = type === 'forecast' ? locationForecast : locationSuccess;  
 
   return navigator.geolocation.getCurrentPosition(
@@ -47,12 +49,23 @@ function sendWeather(weather_data) {
     sender.send(weather_data);
 }
 
-function isDayNow (sunrise, sunset) {
+function isDayAt (sunrise, sunset, time) {
   if(!sunrise) {
-    return true;
+    var sunData = JSON.parse(localStorage.getItem('SunTimes'));
+    if (!sunData.sunrise && !sunData.sunset) {
+      return true;
+    } 
+    sunrise = sunData.sunrise;
+    sunset = sunData.sunset;        
   }
-  var now = Date.now() / 1000;
-  return now > sunrise && now < sunset;
+    
+  var newSunrise = minutesOfADay(sunrise);
+  var newSunset = minutesOfADay(sunset);  
+  var now = time ? 
+    minutesOfADay(timeFromUtc(time).getTime()) :
+    minutesOfADay(Date.now()); 
+//  console.log (newSunset + " < " + now + " < " + newSunrise);
+  return now > newSunrise && now < newSunset;
 }
 
 function getWindDirection(direction) {
@@ -65,7 +78,12 @@ function addLeadingZero(num) {
   return num > 9 ? num : '0' + num;
 }
 
-function timeFromUtc (utc) {
+function minutesOfADay(unixtime) {
+  var date = new Date(unixtime);  
+  return date.getHours() * 60 + date.getMinutes();
+}
+
+function timeFromUtc(utc) {
   var offset = new Date().getTimezoneOffset();  
   return new Date(utc * 1000  + offset * 60);
 }
@@ -84,6 +102,7 @@ function getTimeStr(utc) {
 
 function locationForecast(pos) {
   isForecast = true;
+
   locationSuccess(pos);
 }
 
@@ -93,8 +112,6 @@ function getRequestType() {
 
 function saveForecast(json) {
   var storageName = 'forecast';
-  //localStorage.setItem(storageName, json);
-  //console.log('forecast saved:'+JSON.parse(localStorage.getItem(storageName)));
 }
 
 function fillForecastData(data, fill_obj, index, json) {
@@ -104,7 +121,7 @@ function fillForecastData(data, fill_obj, index, json) {
       var item_data = key.split('.').reduce(function (acc,item) {
           return acc[item];
         }, json);
-      data[val + index] = processItemDispatcher(key, item_data);
+      data[val + index] = processItemDispatcher(key, item_data, json.dt);
 
     });
     return data;
@@ -112,8 +129,8 @@ function fillForecastData(data, fill_obj, index, json) {
 
 function processForecast(parsed) {
 
-  var forecast_matrix = [0, 2, 4, 6];
-
+  //var forecast_matrix = [0, 2, 4, 6];
+  var forecast_matrix = [0, 1, 2, 3];
   var weather_data = {
      "WeatherMarkerForecast": true,
      "ForecastQty": forecast_matrix.length,
@@ -133,12 +150,12 @@ function processForecast(parsed) {
   return weather_data;
 }
 
-function processItemDispatcher(item_key, item_data) {
+function processItemDispatcher(item_key, item_data, dt) {
   switch (item_key) {
     case 'dt': 
       return processItemDateTime(item_data);
     case 'weather.0.id':
-      return getCondition(item_data);
+      return getCondition(item_data,undefined,undefined,dt);
     default: 
       return item_data;    
   }
@@ -147,6 +164,15 @@ function processItemDispatcher(item_key, item_data) {
 function processItemDateTime(item) {
   return getDateTimeStr(item + 60);
   //59 min looks ugly, add one more minute
+}
+
+function saveSunData(sunrise, sunset) {
+  var sunKey = "SunTimes";
+  var sunItem = {
+    "sunrise": sunrise * 1000,
+    "sunset": sunset * 1000
+  };
+  localStorage.setItem(sunKey, JSON.stringify(sunItem));  
 }
 
 function parseResponse(json) {
@@ -165,6 +191,10 @@ function parseResponse(json) {
      "WeatherSunrise": getTimeStr(json.sys.sunrise),
      "WeatherSunset": getTimeStr(json.sys.sunset)
     };
+
+    if (!isForecast) {      
+      saveSunData(json.sys.sunrise, json.sys.sunset);
+    }
 
     sendWeather(weatherData);
 }
@@ -206,8 +236,8 @@ function locationError(err) {
 }
 
 //http://openweathermap.org/weather-conditions
-function getCondition (owmCond, sunrise, sunset) {
-  var isDay = isDayNow(sunrise, sunset);
+function getCondition (owmCond, sunrise, sunset, time) {
+  var isDay = isDayAt(sunrise, sunset, time);
 //Thunderstorm
   switch (owmCond) {
 //    
