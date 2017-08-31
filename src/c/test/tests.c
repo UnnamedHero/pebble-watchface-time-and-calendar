@@ -8,6 +8,8 @@ typedef struct {
 	int (*f_ptr)(void);
 } test_callback_ptr;
 
+static int count = 0;
+
 typedef void(*tt_ptr)(int);
 
 void ll_data_helper(void *data, void *context) {	
@@ -80,11 +82,27 @@ void tt_test_helper(int data) {
 	CU_ASSERT_EQUAL(data, 42);	
 }
 
+void tt_test_deephelper(int data) {
+	count = count + 1;	
+}
+
+
 void test_ticktimerhelper(void) {
 	start_ticktimerhelper();
 	ticktimerhandler p = tt_test_helper;
 	ticktimerhelper_register(p);
-	ticktimerhelper_emulate(42);
+	ticktimerhelper_emulate(42);	
+	stop_ticktimerhelper();
+}
+
+void test_ticktimerhelper_deep(void) {
+	start_ticktimerhelper();
+	ticktimerhandler p = tt_test_deephelper;
+	ticktimerhelper_register(p);
+	ticktimerhelper_register(p);
+	ticktimerhelper_register(p);
+	ticktimerhelper_emulate(1);		
+	CU_ASSERT_EQUAL(count, 3);
 	stop_ticktimerhelper();
 }
 
@@ -95,7 +113,7 @@ static CU_TestInfo tests_success[] = {
   { "test_is_between_numbers", test_is_between_numbers },
   { "test_linked_list", test_linked_list },
   { "test_ticktimerhelper", test_ticktimerhelper },
-
+  { "test_ticktimerhelper_deep", test_ticktimerhelper_deep },
 	CU_TEST_INFO_NULL
 };
 

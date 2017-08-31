@@ -58,13 +58,11 @@ function isDayAt (sunrise, sunset, time) {
     sunrise = sunData.sunrise;
     sunset = sunData.sunset;        
   }
-    
   var newSunrise = minutesOfADay(sunrise);
   var newSunset = minutesOfADay(sunset);  
   var now = time ? 
     minutesOfADay(timeFromUtc(time).getTime()) :
     minutesOfADay(Date.now()); 
-//  console.log (newSunset + " < " + now + " < " + newSunrise);
   return now > newSunrise && now < newSunset;
 }
 
@@ -181,7 +179,7 @@ function parseResponse(json) {
     {
      "WeatherMarker": true,
      "WeatherTemperature": json.main.temp,
-     "WeatherCondition": getCondition(json.weather[0].id, json.sys.sunrise, json.sys.sunset),
+     "WeatherCondition": getCondition(json.weather[0].id, json.sys.sunrise * 1000, json.sys.sunset * 1000),
      "WeatherDesc": json.weather[0].description,
      "WeatherTimeStamp": json.dt,
      "WeatherPressure": Math.round(json.main.pressure * 0.75) - 14,

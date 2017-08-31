@@ -11,7 +11,7 @@ static void prv_send_data_failed();
 static void prv_timer_timeout_handler(void*);
 static void prv_load_forecast();
 static void prv_save_forecast();
-static void prv_ticktimer(struct tm*);
+static void prv_ticktimer_f(struct tm*);
 
 static AppTimer *s_timeout_timer;
 static const int timeout = 5000;
@@ -31,8 +31,8 @@ void init_forecast_layer(GRect rect) {
   s_forecast_layer = layer_create(rect);
   s_wfont_sm = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
   prv_load_forecast();
-  layer_set_update_proc(s_forecast_layer, prv_populate_forecast_layer);
-  ticktimerhelper_register(prv_ticktimer);
+  layer_set_update_proc(s_forecast_layer, prv_populate_forecast_layer);  
+  ticktimerhelper_register(prv_ticktimer_f);
 }
 
 void prv_default_forecast_data() {
@@ -197,7 +197,7 @@ static void prv_load_forecast() {
   persist_read_data(FORECAST_KEY, &forecast, sizeof(forecast));
 }
 
-static void prv_ticktimer(struct tm* unneeded) {
-    update_forecast(false);
+static void prv_ticktimer_f(struct tm* unneeded) {  
+  update_forecast(false);
 
 }

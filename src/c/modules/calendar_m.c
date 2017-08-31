@@ -76,9 +76,9 @@ static void populate_calendar_values() {
   char* weekdays_abbr[] = {_("mo"), _("tu"), _("we"), _("th"), _("fr"), _("sa")};
   char* special_day = _("su");
 
-  for (int row = 0; row < 4; row ++) {
-    for (int col = 0; col < 7; col ++) {
-      if (row == 0) {
+  for (int row = 0; row < 4; row ++) { //4 rows, days of week + 3 weeks
+    for (int col = 0; col < 7; col ++) { // 7 days in a week
+      if (row == 0) { //filling first row
         if (settings_get_SundayFirst()) {
 
           col == 0 ? snprintf(calendar_values[col], sizeof(calendar_values[col]), "%s", special_day) : \

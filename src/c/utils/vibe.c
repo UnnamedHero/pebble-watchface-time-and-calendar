@@ -15,8 +15,7 @@ void init_vibrate() {
   ticktimerhelper_register(prv_ticktimer);
 }
 
-static void prv_ticktimer(struct tm* timer) {
-
+static void prv_ticktimer(struct tm* timer) {  
   if (!(settings_get_VibratePeriodic() || can_vibrate())) {
     return;
   }  
@@ -40,7 +39,7 @@ static void prv_ticktimer(struct tm* timer) {
   }
 
   if (do_vibr) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "BzZzzZzzZzzZzzzzz");
+    
     do_vibrate(settings_get_VibratePeriodicType());
   }
 }

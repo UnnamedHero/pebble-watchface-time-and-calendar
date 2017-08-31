@@ -14,7 +14,7 @@ typedef struct TimerHandlerContainer {
 	ticktimerhandler tt_handler;
 } TimerHandlerContainer;
 
-static LinkedList *container;
+static LinkedList *container = NULL;
 static void prv_deinit_helper(void *, void*);
 
 void start_ticktimerhelper() {	
@@ -30,6 +30,7 @@ void stop_ticktimerhelper() {
 	if (container) {
 		linkedlist_forEachData(container, prv_deinit_helper, NULL);
 		deinit_linkedlist(container);
+		container = NULL;
 	}
 }
 

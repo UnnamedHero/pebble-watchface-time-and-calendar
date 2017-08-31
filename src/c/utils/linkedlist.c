@@ -49,11 +49,11 @@ bool linkedlist_append(LinkedList *ll, void *data) {
 		ll->first = item;
 	}
 	LinkedListItem *oldLast = ll->last;
-	if (oldLast) {
+	if (oldLast != NULL) {
 		oldLast->next = item;	
 	}
 	ll->last = item;
-	ll->size++;
+	ll->size = ll->size + 1;
 	return true;
 }
 
@@ -88,9 +88,8 @@ void linkedlist_clear(LinkedList *ll) {
 void linkedlist_forEachData(LinkedList *ll, ll_callback_ptr func, void *context) {
 	if (ll->size < 0) {
 		return;
-	}
+	}	
 	LinkedListItem *current = ll->first;
-
 	while (current) {
 		func(current->data, context);
 		current = current->next;

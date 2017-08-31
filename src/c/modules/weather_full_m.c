@@ -14,7 +14,7 @@ void init_weather_full_layer(GRect rect) {
   //s_weather_full_layer = layer;
   layer_set_update_proc(s_weather_full_layer, prv_populate_weather_full_layer);
   s_wfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_42));
-  s_wfont_sm = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
+  s_wfont_sm = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));  
 }
 
 void deinit_weather_full_layer() {
