@@ -58,6 +58,8 @@
       "ForecastTimeStamp[5]",
       "ForecastCondition[5]",
       "ForecastTemperature[5]",
+      "ForecastType",
+      "SwitchBackTimeout",
       "WeatherUnits",
       "WeatherUpdatePeriod",
       "WeatherAPIKey",
