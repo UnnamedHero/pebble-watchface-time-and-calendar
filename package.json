@@ -2,7 +2,7 @@
   "name": "time-and-calendar",
   "author": "Eugene 'EEM' Mikhaylov",
   "description": "Another inplementation of functional watchface with time, calendar and weather",
-  "version": "0.23.0",
+  "version": "0.24.0",
   "license": "GPLv3",
   "keywords": [
     "pebble watchface",
@@ -33,6 +33,8 @@
       "watchface": true
     },
     "messageKeys": [
+      "BackgroundColor",
+      "FontColor",
       "ClockFormat",
       "DateFormat",
       "DateFormatSeparator",
@@ -125,6 +127,11 @@
           "type": "font",
           "name": "TIME_BOLD_54",
           "file": "fonts/BebasNeue_Bold.ttf"
+        },
+        {
+          "type": "font",
+          "name": "STATUSES_18",
+          "file": "fonts/statuses.ttf"
         },
         {
           "type": "raw",

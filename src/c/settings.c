@@ -2,6 +2,8 @@
 #include "settings.h"
 #include "utils/include/timeutils.h"
 
+static const uint32_t storage_version_key = 777;
+static const int current_storage_version = 2;
 
 typedef struct ClaySettings {
 //  char WeatherAPIKey[33];
@@ -16,6 +18,8 @@ typedef struct ClaySettings {
   uint8_t QTMinBegin;
   uint8_t QTMinEnd;
 #endif
+  int FontColorHex;
+  int BackgroundColorHex;
   uint8_t VibrateDuringCharged;
   uint8_t VibrateConnected;  
   VIBE VibrateConnectedType;
@@ -46,6 +50,8 @@ static void prv_default_settings() {
   //snprintf(settings.DateFormat, sizeof(settings.DateFormat), "%Y.%m.%d");
   //strcpy(settings.WeatherAPIKey, "not_set");
   settings.WeatherUpdatePeriod = P_1H;
+  settings.FontColorHex = 0xffffff;
+  settings.BackgroundColorHex = 0x000000;  
   settings.RespectQuietTime = 0;
 #if defined (PBL_PLATFORM_APLITE)
   settings.QT = 0;
@@ -75,6 +81,8 @@ static void prv_default_settings() {
 }
 
 static void prv_post_load_settings() {  
+
+
   if (strlen(settings.DateFormat) == 0) {    
     strcpy(settings.DateFormat, "%Y.%m.%d\0");
   }
@@ -82,6 +90,24 @@ static void prv_post_load_settings() {
   if (strlen(settings.ClockFormat) == 0) {
   strcpy(settings.ClockFormat, "%H:%M\0");
   }
+  bool has_storage_version = persist_exists(storage_version_key);
+
+  const int last_storage_version = has_storage_version ? \
+          persist_read_int(storage_version_key) :\
+          0;
+
+  switch (last_storage_version) {
+    case 0:
+      settings.FontColorHex = 0xffffff;
+      settings.BackgroundColorHex = 0x000000;
+      break;
+    case 2:
+      break;
+    default:
+      break;
+  }
+
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "=== %d, %d", settings.FontColorHex, settings.BackgroundColorHex);  
 }
 
 char* settings_get_clockformat() {
@@ -162,6 +188,13 @@ bool settings_get_SundayFirst() {
   return get_bool(settings.SundayFirst);
 }
 
+int settings_get_BackgroundColorHex() {
+  return settings.BackgroundColorHex;
+}
+
+int settings_get_FontColorHex() {
+  return settings.FontColorHex;
+}
 // bool settings_get_VibrateDuringCharging() {
 //   return get_bool(settings.VibrateDuringCharging);
 // };
@@ -254,7 +287,13 @@ static void prv_load_settings() {
 
 void save_settings() {
     persist_write_data(SETTINGS_KEY, &settings, sizeof(settings));
+    persist_write_int(storage_version_key, current_storage_version);
     settings_update_handler();
+}
+
+void settings_get_theme(GContext *ctx) {
+    graphics_context_set_fill_color(ctx, GColorFromHEX(settings.BackgroundColorHex));
+    graphics_context_set_text_color(ctx, GColorFromHEX(settings.FontColorHex));  
 }
 
 void populate_settings(DictionaryIterator *iter, void *context) {
@@ -272,6 +311,16 @@ void populate_settings(DictionaryIterator *iter, void *context) {
   if (date_fmt) {
     strcpy(settings.DateFormat, date_fmt->value->cstring);    
   }
+
+   Tuple *font_c = dict_find(iter, MESSAGE_KEY_FontColor);
+   if (font_c) {
+      settings.FontColorHex = font_c->value->int32;
+   }
+
+   Tuple *bkg_c = dict_find(iter, MESSAGE_KEY_BackgroundColor);
+   if (bkg_c) {
+      settings.BackgroundColorHex = bkg_c->value->int32;
+   }   
 
 #if defined (PBL_PLATFORM_APLITE)
   Tuple *qt = dict_find(iter, MESSAGE_KEY_QuietTime);

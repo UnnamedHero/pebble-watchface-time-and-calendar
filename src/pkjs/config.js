@@ -9,6 +9,28 @@ module.exports = [
     [
       {
         "type": "heading",
+        "defaultValue": "Interface settings"
+      },
+      {
+        "type": "color",
+        "messageKey": "BackgroundColor",
+        "label": "Background color",
+        "defaultValue": "000000",
+      },
+        {
+        "type": "color",
+        "messageKey": "FontColor",
+        "label": "Font color",
+        "defaultValue": "FFFFFF",
+      }
+    ]
+  },
+  {
+    "type": "section",
+    "items":
+    [
+      {
+        "type": "heading",
         "defaultValue": "Date and time settings"
       },
       {

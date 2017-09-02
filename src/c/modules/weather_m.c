@@ -78,12 +78,10 @@ void update_weather(bool force) {
 }
 
 void prv_populate_weather_layer(Layer *me, GContext *ctx) {
+  settings_get_theme(ctx);
   if (weather.WeatherReady == 1) {
-
   static char weather_text[8];
-
-  snprintf(weather_text, sizeof(weather_text), "%d°", weather.WeatherTemperature);
-  
+  snprintf(weather_text, sizeof(weather_text), "%d°", weather.WeatherTemperature);  
   graphics_draw_text(ctx, weather.WeatherCondition, \
     s_wfont, \
     GRect (4, 0, 30, 30), \

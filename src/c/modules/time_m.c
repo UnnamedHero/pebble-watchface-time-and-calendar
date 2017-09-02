@@ -37,7 +37,9 @@ Layer* get_layer_time() {
 }
 
 static void prv_populate_time_layer(Layer *me, GContext *ctx) {
+
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: TIME");
+  settings_get_theme(ctx);
   //APP_LOG(APP_LOG_LEVEL_DEBUG, "memory: %d", heap_bytes_free());
   //GFont font = fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49);
 //  GRect pretty_rect = get_pretty_rect_for_text(layer_get_bounds(me), s_tfont);

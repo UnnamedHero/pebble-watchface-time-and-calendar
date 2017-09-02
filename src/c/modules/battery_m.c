@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "include/battery_m.h"
+#include "../settings.h"
 
 static Layer *s_battery_layer;
 static GBitmap *s_battery_state_icon;
@@ -38,13 +39,14 @@ if ((state.charge_percent != s_battery_level.charge_percent) || \
 
 static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: BATTERY");
+  settings_get_theme(ctx);
   static char percent_text[5];
   int battery_bar_level;
 
   GRect bb = layer_get_bounds(me);
   GRect percent_text_rect = GRect (0, 0, 34, bb.size.h);
   GRect battery_bar_rect = GRect (34, 1, 14, bb.size.h);
-
+  GColor paint_color = GColorFromHEX(settings_get_FontColorHex());
   GRect battery_inner_bar_rect;
 
   if (s_battery_level.is_plugged || s_battery_level.is_charging) {
@@ -57,8 +59,8 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
   } else {
     battery_bar_level = s_battery_level.charge_percent / 5; // 2 px per 10%
   }
-  graphics_context_set_fill_color(ctx, GColorWhite);
-  graphics_context_set_stroke_color(ctx, GColorWhite);
+  graphics_context_set_fill_color(ctx, paint_color);
+  graphics_context_set_stroke_color(ctx, paint_color);
   battery_inner_bar_rect = GRect(34, bb.size.h - battery_bar_level + 1, 14, battery_bar_level);
   snprintf(percent_text, sizeof(percent_text), "%d%%", s_battery_level.charge_percent);
   graphics_draw_text(ctx, percent_text, \

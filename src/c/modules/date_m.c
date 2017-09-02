@@ -25,6 +25,7 @@ Layer* get_layer_date() {
 
 static void prv_populate_date_layer(Layer *me, GContext *ctx) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: DATE");
+  settings_get_theme(ctx);
   static char date_txt[33];
   get_current_date(settings_get_DateFormat(), date_txt);
   GFont font = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);

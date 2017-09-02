@@ -5,6 +5,7 @@
 #include "../settings.h"
 
 static Window *s_forecast_window;
+static void prv_populate_fc_layer(Layer *, GContext *);
 
 Window* get_forecast_window() {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Request forecast window");
@@ -22,8 +23,6 @@ static void prv_window_load(Window *window) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "forecast Window loading");
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
-  window_set_background_color(window, GColorBlack);
-
 
   GRect weather_full_rect = GRect (0, 0, bounds.size.w, 75);
   GRect forecast_rect = GRect (0, 76, bounds.size.w, bounds.size.h - 76);
@@ -38,9 +37,15 @@ static void prv_window_load(Window *window) {
 
 static void prv_window_unload(Window *window) {
   deinit_weather_full_layer();
-  deinit_forecast_layer();
-  
+  deinit_forecast_layer();  
 }
+
+static void prv_populate_fc_layer(Layer *me, GContext *ctx) {
+  GRect this_rect = layer_get_bounds(me);
+  graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_BackgroundColorHex()));  
+  graphics_fill_rect(ctx, this_rect, 0, GCornerNone);  
+};
+
 
 void init_forecast_window() {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "forecast Window init");
@@ -49,6 +54,7 @@ void init_forecast_window() {
     .load = prv_window_load,
     .unload = prv_window_unload,
   });
+  layer_set_update_proc(window_get_root_layer(s_forecast_window), prv_populate_fc_layer);
 }
 
 void ready_for_forecast(bool force) {

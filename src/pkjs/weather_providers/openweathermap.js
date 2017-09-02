@@ -127,8 +127,8 @@ function fillForecastData(data, fill_obj, index, json) {
 
 function processForecast(parsed) {
 
-  //var forecast_matrix = [0, 2, 4, 6];
-  var forecast_matrix = [0, 1, 2, 3];
+  var forecast_matrix = [0, 2, 4, 6];
+  //var forecast_matrix = [0, 1, 2, 3];
   var weather_data = {
      "WeatherMarkerForecast": true,
      "ForecastQty": forecast_matrix.length,

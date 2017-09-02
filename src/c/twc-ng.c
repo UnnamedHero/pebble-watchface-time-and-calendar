@@ -12,7 +12,7 @@
 
 static bool main_window_active = true;
 static AppTimer *s_timeout_timer;
-static const int timeout = 20000;
+static const int timeout = 15000;
 static void prv_timer_timeout_handler(void*);
 
 static void toggle_windows() {
@@ -20,7 +20,9 @@ static void toggle_windows() {
   const bool animated = true;
   //window_stack_push(get_time_window(), animated);
   if (now) { 
-    window_stack_push(get_forecast_window(), animated);  
+    Window *fw = get_forecast_window();
+    
+    window_stack_push(fw, animated);  
     s_timeout_timer = app_timer_register(timeout, prv_timer_timeout_handler, NULL);
   } else {
     app_timer_cancel(s_timeout_timer);
@@ -49,7 +51,8 @@ static void prv_init() {
   init_forecast_window();
 
   const bool animated = true;
-  window_stack_push(get_time_window(), animated);
+  //window_stack_push(get_forecast_window(), !animated);
+  window_stack_push(get_time_window(), !animated);
   accel_tap_service_subscribe(accel_tap_handler);
 }
 

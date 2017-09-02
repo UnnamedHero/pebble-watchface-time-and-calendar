@@ -48,4 +48,7 @@ module.exports = {
     "Date format": "Формат даты",
     "december 31, 2017" : "31 декабря 2017",
     "Date separator" : "Разделитель",
+    "Interface settings" : "настройки внешнего вида",
+    "Font color": "Цвет шрифта",
+    "Background color" : "Цвет фона"
   };

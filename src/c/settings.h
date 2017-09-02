@@ -68,7 +68,9 @@ bool settings_get_CalendarInvertWeekDay();
 bool settings_get_CalendarBoldToday();
 bool settings_get_CalendarInvertToday();
 char* settings_get_DateFormat();
-
+int settings_get_BackgroundColorHex();
+int settings_get_FontColorHex();
+void settings_get_theme(GContext *);
 
 #if defined (PBL_PLATFORM_APLITE)
 uint8_t settings_get_QTHourBegin();

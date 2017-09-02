@@ -95,22 +95,25 @@ static void populate_calendar_values() {
   }
 }
 
-static void prv_set_light_theme(GContext *ctx) {
-    graphics_context_set_fill_color(ctx, GColorWhite);
-    graphics_context_set_text_color(ctx, GColorBlack);
-}
+// static void prv_set_light_theme(GContext *ctx) {
+//   graphics_context_set_text_color(ctx, GColorFromHEX(settings_get_FontColorHex()));  
+//   graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_FontColorHex()));
+// }
 
-static void prv_set_dark_theme(GContext *ctx) {
-    graphics_context_set_fill_color(ctx, GColorBlack);
-    graphics_context_set_text_color(ctx, GColorWhite);
+// static void prv_set_dark_theme(GContext *ctx) {
+//   graphics_context_set_text_color(ctx, GColorFromHEX(settings_get_BackgroundColorHex()));  
+//   graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_BackgroundColorHex()));  
+// }
+
+static void prv_set_inverted_theme(GContext *ctx) {
+    graphics_context_set_text_color(ctx, GColorFromHEX(settings_get_BackgroundColorHex()));
+    graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_FontColorHex()));  
 }
 
 static void prv_populate_this_layer(Layer *me, GContext *ctx) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: CALENDAR");
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: CALENDAR");  
   populate_calendar_values();
   GRect bounds = layer_get_bounds(s_this_layer);
-
-  graphics_context_set_fill_color(ctx, GColorWhite);
 
   int width = (bounds.size.w) / 7;
   prv_update_time();
@@ -121,10 +124,11 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
    current_week_day_abbr_index = ct->tm_wday == 0 ? 6 : ct->tm_wday - 1;
  }
   int current_date_index =current_week_day_abbr_index + s_get_calendar_begin() + 7;
-  //APP_LOG(APP_LOG_LEVEL_DEBUG, "DOW: %d, date: %d", ct->tm_wday, ct->tm_mday);
-  GRect backgrnd = GRect (bounds.origin.x + 1, bounds.origin.y, bounds.size.w - 6, bounds.size.h - 1);
+  GRect backgrnd = GRect(bounds.origin.x + 1, bounds.origin.y, bounds.size.w - 6, bounds.size.h - 1);  
+
+  graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_FontColorHex()));  
   graphics_fill_rect(ctx, backgrnd, 0, GCornerNone);
-  prv_set_dark_theme(ctx);
+  settings_get_theme(ctx);  
   for (int iy = 0; iy < 4; iy ++) {
      for (int ix = 0; ix < 7; ix++) {
       int x = ix * width;
@@ -135,22 +139,20 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
       GFont font = fonts_get_system_font(FONT_KEY_GOTHIC_18);
       if (index == current_week_day_abbr_index) { 
         if (settings_get_CalendarInvertWeekDay()) {
-          prv_set_light_theme(ctx);
+          prv_set_inverted_theme(ctx);
         }
         if (settings_get_CalendarBoldWeekDay()) {
           font = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
         }
       }
-
       if (index == current_date_index) {
         if (settings_get_CalendarInvertToday()) {
-          prv_set_light_theme(ctx);  
+          prv_set_inverted_theme(ctx);  
         }      
         if (settings_get_CalendarBoldToday()) {
            font = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
         }        
       }
-
       graphics_fill_rect(ctx, fill, 0, GCornerNone);
       graphics_draw_text(ctx, calendar_values[index], \
           font, \
@@ -158,7 +160,7 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
           GTextOverflowModeWordWrap, \
           GTextAlignmentCenter, \
           NULL);
-       prv_set_dark_theme(ctx);
+      settings_get_theme(ctx);
     }
 
  }
