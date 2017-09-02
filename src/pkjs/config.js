@@ -255,7 +255,59 @@ module.exports = [
             },
           ],
           "defaultValue": "metric"
-        },      
+        },
+        {
+          "type": "select",
+          "messageKey": "ForecastType",
+          "label": "Forecast type",
+          "options" : [
+            {
+              "label": "3 hours",
+              "value": "ft_3h"
+            },
+            {
+              "label": "6 hours",
+              "value": "ft_6h"
+            }
+          ],
+          "defaultValue": "ft_3h"
+        },
+        {
+          "type": "text",
+          "defaultValue": "Shake your Pebble to view forecast. Set timeout for auto switch back."
+        },
+        {
+          "type": "select",
+          "messageKey": "SwitchBackTimeout",
+          "label": "Switch back timeout in seconds",
+          "options" : [
+            {
+              "label": "manual switch",
+              "value": "0"
+            },
+            {
+              "label": "15",
+              "value": "15"
+            },
+            {
+              "label": "20",
+              "value": "20"
+            },
+            {
+              "label": "25",
+              "value": "25"
+            },
+            {
+              "label": "30",
+              "value": "30"
+            },
+            {
+              "label": "45",
+              "value": "45"
+            },         
+          ],
+          "defaultValue" : "15"
+        }
     ]
   },
   {

@@ -125,10 +125,21 @@ function fillForecastData(data, fill_obj, index, json) {
     return data;
 }
 
+function get_forecast_matrix() {
+    var forecastType = JSON.parse(localStorage.getItem('clay-settings')).ForecastType;
+    switch (forecastType) {
+      case 'ft_3h': 
+        return [0, 1, 2, 3];
+      case 'ft_6h':
+        return [0, 2, 4, 6];
+      default: 
+        return [0, 1, 2, 3];
+    }
+}
+
 function processForecast(parsed) {
 
-  var forecast_matrix = [0, 2, 4, 6];
-  //var forecast_matrix = [0, 1, 2, 3];
+  var forecast_matrix = get_forecast_matrix();  
   var weather_data = {
      "WeatherMarkerForecast": true,
      "ForecastQty": forecast_matrix.length,

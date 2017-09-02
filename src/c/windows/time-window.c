@@ -93,10 +93,10 @@ void simple_weather_update(DictionaryIterator *iter, void *context) {
 }
 
 void time_window_force_redraw() {
-  // layer_mark_dirty(get_layer_bluetooth());
-  // layer_mark_dirty(get_layer_battery());
-  // layer_mark_dirty(get_layer_date());
-  // layer_mark_dirty(get_layer_time());
-  // layer_mark_dirty(get_layer_calendar());
-  // layer_mark_dirty(get_layer_weather());
+  layer_mark_dirty(get_layer_bluetooth());
+  layer_mark_dirty(get_layer_battery());
+  layer_mark_dirty(get_layer_date());
+  layer_mark_dirty(get_layer_time());
+  layer_mark_dirty(get_layer_calendar());
+  layer_mark_dirty(get_layer_weather());
 }

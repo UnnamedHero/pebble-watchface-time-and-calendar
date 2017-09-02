@@ -30,6 +30,10 @@ Pebble.addEventListener('webviewclosed', function(e) {
   var newDateFormat = dateFormat.replace(new RegExp ('\\.','g'), dateSeparator);
   dict[messageKeys.DateFormat] = newDateFormat;
 
+  var sw_timeout_str = dict[messageKeys.SwitchBackTimeout];
+  dict[messageKeys.SwitchBackTimeout] = parseInt(sw_timeout_str, 10);
+
+
   Pebble.sendAppMessage(dict, function(e) {
     console.log('Sent config data to Pebble');
   }, function(e) {

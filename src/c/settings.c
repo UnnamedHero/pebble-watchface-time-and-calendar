@@ -35,6 +35,7 @@ typedef struct ClaySettings {
   uint8_t CalendarInvertWeekDay;
   uint8_t CalendarBoldToday;
   uint8_t CalendarInvertToday;
+  uint8_t SwitchBackTimeout;
   // bool showPebbleConnection;
   // bool showPebbleBattery;
   // bool showPebbleBatteryPercents;
@@ -75,6 +76,7 @@ static void prv_default_settings() {
   settings.CalendarInvertWeekDay = 0;
   settings.CalendarBoldToday = 0;
   settings.CalendarInvertToday = 1;
+  settings.SwitchBackTimeout = 15;
   // settings.showPebbleBattery = true;
   // settings.showPebbleConnection = true;
   // settings.showPebbleBatteryPercents = true;
@@ -100,35 +102,18 @@ static void prv_post_load_settings() {
     case 0:
       settings.FontColorHex = 0xffffff;
       settings.BackgroundColorHex = 0x000000;
+      settings.SwitchBackTimeout = 15;
       break;
     case 2:
       break;
     default:
       break;
   }
-
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "=== %d, %d", settings.FontColorHex, settings.BackgroundColorHex);  
 }
 
 char* settings_get_clockformat() {
-  //strcmp(settings.ClockFormat, "cf_respect" == 0 ?
-  // char *result = "%I:%M";
-  // switch (settings.ClockFormat) {
-  //   case 0:
-  //     break;
-  //   case 1:
-  //     result = "%H:%M";
-  //     break;
-  //   case 2:
-  //     result = "%I:%M";
-  //     break;
-  // }
   return settings.ClockFormat;
 }
-
-// char* settings_get_weather_apikey() {
-//   return settings.WeatherAPIKey;
-// }
 
 static bool get_bool (uint8_t settings_bool) {
     return settings_bool == 1;
@@ -195,9 +180,6 @@ int settings_get_BackgroundColorHex() {
 int settings_get_FontColorHex() {
   return settings.FontColorHex;
 }
-// bool settings_get_VibrateDuringCharging() {
-//   return get_bool(settings.VibrateDuringCharging);
-// };
 
 bool settings_get_VibratePeriodic() {
   return get_bool(settings.VibratePeriodic);
@@ -274,6 +256,10 @@ bool settings_get_CalendarInvertToday() {
 
 char *settings_get_DateFormat() {
   return settings.DateFormat;
+}
+
+uint8_t settings_get_SwitchBackTimeout() {
+  return settings.SwitchBackTimeout;
 }
 
 static void prv_load_settings() {
@@ -437,6 +423,12 @@ void populate_settings(DictionaryIterator *iter, void *context) {
   if (cal_invtoday) {
      settings.CalendarInvertToday = cal_invtoday->value->uint8;
   }
+
+  Tuple *swtime = dict_find(iter, MESSAGE_KEY_SwitchBackTimeout);
+  if (swtime) {
+     settings.SwitchBackTimeout = swtime->value->uint8;
+  }
+
 
   save_settings();
 //  settings_update_handler();

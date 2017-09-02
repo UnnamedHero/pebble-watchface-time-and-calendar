@@ -111,7 +111,7 @@ static void prv_populate_weather_full_layer(Layer *me, GContext *ctx) {
 	    s_wfont, \
     	hum_rect, \
     	GTextOverflowModeWordWrap, \
-    	GTextAlignmentLeft, \
+    	GTextAlignmentCenter, \
     	NULL);
 
 	static char hum_text[8];
@@ -120,7 +120,7 @@ static void prv_populate_weather_full_layer(Layer *me, GContext *ctx) {
 	    fonts_get_system_font(FONT_KEY_GOTHIC_24), \
     	hum_text_rect, \
     	GTextOverflowModeWordWrap, \
-    	GTextAlignmentLeft, \
+    	GTextAlignmentCenter, \
     	NULL);
 
 	GRect sunrise_rect = GRect (80, 19, bb.size.w / 4 , 20);

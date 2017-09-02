@@ -12,7 +12,6 @@
 
 static bool main_window_active = true;
 static AppTimer *s_timeout_timer;
-static const int timeout = 15000;
 static void prv_timer_timeout_handler(void*);
 
 static void toggle_windows() {
@@ -22,8 +21,11 @@ static void toggle_windows() {
   if (now) { 
     Window *fw = get_forecast_window();
     
-    window_stack_push(fw, animated);  
-    s_timeout_timer = app_timer_register(timeout, prv_timer_timeout_handler, NULL);
+    window_stack_push(fw, animated);
+    uint8_t swback_timeout = settings_get_SwitchBackTimeout();
+    if (swback_timeout > 0 && swback_timeout < 60) {
+      s_timeout_timer = app_timer_register(swback_timeout * 1000, prv_timer_timeout_handler, NULL);
+    }
   } else {
     app_timer_cancel(s_timeout_timer);
     window_stack_push(get_time_window(), animated);

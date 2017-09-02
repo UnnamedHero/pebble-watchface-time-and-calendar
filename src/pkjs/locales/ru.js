@@ -50,5 +50,8 @@ module.exports = {
     "Date separator" : "Разделитель",
     "Interface settings" : "настройки внешнего вида",
     "Font color": "Цвет шрифта",
-    "Background color" : "Цвет фона"
+    "Background color" : "Цвет фона",
+    "Forecast type": "Тип прогноза",
+    "3 hours" : "3х часовой",
+    "6 hours" : "6ти часовой"
   };

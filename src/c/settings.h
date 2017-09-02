@@ -71,6 +71,7 @@ char* settings_get_DateFormat();
 int settings_get_BackgroundColorHex();
 int settings_get_FontColorHex();
 void settings_get_theme(GContext *);
+uint8_t settings_get_SwitchBackTimeout();
 
 #if defined (PBL_PLATFORM_APLITE)
 uint8_t settings_get_QTHourBegin();
