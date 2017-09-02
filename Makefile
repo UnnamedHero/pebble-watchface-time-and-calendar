@@ -29,5 +29,11 @@ config:
 	
 tap:
 	pebble emu-tap
+
+wipe:
+	pebble wipe
+
+shot:
+	PEBBLE_PHONE="" pebble screenshot --emulator aplite	
 	
 .PHONY: test build
