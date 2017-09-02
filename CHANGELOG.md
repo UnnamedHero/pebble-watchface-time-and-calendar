@@ -1,6 +1,14 @@
 # Changelog
 ---
+#### 0.24.0 (published)
+ - add font color and background color options
+ - add swtch back timeout from forecast screen option 
 
+---
+#### 0.22.0 (published version)
+ - calendar current day and day of a week visual options
+
+---
 #### 0.21.0 (developer version)
  - add calendar current day and day of a week visual options
  - weather font fixes

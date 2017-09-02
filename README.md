@@ -12,26 +12,27 @@ Main features:
 - shows date and time
 - shows a three-week calendar grid
 - shows current weather status (OpenWeatherMap API key required)
-- various vibration settings.
+- weather forecast
+- various vibration settings
+- font and background color options
 - simple quiet time support for pebble classic watches (other platforms have native support I suppose)
 - english and russian translations.
+
 
 Configurable with Clay for Pebble framework. It means - no external website is needed to load configurartion page, all is done on your smartphone.
 
 Feel free to post any comments on GitHub page, report bugs, ask for features.
 
 Nearest plans:
-- add weather forecast for 3-5 days, switch between time and forecast with smartwatch shake (avail in dev vesrion);
-- add simple "pomodoro" vibration notifications(e.g. 25 mins of workong, 5 minutes rest, 25 min of working, 5 minutes of rest.);
 - add more configurable options;
-- support for color screens (color icons);
+- support for color screens (color icons) and pebble time screen size;
 - code cleanup and optimizations, more locales support.
 
 Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
-Lastest stable version is 0.9.0 (available in Pebble Store)
+Lastest stable version is 0.24.0 (available in Pebble Store)
 
-Lastest development version is 0.21.0
+Lastest development version is 0.20.0
 
 See CHANGELOG for more details.
 
