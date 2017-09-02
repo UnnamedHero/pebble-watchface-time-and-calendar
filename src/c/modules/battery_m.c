@@ -3,7 +3,7 @@
 #include "../settings.h"
 
 static Layer *s_battery_layer;
-static GBitmap *s_battery_state_icon;
+//static GBitmap *s_battery_state_icon;
 
 static BatteryChargeState s_battery_level;
 static void prv_battery_handler(BatteryChargeState);
@@ -19,10 +19,10 @@ void init_battery_layer(GRect rect) {
 void deinit_battery_layer() {
     battery_state_service_unsubscribe();
     layer_destroy(s_battery_layer);
-    if (s_battery_state_icon) {
-      gbitmap_destroy(s_battery_state_icon);
-     APP_LOG(APP_LOG_LEVEL_DEBUG, "remove battery bitmap in deinit");
-    }
+    // if (s_battery_state_icon) {
+    //   gbitmap_destroy(s_battery_state_icon);
+    //  APP_LOG(APP_LOG_LEVEL_DEBUG, "remove battery bitmap in deinit");
+    // }
 
 }
 
@@ -51,10 +51,12 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
 
   if (s_battery_level.is_plugged || s_battery_level.is_charging) {
     battery_bar_level = bb.size.h;
-    int res_id = s_battery_level.is_charging ? \
-                RESOURCE_ID_BATTERY_CHARGING : \
-                RESOURCE_ID_BATTERY_CHARGED;
-    s_battery_state_icon = gbitmap_create_with_resource(res_id);
+    /*
+    // int res_id = s_battery_level.is_charging ? \
+    //             RESOURCE_ID_BATTERY_CHARGING : \
+    //             RESOURCE_ID_BATTERY_CHARGED;
+    // s_battery_state_icon = gbitmap_create_with_resource(res_id);
+    */
     APP_LOG(APP_LOG_LEVEL_DEBUG, "create battery bitmap in redraw");
   } else {
     battery_bar_level = s_battery_level.charge_percent / 5; // 2 px per 10%
@@ -71,9 +73,9 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
   graphics_draw_rect(ctx, battery_bar_rect);
   graphics_fill_rect(ctx, battery_inner_bar_rect, 0, GCornerNone);
 
-  if (s_battery_level.is_plugged || s_battery_level.is_charging) {
-    graphics_draw_bitmap_in_rect (ctx, s_battery_state_icon, battery_bar_rect);
-  }
+  // if (s_battery_level.is_plugged || s_battery_level.is_charging) {
+  //   graphics_draw_bitmap_in_rect (ctx, s_battery_state_icon, battery_bar_rect);
+  // }
 }
 
 Layer* get_layer_battery() {
