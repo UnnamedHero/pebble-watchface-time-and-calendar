@@ -15,16 +15,17 @@ Pebble.addEventListener('webviewclosed', function(e) {
   if (e && !e.response) {
     return;
   }
-
   var dict = clay.getSettings(e.response);
-  var qtb = dict[messageKeys.QuietTimeBegin].split(":",2);
-  var qte = dict[messageKeys.QuietTimeEnd].split(":",2);;
 
-  dict[messageKeys.QuietTimeBegin] = parseInt(qtb[0], 10);
-  dict[messageKeys.QuietTimeBegin + 1] = parseInt(qtb[1], 10);
-  dict[messageKeys.QuietTimeEnd] = parseInt(qte[0], 10);
-  dict[messageKeys.QuietTimeEnd + 1] = parseInt(qte[1], 10);
-
+  var watch = Pebble.getActiveWatchInfo();
+  if (watch.platform === 'aplite') {  
+    var qtb = dict[messageKeys.QuietTimeBegin].split(":",2);
+    var qte = dict[messageKeys.QuietTimeEnd].split(":",2);
+    dict[messageKeys.QuietTimeBegin] = parseInt(qtb[0], 10);
+    dict[messageKeys.QuietTimeBegin + 1] = parseInt(qtb[1], 10);
+    dict[messageKeys.QuietTimeEnd] = parseInt(qte[0], 10);
+    dict[messageKeys.QuietTimeEnd + 1] = parseInt(qte[1], 10);
+  }
   var dateFormat = dict[messageKeys.DateFormat];
   var dateSeparator = dict[messageKeys.DateFormatSeparator];
   var newDateFormat = dateFormat.replace(new RegExp ('\\.','g'), dateSeparator);
