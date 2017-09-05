@@ -1,7 +1,10 @@
 #simple automate 
 
 build:
-	pebble build
+	pebble build -- --enable-debug
+
+build-release:
+	pebble build 
 
 test:	
 	@gcc -c src/c/utils/linkedlist.c -DTESTS
@@ -15,11 +18,17 @@ test:
 emul: build	
 	PEBBLE_PHONE="" pebble install --emulator aplite
 
+emul_dio: build	
+	PEBBLE_PHONE="" pebble install --emulator diorite
+
 phone: build
 	pebble install --phone ${PEBBLE_PHONE}
 
 loge:
 	PEBBLE_PHONE="" pebble logs --emulator aplite 
+
+loge_dio: wipe
+	PEBBLE_PHONE="" pebble logs --emulator diorite
 
 logp:
 	pebble logs --phone ${PEBBLE_PHONE}

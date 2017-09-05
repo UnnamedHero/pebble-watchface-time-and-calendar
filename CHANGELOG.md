@@ -1,5 +1,9 @@
 # Changelog
 ---
+#### 0.25.0 (published)
+ - fix settings processing for no-aplite platforms
+
+---
 #### 0.24.0 (published)
  - add font color and background color options
  - add swtch back timeout from forecast screen option 

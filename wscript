@@ -9,9 +9,10 @@ top = '.'
 out = 'build'
 
 
-def options(ctx):
-    ctx.load('pebble_sdk')
-
+def options(ctx):    
+    ctx.add_option('--enable-debug', default=False, action='store_true',
+             help='enable debug output')
+    ctx.load('pebble_sdk')    
 
 def configure(ctx):
     """
@@ -20,12 +21,17 @@ def configure(ctx):
     change after calling ctx.load('pebble_sdk') and make sure to set the correct environment first.
     Universal configuration: add your change prior to calling ctx.load('pebble_sdk').
     """
+    if (ctx.options.enable_debug):
+        ctx.env.append_value('DEFINES', 'DEBUG')    
     ctx.load('pebble_sdk')
+    
+    #ctx.define('DEBUG', 1)
+
 
 
 def build(ctx):
     ctx.load('pebble_sdk')
-
+#    ctx.env.append_value('DEFINES', 'DEBUG=1')    
     build_worker = os.path.exists('worker_src')
     binaries = []
 
