@@ -18,7 +18,7 @@ test:
 emul: build	
 	PEBBLE_PHONE="" pebble install --emulator aplite
 
-emul_dio: build	
+emul_dio: build
 	PEBBLE_PHONE="" pebble install --emulator diorite
 
 phone: build
