@@ -8,7 +8,10 @@
 
 static Layer *s_this_layer;
 static GFont s_wfont;
-static void prv_populate_weather_layer(Layer *, GContext *);
+static GFont s_tfont;
+static void prv_populate_this_layer(Layer *, GContext *);
+static void prv_populate_combined_layer(Layer *, GContext *);
+static void prv_populate_time_layer(Layer *, GContext *, GRect);
 static void prv_save_weather();
 static void prv_load_weather();
 static void prv_send_data_failed();
@@ -16,7 +19,6 @@ static void prv_timer_timeout_handler(void*);
 static void prv_ticktimer(struct tm*);
 static AppTimer *s_timeout_timer;
 static const int timeout = 5000;
-
 
 typedef struct WeatherData {
   uint8_t WeatherReady;
@@ -34,17 +36,27 @@ typedef struct WeatherData {
 
 static WeatherData weather;
 
-void prv_default_weather_data() {
-  weather.WeatherReady = 0;
-  weather.WeatherTimeStamp = 0;
-//  weather.WeatherCondition = 'h';
+
+
+
+void prv_default_weather_data() {  
+  if (weather.WeatherReady != 1) {
+    weather.WeatherReady = 0;
+  }
+
+  helper_str_filler(weather.WeatherCondition, "h");
+  // if (strlen(weather.WeatherCondition == 0)) {
+  //   strcpy(weather.WeatherCondition, 'h');
+  // }
+
 }
 
 void init_weather_layer(GRect bounds) {  
   s_this_layer = layer_create(bounds);
   s_wfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
+  s_tfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_TIME_BOLD_54));
   prv_load_weather();
-  layer_set_update_proc(s_this_layer, prv_populate_weather_layer);
+  layer_set_update_proc(s_this_layer, prv_populate_this_layer);
   ticktimerhelper_register(prv_ticktimer);
 }
 
@@ -53,6 +65,7 @@ void deinit_weather_layer() {
     layer_destroy(s_this_layer);
   }
   fonts_unload_custom_font(s_wfont);
+  fonts_unload_custom_font(s_tfont);
 }
 
 Layer* get_layer_weather() {
@@ -66,20 +79,39 @@ static void prv_ticktimer(struct tm* unneeded) {
 void update_weather(bool force) {
     if (!force) {
      if (!is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
+      #if defined (DEBUG) 
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
+      #endif            
       return;
     } 
  }
   Tuplet data_to_send[] = {
     TupletInteger(MESSAGE_KEY_WeatherMarker, 1),
   };
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Request weather");
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Request weather");
+  #endif  
   send_message(data_to_send, 1, prv_send_data_failed);
 }
 
-void prv_populate_weather_layer(Layer *me, GContext *ctx) {
+void prv_populate_this_layer(Layer *me, GContext *ctx) {
   settings_get_theme(ctx);
-  if (weather.WeatherReady == 1) {
+  GRect bounds = layer_get_bounds(me);
+  weather.WeatherReady == 1 && settings_get_WeatherAPIKeyStatus() == API_OK ? prv_populate_combined_layer (me, ctx) : prv_populate_time_layer(me, ctx, bounds);
+}
+
+
+void prv_populate_combined_layer(Layer *me, GContext *ctx) {
+
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "DRAW small weather");
+  #endif
+  GRect bounds = layer_get_bounds(me);
+  static const int offset = 10;
+  int weather_width = bounds.size.w / 3 - offset;
+  const GRect combined = GRect (weather_width, 0, bounds.size.w - weather_width, bounds.size.h);
+  prv_populate_time_layer(me, ctx, combined);
+
   static char weather_text[8];
   snprintf(weather_text, sizeof(weather_text), "%d°", weather.WeatherTemperature);  
   graphics_draw_text(ctx, weather.WeatherCondition, \
@@ -93,12 +125,26 @@ void prv_populate_weather_layer(Layer *me, GContext *ctx) {
     GRect(0, 28, 43, 20), \
     GTextOverflowModeWordWrap, \
     GTextAlignmentCenter, \
-    NULL);        
+    NULL);          
 }
+
+static void prv_populate_time_layer(Layer *me, GContext *ctx, GRect rect) {
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: TIME");
+  #endif
+  
+  static char time_txt[33];
+  get_currect_time(CLOCK_FORMAT, time_txt);
+//  APP_LOG(APP_LOG_LEVEL_DEBUG, "time to show: %s", time_txt);
+  graphics_draw_text(ctx, time_txt, \
+      s_tfont, \
+      rect, \
+      GTextOverflowModeWordWrap, \
+      GTextAlignmentCenter, \
+      NULL);
 }
 
 void get_weather(DictionaryIterator *iter, void *context) {
-//  APP_LOG(APP_LOG_LEVEL_DEBUG, "parsing weather_text");
 
   Tuple *w_temp = dict_find(iter, MESSAGE_KEY_WeatherTemperature);
   if (w_temp) {
@@ -118,7 +164,6 @@ void get_weather(DictionaryIterator *iter, void *context) {
   }
 
   weather.WeatherTimeStamp = time(NULL);
-  //APP_LOG(APP_LOG_LEVEL_DEBUG, "weather timestamp: %ld", weather.WeatherTimeStamp);
 
   Tuple *w_press = dict_find(iter, MESSAGE_KEY_WeatherPressure);
   if (w_press) {
@@ -159,9 +204,9 @@ static void prv_save_weather() {
     persist_write_data(WEATHER_KEY, &weather, sizeof(weather));
 }
 
-static void prv_load_weather() {
-  prv_default_weather_data();
+static void prv_load_weather() {  
   persist_read_data(WEATHER_KEY, &weather, sizeof(weather));
+  prv_default_weather_data();
 }
 
 uint8_t get_weatherIsReady() {

@@ -4,7 +4,7 @@
 #include "../modules/include/bluetooth_m.h"
 #include "../modules/include/battery_m.h"
 #include "../modules/include/date_m.h"
-#include "../modules/include/time_m.h"
+//#include "../modules/include/time_m.h"
 #include "../modules/include/weather_m.h"
 #include "../settings.h"
 
@@ -13,7 +13,9 @@ static Window *s_time_window;
 static void prv_populate_tw_layer(Layer *, GContext *);
 
 Window* get_time_window() {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Request time window");
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Request time window");
+  #endif  
   if (!s_time_window) {
     init_time_window();
   }
@@ -25,21 +27,22 @@ void deinit_time_window() {
 }
 
 static void prv_window_load(Window *window) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window loading");
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window loading");
+  #endif  
   Layer *window_layer = window_get_root_layer(window);
-  GRect bounds = layer_get_bounds(window_layer);
-  //window_set_background_color(window, GColorFromHEX(settings_get_BackgroundColorHex()));
-  GRect bluetooth_bounds = GRect (0, 0, 20, 20);
-  GRect battery_bounds = GRect (bounds.size.w - 52, 0, 50, 20);
-  GRect date_bounds = GRect(0, 22, bounds.size.w, 16);
-  GRect time_bounds = GRect (35, 32, bounds.size.w - 35, 54);
-  GRect calendar_bounds = GRect (2, 92, bounds.size.w, 73);
-  GRect weather_bounds = GRect (2, 34, 34, 54);
+  const GRect bounds = layer_get_bounds(window_layer);
+  const GRect bluetooth_bounds = GRect (0, 0, 40, 20);
+  const GRect battery_bounds = GRect (bounds.size.w - 52, 0, 50, 20);
+  const GRect date_bounds = GRect(0, 22, bounds.size.w, 16);
+  //GRect time_bounds = GRect (35, 32, bounds.size.w - 35, 54);
+  const GRect calendar_bounds = GRect (2, 92, bounds.size.w, 73);
+  GRect weather_bounds = GRect (2, 34, bounds.size.w, 54);
 
   init_bluetooh_layer(bluetooth_bounds);
   init_battery_layer(battery_bounds);
   init_date_layer(date_bounds);
-  init_time_layer(time_bounds);
+ // init_time_layer(time_bounds);
 
   init_calendar_layer(calendar_bounds);
   init_weather_layer(weather_bounds);
@@ -47,7 +50,7 @@ static void prv_window_load(Window *window) {
   layer_add_child(window_layer, get_layer_bluetooth());
   layer_add_child(window_layer, get_layer_battery());
   layer_add_child(window_layer, get_layer_date());
-  layer_add_child(window_layer, get_layer_time());
+ // layer_add_child(window_layer, get_layer_time());
   layer_add_child(window_layer, get_layer_calendar());
   layer_add_child(window_layer, get_layer_weather());
 }
@@ -56,13 +59,16 @@ static void prv_window_unload(Window *window) {
   deinit_bluetooth_layer();
   deinit_battery_layer();
   deinit_date_layer();
-  deinit_time_layer();
+ // deinit_time_layer();
   deinit_calendar_layer();
   deinit_weather_layer();
 }
 
 void init_time_window() {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window init");
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window init"); 
+  #endif
+  
   s_time_window = window_create();
   window_set_window_handlers(s_time_window, (WindowHandlers) {
     .load = prv_window_load,
@@ -78,9 +84,12 @@ static void prv_populate_tw_layer(Layer *me, GContext *ctx) {
 };
 
 void window_update_time(struct tm *tick_time) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window update time handler");
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Time Window update time handler");
+  #endif
+  
 
-  layer_mark_dirty(get_layer_time());
+  layer_mark_dirty(get_layer_weather());
 }
 
 
@@ -96,7 +105,7 @@ void time_window_force_redraw() {
   layer_mark_dirty(get_layer_bluetooth());
   layer_mark_dirty(get_layer_battery());
   layer_mark_dirty(get_layer_date());
-  layer_mark_dirty(get_layer_time());
+//  layer_mark_dirty(get_layer_time());
   layer_mark_dirty(get_layer_calendar());
   layer_mark_dirty(get_layer_weather());
 }
