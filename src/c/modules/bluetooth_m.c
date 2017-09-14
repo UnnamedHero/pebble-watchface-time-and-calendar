@@ -26,15 +26,8 @@ void init_bluetooh_layer(GRect rect) {
 }
 
 static void prv_bt_connection_status(bool state) {
-  //APP_LOG(APP_LOG_LEVEL_DEBUG, "bt state change");  
+  
   bt_connected = state;
-  //gbitmap_destroy(s_bt_icon);
-  //int res_id = state ? RESOURCE_ID_BLUETOOTH_CONNECTED : RESOURCE_ID_BLUETOOTH_LOST;
-  //s_bt_icon = gbitmap_create_with_resource(res_id);
-
-  // if (!s_bt_icon) {
-  //   APP_LOG(APP_LOG_LEVEL_ERROR, "Error allocation memory for BT_ICON");
-  // }
   if (can_vibrate() && init) {
     state ? do_vibrate (settings_get_VibrateConnectedType()) : do_vibrate(settings_get_VibrateDisconnectedType());
   }
@@ -43,15 +36,26 @@ static void prv_bt_connection_status(bool state) {
 }
 
 static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
-  //APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: BLUETOOTH");
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: STATUS LAYER");
+  #endif  
   
   settings_get_theme(ctx);
-  graphics_draw_text(ctx, bt_connected ? "1" : "0" , \
+  graphics_draw_text(ctx, bt_connected ? "B" : "A" , \
     statuses_font, \
     GRect (0, 0, 20, 20), \
     GTextOverflowModeWordWrap, \
     GTextAlignmentCenter, \
-    NULL);  
+    NULL);
+  if (settings_get_WeatherAPIKeyStatus() != API_OK) {
+    graphics_draw_text(ctx, "C" , \
+    statuses_font, \
+    GRect (20, 0, 20, 20), \
+    GTextOverflowModeWordWrap, \
+    GTextAlignmentCenter, \
+    NULL);
+
+  }
   //graphics_draw_bitmap_in_rect(ctx, s_bt_icon, GRect(0,0, 20, 20));
 
 //  APP_LOG(APP_LOG_LEVEL_DEBUG, "REDRAW: BT-layer");
