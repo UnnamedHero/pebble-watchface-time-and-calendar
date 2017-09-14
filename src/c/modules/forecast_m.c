@@ -69,7 +69,7 @@ static void prv_populate_forecast_layer(Layer *me, GContext *ctx) {
   settings_get_theme(ctx);
   GRect bounds = layer_get_bounds(me);
   int item_width = bounds.size.w / forecast.ForecastQty;
-  int item_height = bounds.size.h;
+  //int item_height = bounds.size.h;
 
   //graphics_context_set_stroke_color(ctx, GColorWhite);
   for (int i = 0; i < forecast.ForecastQty; i++) {

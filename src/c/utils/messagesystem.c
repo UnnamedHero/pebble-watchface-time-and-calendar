@@ -18,9 +18,14 @@ void init_message_system() {
 
 
 static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Inbox message received");
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Inbox message received");
+  #endif
   Tuple *js_ready_t = dict_find(iter, MESSAGE_KEY_JSReady);
   if (js_ready_t) {
+    #if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "JS Ready received");
+    #endif
     s_js_ready = true;
     busy = false;
     ready_for_weather(false);
@@ -30,9 +35,14 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
 
   Tuple *config_marker = dict_find(iter, MESSAGE_KEY_ConfigMarker);
   if (config_marker) {
+    #if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Config received");
+    #endif
     populate_settings(iter, context);
-    ready_for_weather(true);
-    ready_for_forecast(true);
+    if (settings_get_WeatherAPIKeyStatus() == API_OK) {
+      ready_for_weather(true);
+      ready_for_forecast(true);
+    }
   }
 
   Tuple *weather_marker = dict_find(iter, MESSAGE_KEY_WeatherMarker);
@@ -50,14 +60,21 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
 
 void send_message(Tuplet *data, int data_array_size, message_failed_callback_ptr message_failed_callback) {
   if (busy) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Message system busy");
+    #if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Message system busy");
+    #endif    
     message_failed_callback();
   }
   busy = true;
-  if (!is_bt_connected()) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Bluetooth not connected, aborting sending data");
-    return;
+  if (!s_js_ready) {
+    #if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "JS not ready yet");
+    #endif
+    busy = false;
+    message_failed_callback();
   }
+  
+
   DictionaryIterator *iter;
   AppMessageResult prepare_result = app_message_outbox_begin(&iter);
   if (prepare_result != APP_MSG_OK) {
@@ -73,14 +90,21 @@ void send_message(Tuplet *data, int data_array_size, message_failed_callback_ptr
     }
   }
   if (!is_bt_connected()) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Bluetooth not connected, aborting sending data");
+    #if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Bluetooth not connected, aborting sending data");
+    #endif
+    busy = false;    
     return;
   }
   AppMessageResult send_result = app_message_outbox_send();
   if (send_result != APP_MSG_OK) {
     message_failed_callback();
+    busy = false;
   }
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Data sended!");
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Data sended!");
+  #endif
+  
   busy = false;
 }
 

@@ -38,8 +38,10 @@ void settings_update_handler() {
   time_window_force_redraw();
 }
 
-static void accel_tap_handler(AccelAxisType axis, int32_t direction) {  
-  toggle_windows();
+static void accel_tap_handler(AccelAxisType axis, int32_t direction) { 
+  if (settings_get_WeatherAPIKeyStatus() == API_OK) {
+    toggle_windows();
+  }
 }
 
 static void prv_init() {
@@ -70,9 +72,9 @@ static void prv_timer_timeout_handler (void *context) {
 }
 
 int main(void) {
-  //APP_LOG(APP_LOG_LEVEL_DEBUG, "Locale: %s", i18n_get_system_locale());
   locale_init();
   prv_init();
   app_event_loop();
   prv_deinit();
+
 }
