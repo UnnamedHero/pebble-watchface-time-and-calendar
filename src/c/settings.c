@@ -3,10 +3,10 @@
 #include "utils/include/timeutils.h"
 
 static const uint32_t storage_version_key = 777;
-static const int current_storage_version = 2;
+//static const int current_storage_version = 2;
 
 typedef struct ClaySettings {
-//  char WeatherAPIKey[33];
+  API_STATUS WeatherAPIKeyStatus;
   PERIOD WeatherUpdatePeriod;
   char ClockFormat[8];
   char DateFormat[12];
@@ -44,12 +44,15 @@ typedef struct ClaySettings {
 static ClaySettings settings;
 static callback_ptr settings_update_handler = NULL;
 
+static void prv_post_load_settings();
+
 static void prv_default_settings() {
+  
   //strcpy(settings.ClockFormat, "%H:%M\0");
   //strcpy(settings.DateFormat, "%Y.%m.%d\0");
   //snprintf(settings.ClockFormat, sizeof(settings.ClockFormat), "%H:%M");
   //snprintf(settings.DateFormat, sizeof(settings.DateFormat), "%Y.%m.%d");
-  //strcpy(settings.WeatherAPIKey, "not_set");
+  
   settings.WeatherUpdatePeriod = P_1H;
   settings.FontColorHex = 0xffffff;
   settings.BackgroundColorHex = 0x000000;  
@@ -82,16 +85,16 @@ static void prv_default_settings() {
   // settings.showPebbleBatteryPercents = true;
 }
 
+static void increase_current_storage_version(int current) {
+  persist_write_int(storage_version_key, current);
+  prv_post_load_settings();
+}
+
 static void prv_post_load_settings() {  
 
+  helper_str_filler(settings.DateFormat, "%Y.%m.%d\0");
+  helper_str_filler(settings.ClockFormat, "%H:%M\0");
 
-  if (strlen(settings.DateFormat) == 0) {    
-    strcpy(settings.DateFormat, "%Y.%m.%d\0");
-  }
-
-  if (strlen(settings.ClockFormat) == 0) {
-  strcpy(settings.ClockFormat, "%H:%M\0");
-  }
   bool has_storage_version = persist_exists(storage_version_key);
 
   const int last_storage_version = has_storage_version ? \
@@ -103,17 +106,28 @@ static void prv_post_load_settings() {
       settings.FontColorHex = 0xffffff;
       settings.BackgroundColorHex = 0x000000;
       settings.SwitchBackTimeout = 15;
+      increase_current_storage_version(last_storage_version + 1);
+      break;        
+    case 2:    
+      //helper_str_filler(settings.WeatherAPIKey, "not_set");      
+      //increase_current_storage_version(last_storage_version + 1);
       break;
-    case 2:
+    case 3:
       break;
+
     default:
       break;
   }
 }
 
+
 char* settings_get_clockformat() {
   return settings.ClockFormat;
 }
+
+// char* settings_get_WeatherAPIKey() {
+//   return settings.WeatherAPIKey;
+// }
 
 static bool get_bool (uint8_t settings_bool) {
     return settings_bool == 1;
@@ -262,6 +276,16 @@ uint8_t settings_get_SwitchBackTimeout() {
   return settings.SwitchBackTimeout;
 }
 
+API_STATUS settings_get_WeatherAPIKeyStatus() {
+  return settings.WeatherAPIKeyStatus;
+}
+
+void helper_str_filler(char *item, char* filler) {
+  if (strlen(item) == 0) {
+    strcpy(item, filler);
+  }
+}
+
 static void prv_load_settings() {
   // Load the default settings
   prv_default_settings();
@@ -273,7 +297,7 @@ static void prv_load_settings() {
 
 void save_settings() {
     persist_write_data(SETTINGS_KEY, &settings, sizeof(settings));
-    persist_write_int(storage_version_key, current_storage_version);
+    //persist_write_int(storage_version_key, current_storage_version);
     settings_update_handler();
 }
 
@@ -291,6 +315,18 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     } else {
       strcpy(settings.ClockFormat, clock_format_t->value->cstring);
     }
+  }
+
+  Tuple *w_api = dict_find(iter, MESSAGE_KEY_WeatherAPIKey);
+  if (w_api) {
+    char *apikey = w_api->value->cstring;
+    if (strcmp(apikey, "not_set") == 0) {
+      settings.WeatherAPIKeyStatus = API_NOT_SET;
+    } else if (strcmp(apikey, "invalid_api_key") == 0) {
+      settings.WeatherAPIKeyStatus = API_INVALID;
+    } else {
+      settings.WeatherAPIKeyStatus = API_OK;
+    }    
   }
 
   Tuple *date_fmt = dict_find(iter, MESSAGE_KEY_DateFormat);

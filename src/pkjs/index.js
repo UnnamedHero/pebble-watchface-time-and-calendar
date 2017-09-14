@@ -33,7 +33,12 @@ Pebble.addEventListener('webviewclosed', function(e) {
 
   var sw_timeout_str = dict[messageKeys.SwitchBackTimeout];
   dict[messageKeys.SwitchBackTimeout] = parseInt(sw_timeout_str, 10);
-
+  
+  var mySettings = {
+    'WeatherAPIKey' : dict[messageKeys.WeatherAPIKey]
+  }
+  
+  localStorage.setItem('clay-helper', JSON.stringify(mySettings));
 
   Pebble.sendAppMessage(dict, function(e) {
     console.log('Sent config data to Pebble');

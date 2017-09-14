@@ -17,10 +17,25 @@ exports.getWeather = function(type) {
 
 
 function getWeatherAPIKey() {
-	return localStorage.getItem('clay-settings') ?
-		JSON.parse(localStorage.getItem('clay-settings')).WeatherAPIKey :
-		"not_set";
-	}
+ var helperSettings = localStorage.getItem('clay-helper');
+ var claySettings = localStorage.getItem('clay-settings');
+ var weatherAPI = claySettings ? JSON.parse(claySettings).WeatherAPIKey : 'not_set';
+
+ if (!helperSettings) {
+   clayHelperSetItem('WeatherAPIKey', weatherAPI);
+   return weatherAPI;
+  }   
+  return JSON.parse(helperSettings).WeatherAPIKey;   
+}
+
+function clayHelperSetItem(key, value) {
+  var settings = JSON.parse(localStorage.getItem('clay-helper')) || {} ; 
+
+  if (key) {
+    settings[key] = value;
+  }
+  localStorage.setItem('clay-helper', JSON.stringify(settings));
+}
 
 function getTempUnits() {
   var units = JSON.parse(localStorage.getItem('clay-settings')).WeatherUnits;
@@ -52,7 +67,7 @@ function sendWeather(weather_data) {
 function isDayAt (sunrise, sunset, time) {
   if(!sunrise) {
     var sunData = JSON.parse(localStorage.getItem('SunTimes'));
-    if (!sunData.sunrise && !sunData.sunset) {
+    if (!(sunData && sunData.sunrise && sunData.sunset)) {
       return true;
     } 
     sunrise = sunData.sunrise;
@@ -212,8 +227,8 @@ function locationSuccess(pos) {
   // We will request the weather here
   var weatherAPIKey = getWeatherAPIKey();
 //  return;
-   if (weatherAPIKey == "not_set" || weatherAPIKey == "invalid_api_key" ) {
-     console.log("Weather ERROR: Invalid API key");
+   if (weatherAPIKey == "not_set" || weatherAPIKey == 'invalid_api_key') {
+     console.log("Weather ERROR: bad api key: " + weatherAPIKey);
      return ;
    }
 
@@ -231,11 +246,23 @@ function locationSuccess(pos) {
 
     	if (json.cod === 401) {
     		console.log("Waether ERROR: Invalid API key");
+        setInvalidAPIKey();
         return;
     	}
       parseResponse(json);
     }
   );
+}
+
+function setInvalidAPIKey() {  
+  message = 'invalid_api_key';
+  clayHelperSetItem('WeatherAPIKey', message)
+
+  var bad_api = {
+      "ConfigMarker": true,
+      "WeatherAPIKey": message
+    };  
+    sendWeather(bad_api);
 }
 
 function locationError(err) {  

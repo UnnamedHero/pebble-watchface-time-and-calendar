@@ -40,6 +40,11 @@ typedef enum WeatherRequest {
   W_BOTH
 } W_REQ;
 
+typedef enum APYKeyStatus {
+  API_NOT_SET,  
+  API_INVALID,
+  API_OK
+} API_STATUS;
 
 typedef void (*callback_ptr)();
 
@@ -47,9 +52,12 @@ void init_settings(callback_ptr callback);
 void populate_settings(DictionaryIterator *iter, void *context);
 void save_settings();
 
+void helper_str_filler(char *item, char* filler);
 
 char* settings_get_clockformat();
-//char* settings_get_weather_apikey();
+
+//char* settings_get_WeatherAPIKey();
+API_STATUS settings_get_WeatherAPIKeyStatus();
 PERIOD settings_get_WeatherUpdatePeriod();
 bool settings_get_RespectQuietTime();
 bool settings_get_VibrateDuringCharging();
