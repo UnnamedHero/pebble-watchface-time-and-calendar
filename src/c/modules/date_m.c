@@ -6,7 +6,6 @@
 
 static Layer *s_this_layer;
 static void prv_populate_date_layer(Layer *, GContext *);
-//static char
 
 void init_date_layer(GRect rect) {
   s_this_layer = layer_create(rect);
@@ -24,7 +23,9 @@ Layer* get_layer_date() {
 }
 
 static void prv_populate_date_layer(Layer *me, GContext *ctx) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: DATE");
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: DATE");
+  #endif  
   settings_get_theme(ctx);
   static char date_txt[33];
   get_current_date(settings_get_DateFormat(), date_txt);

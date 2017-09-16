@@ -44,5 +44,9 @@ wipe:
 
 shot:
 	PEBBLE_PHONE="" pebble screenshot --emulator aplite	
+
+shot_dio:
+	PEBBLE_PHONE="" pebble screenshot --emulator diorite	
+
 	
 .PHONY: test build
