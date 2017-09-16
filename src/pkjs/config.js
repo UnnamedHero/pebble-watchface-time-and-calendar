@@ -113,7 +113,6 @@ module.exports = [
           },
         ],
         "defaultValue": "."
-
       },
       {
         "type": "toggle",
@@ -142,12 +141,6 @@ module.exports = [
         },
         "capabilities": ["PLATFORM_APLITE"]
       },
-      {
-        "type": "toggle",
-        "id": "ConfigMarker",
-        "messageKey": "ConfigMarker",
-        "defaultValue": "true"
-      }
     ]
   },
   {
