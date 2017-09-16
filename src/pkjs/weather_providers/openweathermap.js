@@ -143,6 +143,8 @@ function fillForecastData(data, fill_obj, index, json) {
 function get_forecast_matrix() {
     var forecastType = JSON.parse(localStorage.getItem('clay-settings')).ForecastType;
     switch (forecastType) {
+      case 'ft_off':
+        return null;
       case 'ft_3h': 
         return [0, 1, 2, 3];
       case 'ft_6h':
@@ -153,7 +155,6 @@ function get_forecast_matrix() {
 }
 
 function processForecast(parsed) {
-
   var forecast_matrix = get_forecast_matrix();  
   var weather_data = {
      "WeatherMarkerForecast": true,
@@ -226,12 +227,15 @@ function parseResponse(json) {
 function locationSuccess(pos) {
   // We will request the weather here
   var weatherAPIKey = getWeatherAPIKey();
-//  return;
    if (weatherAPIKey == "not_set" || weatherAPIKey == 'invalid_api_key') {
      console.log("Weather ERROR: bad api key: " + weatherAPIKey);
      return ;
    }
 
+  if (getRequestType() === 'forecast' && get_forecast_matrix() === null) {    
+    return;
+  }
+  
   var url = 'http://api.openweathermap.org/data/2.5/'+getRequestType()+'?lat=' +
       pos.coords.latitude +
       '&lon=' + pos.coords.longitude +
@@ -240,10 +244,7 @@ function locationSuccess(pos) {
       '&appid=' + weatherAPIKey;// + 'ru';
     return xhrRequest(url, 'GET',
     function(responseText) {
-  //    fetchingWeather = false;
-    // responseText contains a JSON object with weather info
     	var json = JSON.parse(responseText);
-
     	if (json.cod === 401) {
     		console.log("Waether ERROR: Invalid API key");
         setInvalidAPIKey();

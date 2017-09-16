@@ -54,4 +54,5 @@ module.exports = {
     "Forecast type": "Тип прогноза",
     "3 hours" : "3х часовой",
     "6 hours" : "6ти часовой"
+    "disabled" : "отключен"
   };

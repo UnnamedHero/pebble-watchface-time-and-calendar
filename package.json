@@ -107,7 +107,7 @@
         {
           "characterRegex": "[:0-9]",
           "type": "font",
-          "name": "TIME_BOLD_54",
+          "name": "TIME_BOLD_58",
           "file": "fonts/BebasNeue_Bold.ttf"
         },
         {

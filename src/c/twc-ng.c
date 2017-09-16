@@ -39,7 +39,7 @@ void settings_update_handler() {
 }
 
 static void accel_tap_handler(AccelAxisType axis, int32_t direction) { 
-  if (settings_get_WeatherAPIKeyStatus() == API_OK) {
+  if (settings_get_WeatherAPIKeyStatus() == API_OK && settings_get_ForecastEnabled()) {
     toggle_windows();
   }
 }

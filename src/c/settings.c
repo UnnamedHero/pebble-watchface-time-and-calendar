@@ -18,6 +18,7 @@ typedef struct ClaySettings {
   uint8_t QTMinBegin;
   uint8_t QTMinEnd;
 #endif
+  uint8_t ForecastEnabled;
   int FontColorHex;
   int BackgroundColorHex;
   uint8_t VibrateDuringCharged;
@@ -197,6 +198,10 @@ int settings_get_FontColorHex() {
 
 bool settings_get_VibratePeriodic() {
   return get_bool(settings.VibratePeriodic);
+}
+
+bool settings_get_ForecastEnabled() {
+  return get_bool(settings.ForecastEnabled);
 }
 
 static PERIOD get_period (char *settings_per) {
@@ -433,6 +438,11 @@ void populate_settings(DictionaryIterator *iter, void *context) {
   if (vibr_per_type) {
     //char sf_option[4] = sunday_first->value->cstring;
     settings.SundayFirst = strcmp(sunday_first->value->cstring, "sun") == 0 ? 1 : 0;
+  }
+
+  Tuple *f_on = dict_find(iter, MESSAGE_KEY_ForecastType);
+  if (f_on) {    
+    settings.ForecastEnabled = strcmp(f_on->value->cstring, "ft_off") == 0 ? 0 : 1;
   }
 
   Tuple *cwv = dict_find(iter, MESSAGE_KEY_CalendarWeeks);

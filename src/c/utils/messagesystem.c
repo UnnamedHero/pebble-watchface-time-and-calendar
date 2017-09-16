@@ -29,7 +29,9 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
     s_js_ready = true;
     busy = false;
     ready_for_weather(false);
-    ready_for_forecast(false);
+    if (settings_get_ForecastEnabled()) {
+      ready_for_forecast(false);
+    }
     //init_weather(settings_get_weather_apikey());
   }
 
@@ -41,7 +43,9 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
     populate_settings(iter, context);
     if (settings_get_WeatherAPIKeyStatus() == API_OK) {
       ready_for_weather(true);
-      ready_for_forecast(true);
+      if (settings_get_ForecastEnabled()) {
+        ready_for_forecast(false);
+      }
     }
   }
 

@@ -262,6 +262,10 @@ module.exports = [
           "label": "Forecast type",
           "options" : [
             {
+              "label": "Disabled",
+              "value": "ft_off"
+            },
+            {
               "label": "3 hours",
               "value": "ft_3h"
             },
