@@ -1,5 +1,12 @@
 # Changelog
 ---
+#### 0.30.0 (develop)
+ - increase time font size #2
+ - add option to disable forecast #5
+ - key sign appear on top panel if something wrong with weather api key
+ - add option to reduce font size for not today in calendar #3
+
+---
 #### 0.25.0 (published)
  - fix settings processing for no-aplite platforms
 

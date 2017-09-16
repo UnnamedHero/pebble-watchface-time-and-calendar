@@ -32,7 +32,7 @@ Development versions can be downloaded from [google drive](https://drive.google.
 
 Lastest stable version is 0.25.0 (available in [Pebble Store](https://apps.getpebble.com/applications/596fb1650dfc321335000144))
 
-Lastest development version is 0.20.0
+Lastest development version is 0.30.0
 
 See CHANGELOG for more details.
 
