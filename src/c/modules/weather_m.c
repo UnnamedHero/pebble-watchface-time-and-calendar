@@ -73,7 +73,8 @@ Layer* get_layer_weather() {
 }
 
 static void prv_ticktimer(struct tm* unneeded) {
-  update_weather(false); 
+  update_weather(false);
+  layer_mark_dirty(s_this_layer);
 }
 
 void update_weather(bool force) {
@@ -138,7 +139,7 @@ static void prv_populate_time_layer(Layer *me, GContext *ctx, GRect rect) {
   static char time_txt[33];
   get_currect_time(CLOCK_FORMAT, time_txt);
 
-  const int time_font_voffset = 8; //crunch for vertical alignment
+  const int time_font_voffset = 6; //crunch for vertical alignment
   graphics_draw_text(ctx, time_txt, \
       s_tfont, \
       GRect (rect.origin.x, rect.origin.y - time_font_voffset, rect.size.w, rect.size.h), \
