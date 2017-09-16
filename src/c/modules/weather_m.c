@@ -54,7 +54,7 @@ void prv_default_weather_data() {
 void init_weather_layer(GRect bounds) {  
   s_this_layer = layer_create(bounds);
   s_wfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
-  s_tfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_TIME_BOLD_54));
+  s_tfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_TIME_BOLD_58));
   prv_load_weather();
   layer_set_update_proc(s_this_layer, prv_populate_this_layer);
   ticktimerhelper_register(prv_ticktimer);
@@ -96,8 +96,10 @@ void update_weather(bool force) {
 
 void prv_populate_this_layer(Layer *me, GContext *ctx) {
   settings_get_theme(ctx);
+
   GRect bounds = layer_get_bounds(me);
-  weather.WeatherReady == 1 && settings_get_WeatherAPIKeyStatus() == API_OK ? prv_populate_combined_layer (me, ctx) : prv_populate_time_layer(me, ctx, bounds);
+  weather.WeatherReady == 1 && settings_get_WeatherAPIKeyStatus() == API_OK ? \
+    prv_populate_combined_layer (me, ctx) : prv_populate_time_layer(me, ctx, bounds);
 }
 
 
@@ -132,13 +134,14 @@ static void prv_populate_time_layer(Layer *me, GContext *ctx, GRect rect) {
   #if defined (DEBUG) 
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: TIME");
   #endif
-  
+
   static char time_txt[33];
   get_currect_time(CLOCK_FORMAT, time_txt);
-//  APP_LOG(APP_LOG_LEVEL_DEBUG, "time to show: %s", time_txt);
+
+  const int time_font_voffset = 8; //crunch for vertical alignment
   graphics_draw_text(ctx, time_txt, \
       s_tfont, \
-      rect, \
+      GRect (rect.origin.x, rect.origin.y - time_font_voffset, rect.size.w, rect.size.h), \
       GTextOverflowModeWordWrap, \
       GTextAlignmentCenter, \
       NULL);
@@ -148,7 +151,7 @@ void get_weather(DictionaryIterator *iter, void *context) {
 
   Tuple *w_temp = dict_find(iter, MESSAGE_KEY_WeatherTemperature);
   if (w_temp) {
-  //  static char w_tempbuffer[4];
+
     weather.WeatherTemperature = w_temp->value->int32;
     weather.WeatherReady = 1;
   }
@@ -183,18 +186,17 @@ void get_weather(DictionaryIterator *iter, void *context) {
   Tuple *w_wdir = dict_find(iter, MESSAGE_KEY_WeatherWindDirection);
   if (w_wdir) {
     snprintf(weather.WeatherWindDirection, sizeof(weather.WeatherWindDirection), w_wdir->value->cstring);
-//    weather.WeatherWindDirection = w_wdir->value->int32;
   }
 
   Tuple *w_rise = dict_find(iter, MESSAGE_KEY_WeatherSunrise);
   if (w_rise) {
     snprintf(weather.WeatherSunrise, sizeof(weather.WeatherSunrise), w_rise->value->cstring);
-//    weather.WeatherWindDirection = w_wdir->value->int32;
   }
+
   Tuple *w_set = dict_find(iter, MESSAGE_KEY_WeatherSunset);
   if (w_set) {
     snprintf(weather.WeatherSunset, sizeof(weather.WeatherSunset), w_set->value->cstring);
-//    weather.WeatherWindDirection = w_wdir->value->int32;
+
   }  
   prv_save_weather();
   layer_mark_dirty(s_this_layer);
@@ -254,7 +256,9 @@ uint8_t get_WeatherHumidity() {
 }
 
 static void prv_send_data_failed() {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather send message failed, timeput 5 secs");
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather send message failed, timeput 5 secs");
+  #endif  
   s_timeout_timer = app_timer_register(timeout, prv_timer_timeout_handler, NULL);
 }
 
