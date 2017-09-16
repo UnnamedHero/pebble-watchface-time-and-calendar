@@ -102,6 +102,10 @@ static void prv_post_load_settings() {
   const int last_storage_version = has_storage_version ? \
           persist_read_int(storage_version_key) :\
           0;
+  if (settings.FontColorHex == settings.BackgroundColorHex) {
+      settings.FontColorHex = 0xffffff;
+      settings.BackgroundColorHex = 0x000000;
+  }
 
   switch (last_storage_version) {
     case 0:

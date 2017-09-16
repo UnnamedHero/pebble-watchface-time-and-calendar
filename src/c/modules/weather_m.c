@@ -78,6 +78,12 @@ static void prv_ticktimer(struct tm* unneeded) {
 }
 
 void update_weather(bool force) {
+  if (settings_get_WeatherAPIKeyStatus() != API_OK) {
+    #if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "API key is bad, disable weather request");
+    #endif
+      return;
+  }
     if (!force) {
      if (!is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
       #if defined (DEBUG) 

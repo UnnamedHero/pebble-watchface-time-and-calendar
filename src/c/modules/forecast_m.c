@@ -58,25 +58,20 @@ Layer* get_layer_forecast() {
 
 
 static void prv_populate_forecast_layer(Layer *me, GContext *ctx) {	
-  // layer_set_hidden(me, true);
-  // layer_set_clips(me, false);
 
   if (forecast.ForecastReady != 1 || forecast.ForecastQty == 0) {
     return;
   }
 
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "DRAW forecast layer");  
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "DRAW forecast layer");  
+  #endif
   settings_get_theme(ctx);
   GRect bounds = layer_get_bounds(me);
   int item_width = bounds.size.w / forecast.ForecastQty;
-  //int item_height = bounds.size.h;
-
-  //graphics_context_set_stroke_color(ctx, GColorWhite);
   for (int i = 0; i < forecast.ForecastQty; i++) {
     const int module_x = i * item_width;
     const int module_y = 0;
-//    GRect module_bounds = GRect(module_x, module_y, item_width, item_height);
-
     const GRect dt = GRect(module_x, module_y, item_width, f_date_height);
     const int cond_y = module_y + f_date_height;
     const GRect cond = GRect (module_x, cond_y, item_width, f_cond_height);
@@ -111,8 +106,6 @@ static void prv_populate_forecast_layer(Layer *me, GContext *ctx) {
     NULL);
   }
 
-  // layer_set_clips(me, true);
-  // layer_set_hidden(me, false);
 }
 
 void forecast_update(DictionaryIterator *iter, void *context) {
@@ -174,6 +167,13 @@ void forecast_update(DictionaryIterator *iter, void *context) {
 }
 
 void update_forecast(bool force) {
+  if (settings_get_WeatherAPIKeyStatus() != API_OK) {
+    #if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "API key is bad, disable forecast request");
+    #endif
+    return;
+  }
+
   if (!s_forecast_layer) {
     prv_load_forecast();
   }
