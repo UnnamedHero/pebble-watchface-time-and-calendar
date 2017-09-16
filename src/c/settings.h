@@ -75,6 +75,7 @@ bool settings_get_CalendarBoldWeekDay();
 bool settings_get_CalendarInvertWeekDay();
 bool settings_get_CalendarBoldToday();
 bool settings_get_CalendarInvertToday();
+bool settings_get_CalendarSmallOtherDays();
 char* settings_get_DateFormat();
 int settings_get_BackgroundColorHex();
 int settings_get_FontColorHex();

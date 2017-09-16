@@ -79,6 +79,7 @@
       "CalendarWeeks",
       "CalendarWeekDayMark[2]",
       "CalendarDayMark[2]",
+      "CalendarSmallOtherDays",
       "dummy"
     ],
     "resources": {

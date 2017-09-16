@@ -184,7 +184,13 @@ module.exports = [
         "label": "Mark current day with",
         "options": [ "Bold text", "Inverted color"],
         "defaultValue" : [false, true]
-      }      
+      }, 
+      {
+        "type": "toggle",
+        "messageKey": "CalendarSmallOtherDays",
+        "label": "Reduce font size for other days",
+        "defaultValue": false
+      },      
     ]
   },
   {

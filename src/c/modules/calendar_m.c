@@ -95,16 +95,6 @@ static void populate_calendar_values() {
   }
 }
 
-// static void prv_set_light_theme(GContext *ctx) {
-//   graphics_context_set_text_color(ctx, GColorFromHEX(settings_get_FontColorHex()));  
-//   graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_FontColorHex()));
-// }
-
-// static void prv_set_dark_theme(GContext *ctx) {
-//   graphics_context_set_text_color(ctx, GColorFromHEX(settings_get_BackgroundColorHex()));  
-//   graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_BackgroundColorHex()));  
-// }
-
 static void prv_set_inverted_theme(GContext *ctx) {
     graphics_context_set_text_color(ctx, GColorFromHEX(settings_get_BackgroundColorHex()));
     graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_FontColorHex()));  
@@ -134,9 +124,15 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
       int x = ix * width;
       int y = iy  * 18;
       GRect fill = iy == 0 ? GRect (x, y, width, 18) : GRect (x + 1, y + 1, width -1 , 17);
-      GRect pos = GRect(x, y - 3, width, 18);
       int index = iy * 7 + ix;
+      bool is_small = (settings_get_CalendarSmallOtherDays() && (index != current_date_index && index > 6));      
+      
+      //GRect pos = is_small ? GRect(x, y - 3, width, 18) : GRect(x, y, width, 18);
+      GRect pos = is_small ? GRect(x, y, width, 18) : GRect(x, y - 3, width, 18);
+      
       GFont font = fonts_get_system_font(FONT_KEY_GOTHIC_18);
+      GFont font_sm = fonts_get_system_font(FONT_KEY_GOTHIC_14);
+
       if (index == current_week_day_abbr_index) { 
         if (settings_get_CalendarInvertWeekDay()) {
           prv_set_inverted_theme(ctx);
@@ -155,7 +151,7 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
       }
       graphics_fill_rect(ctx, fill, 0, GCornerNone);
       graphics_draw_text(ctx, calendar_values[index], \
-          font, \
+          is_small ? font_sm : font, \
           pos, \
           GTextOverflowModeWordWrap, \
           GTextAlignmentCenter, \

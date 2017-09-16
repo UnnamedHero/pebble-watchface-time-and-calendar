@@ -40,6 +40,7 @@ module.exports = {
     "2 previous weeks, current" : "2 предыдущие, текущая",
     "prevoius, current, next" : "предыдущая, текущая, следующая",
     "current, next 2 weeks" : "текущая, 2 следующих",
+    "Reduce font size for other days" : "Уменьшить шрифт для дней, кроме сегодняшнего"
     "Save Settings" : "Сохранить настройки",
     "Mark current day of a week with" : "Выделить текущий день недели",
     "Mark current day with" : "Выделить текущий день",

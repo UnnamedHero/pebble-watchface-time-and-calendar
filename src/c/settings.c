@@ -36,6 +36,7 @@ typedef struct ClaySettings {
   uint8_t CalendarInvertWeekDay;
   uint8_t CalendarBoldToday;
   uint8_t CalendarInvertToday;
+  uint8_t CalendarSmallOtherDays;
   uint8_t SwitchBackTimeout;
   // bool showPebbleConnection;
   // bool showPebbleBattery;
@@ -269,6 +270,10 @@ bool settings_get_CalendarBoldToday() {
   return get_bool(settings.CalendarBoldToday);
 }
 
+bool settings_get_CalendarSmallOtherDays() {
+  return get_bool(settings.CalendarSmallOtherDays);
+}
+
 bool settings_get_CalendarInvertToday() {
   return get_bool(settings.CalendarInvertToday);
 }
@@ -468,6 +473,11 @@ void populate_settings(DictionaryIterator *iter, void *context) {
   Tuple *cal_invtoday = dict_find(iter, MESSAGE_KEY_CalendarDayMark + 1);
   if (cal_invtoday) {
      settings.CalendarInvertToday = cal_invtoday->value->uint8;
+  }
+
+  Tuple *cal_smdays = dict_find(iter, MESSAGE_KEY_CalendarSmallOtherDays);
+  if (cal_smdays) {
+     settings.CalendarSmallOtherDays = cal_smdays->value->uint8;
   }
 
   Tuple *swtime = dict_find(iter, MESSAGE_KEY_SwitchBackTimeout);
