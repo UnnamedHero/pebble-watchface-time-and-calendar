@@ -32,9 +32,9 @@ bool aplite_quiet_time_is_active() {
 
 bool is_quiet_time() {
 #if defined (PBL_PLATFORM_APLITE)
-  bool qt = !aplite_quiet_time_is_active();
+  bool qt = aplite_quiet_time_is_active();
 #else
-  bool qt = !quiet_time_is_active();
+  bool qt = quiet_time_is_active();
 #endif
   return qt;
 }

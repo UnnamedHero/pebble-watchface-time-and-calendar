@@ -58,7 +58,14 @@ static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
     GTextOverflowModeWordWrap, \
     GTextAlignmentCenter, \
     NULL);
-
+  }
+  if (is_quiet_time()) {
+    graphics_draw_text(ctx, "D" , \
+    statuses_font, \
+    GRect (40, 0, 20, 20), \
+    GTextOverflowModeWordWrap, \
+    GTextAlignmentCenter, \
+    NULL);    
   }
   //graphics_draw_bitmap_in_rect(ctx, s_bt_icon, GRect(0,0, 20, 20));
 
