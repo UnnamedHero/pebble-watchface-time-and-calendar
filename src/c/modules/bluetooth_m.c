@@ -25,13 +25,17 @@ void init_bluetooh_layer(GRect rect) {
   init = true;
 }
 
-static void prv_bt_connection_status(bool state) {
-  
-  bt_connected = state;
-  if (can_vibrate() && init) {
-    state ? do_vibrate (settings_get_VibrateConnectedType()) : do_vibrate(settings_get_VibrateDisconnectedType());
+static void prv_bt_connection_status(bool state) {  
+  bt_connected = state;  
+  if (state) {
+    if (settings_get_VibrateConnected()) {
+     do_vibrate(settings_get_VibrateConnectedType());
+    } 
+  } else {
+    if (settings_get_VibrateDisconnected()) {
+     do_vibrate(settings_get_VibrateDisconnectedType()); 
+    }
   }
-
   layer_mark_dirty(this_layer);
 }
 

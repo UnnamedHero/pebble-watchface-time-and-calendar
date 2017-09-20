@@ -45,7 +45,13 @@ static void prv_ticktimer(struct tm* timer) {
 }
 
 void do_vibrate(VIBE vibe_pattern) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "VIBE : %i", vibe_pattern);
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "VIBE : %i", vibe_pattern);
+  #endif
+  if (!can_vibrate()) {
+    return;
+  }
+  
   switch (vibe_pattern) {
     case VP_SHORT:
       vibes_short_pulse();
