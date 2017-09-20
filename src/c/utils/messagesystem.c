@@ -78,6 +78,13 @@ void send_message(Tuplet *data, int data_array_size, message_failed_callback_ptr
     message_failed_callback();
   }
   
+  if (!is_bt_connected()) {
+    #if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Bluetooth not connected, aborting sending data");
+    #endif
+    busy = false;    
+    return;
+  }
 
   DictionaryIterator *iter;
   AppMessageResult prepare_result = app_message_outbox_begin(&iter);
@@ -93,13 +100,7 @@ void send_message(Tuplet *data, int data_array_size, message_failed_callback_ptr
       return;
     }
   }
-  if (!is_bt_connected()) {
-    #if defined (DEBUG) 
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Bluetooth not connected, aborting sending data");
-    #endif
-    busy = false;    
-    return;
-  }
+  
   AppMessageResult send_result = app_message_outbox_send();
   if (send_result != APP_MSG_OK) {
     message_failed_callback();
