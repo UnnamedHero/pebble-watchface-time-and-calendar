@@ -33,7 +33,7 @@ static void prv_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   const GRect bounds = layer_get_bounds(window_layer);
   const GRect bluetooth_bounds = GRect (0, 0, 40, 20);
-  const GRect battery_bounds = GRect (bounds.size.w - 52, 0, 50, 20);
+  const GRect battery_bounds = GRect (bounds.size.w - 47, 0, 52, 20);
   const GRect date_bounds = GRect(0, 22, bounds.size.w, 14);
   //GRect time_bounds = GRect (35, 32, bounds.size.w - 35, 54);
   const GRect calendar_bounds = GRect (2, 92, bounds.size.w, 73);
