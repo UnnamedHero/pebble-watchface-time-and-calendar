@@ -2,7 +2,7 @@
   "name": "time-and-calendar",
   "author": "Eugene 'EEM' Mikhaylov",
   "description": "Another inplementation of functional watchface with time, calendar and weather",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "license": "GPLv3",
   "keywords": [
     "pebble watchface",
@@ -59,7 +59,6 @@
       "ForecastCondition[5]",
       "ForecastTemperature[5]",
       "ForecastType",
-      "ForecastDummy",
       "SwitchBackTimeout",
       "WeatherUnits",
       "WeatherUpdatePeriod",

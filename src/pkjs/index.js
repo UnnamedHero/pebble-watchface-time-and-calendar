@@ -4,7 +4,7 @@ var clayConfig = require('./config');
 var customFunctions = require('./functions');
 var messageKeys = require('message_keys');
 var i18n = require('./localizator');
-
+var sender = require('./sender.js');
 var clay = new Clay(i18n.translate(clayConfig), customFunctions, { autoHandleEvents: false });
 
 Pebble.addEventListener('showConfiguration', function(e) {
@@ -40,10 +40,14 @@ Pebble.addEventListener('webviewclosed', function(e) {
   
   localStorage.setItem('clay-helper', JSON.stringify(mySettings));
 
+  //sender.send(dict);
   Pebble.sendAppMessage(dict, function(e) {
     console.log('Sent config data to Pebble');
-  }, function(e) {
+  }, function(d, e) {
     console.log('Failed to send config data!');
+    Object.keys(dict).forEach(function(item) {
+      console.log(item+':'+dict[item]);
+    });
   });
 });
 
