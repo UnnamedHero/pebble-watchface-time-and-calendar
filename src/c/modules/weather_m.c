@@ -84,14 +84,14 @@ void update_weather(bool force) {
     #endif
       return;
   }
-    if (!force) {
-     if (!is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
-      #if defined (DEBUG) 
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
-      #endif            
-      return;
+  if (!force) {
+   if (!is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
+   #if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
+   #endif
+    return;
     } 
- }
+  }
   Tuplet data_to_send[] = {
     TupletInteger(MESSAGE_KEY_WeatherMarker, 1),
   };
