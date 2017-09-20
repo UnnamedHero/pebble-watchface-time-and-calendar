@@ -59,6 +59,7 @@
       "ForecastCondition[5]",
       "ForecastTemperature[5]",
       "ForecastType",
+      "ForecastDummy",
       "SwitchBackTimeout",
       "WeatherUnits",
       "WeatherUpdatePeriod",

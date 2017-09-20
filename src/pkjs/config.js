@@ -277,6 +277,7 @@ module.exports = [
         },
         {
           "type": "text",
+          "messageKey": "ForecastDummy",
           "defaultValue": "Shake your Pebble to view forecast. Set timeout for auto switch back."
         },
         {

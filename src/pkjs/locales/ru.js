@@ -55,5 +55,7 @@ module.exports = {
     "Forecast type": "Тип прогноза",
     "3 hours" : "3х часовой",
     "6 hours" : "6ти часовой",
-    "disabled" : "отключен"
+    "disabled" : "отключен",
+    "Shake your Pebble to view forecast. Set timeout for auto switch back." : "Потрясите часами, чтобы переключиться на окно показа прогноза погоды. Выставите таймаут в секундах ниже для автоматического переключения назад.",
+    "Switch back timeout in seconds" : "Переключаться назад автоматически через..."
   };
