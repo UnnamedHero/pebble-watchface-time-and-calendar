@@ -13,9 +13,9 @@ static int prv_get_mins(int hour, int min) {
 static bool prv_is_between_numbers(int begin, int end, int now) {
   bool within_24h = begin < end;
   if (within_24h) {    
-    return (now > begin) && (now < end);
+    return (now >= begin) && (now <= end);
   } 
-  return (((now < begin) && (now < end)) || ((now > begin) && (now > end)));
+  return (((now <= begin) && (now <= end)) || ((now >= begin) && (now >= end)));
 }
 
 bool aplite_quiet_time_is_active() {

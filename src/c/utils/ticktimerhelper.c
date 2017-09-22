@@ -81,7 +81,10 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 		APP_LOG(APP_LOG_LEVEL_DEBUG, "Seconds units_changed, ignoring tick_handlers");
 	#endif		
 		return;
-	}	
+	}
+	#if defined (DEBUG) 
+		  APP_LOG(APP_LOG_LEVEL_DEBUG, "Processing time handlers");
+		#endif	
 	linkedlist_forEachData(container, prv_ticktimerhelper_launcher, tick_time);
 }
 
