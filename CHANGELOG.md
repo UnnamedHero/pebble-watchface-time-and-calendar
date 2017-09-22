@@ -1,5 +1,9 @@
 # Changelog
 ---
+#### 0.32.0 (develop)
+ - improve js message sender
+ - fix some vibration cases
+
 #### 0.31.0 (develop)
  - fix crash when bluetooh conenction unavailable
  - battery status icon is now font symbols
