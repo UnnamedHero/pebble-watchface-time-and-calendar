@@ -39,23 +39,14 @@ Pebble.addEventListener('webviewclosed', function(e) {
   }
   
   localStorage.setItem('clay-helper', JSON.stringify(mySettings));
-
-  //sender.send(dict);
-  Pebble.sendAppMessage(dict, function(e) {
-    console.log('Sent config data to Pebble');
-  }, function(d, e) {
-    console.log('Failed to send config data!');
-    Object.keys(dict).forEach(function(item) {
-      console.log(item+':'+dict[item]);
-    });
-  });
+  sender.send(dict);
 });
 
 
 Pebble.addEventListener('ready',
   function(e) {
     console.log('PebbleKit JS ready!');
-    Pebble.sendAppMessage({'JSReady': 1});
+    sender.send({'JSReady': 1});
   }
 );
 
