@@ -2,6 +2,23 @@
 
 Welcome to a "Time-and-Calendar" watchface for Pebble smartwatch. Watch was was created as a trubute to such watchfaces as TCW (https://github.com/alexsum/TCW) and Timely (https://github.com/cynorg/PebbleTimely). The main goal of watchface creation is self-education process on mine. 
 
+![][screen1]
+![][screen2]
+![][screen3]
+![][screen4]
+![][screen5]
+
+[screen1]: https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/raw/gh-pages/screenshots/pebble_screenshot_2017-09-24_00-46-40.png
+
+[screen2]: https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/raw/gh-pages/screenshots/pebble_screenshot_2017-09-24_00-55-22.png
+
+[screen3]: https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/raw/gh-pages/screenshots/pebble_screenshot_2017-09-24_00-55-32.png
+
+[screen4]: https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/raw/gh-pages/screenshots/screenshot_20170923-121932.png
+
+[screen5]: https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/blob/gh-pages/screenshots/screenshot_20170923-121938.png
+
+
 Watchwace mainly designed for Pebble classic watches (I have Pebble classic). Written in C, configuration part in js.
 
 The code is licenced under GPLv3 license. 
