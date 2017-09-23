@@ -22,11 +22,21 @@ void init_bluetooh_layer(GRect rect) {
   });
   statuses_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_STATUSES_18));
   prv_bt_connection_status(connection_service_peek_pebble_app_connection());
-  init = true;
+ 
 }
 
-static void prv_bt_connection_status(bool state) {  
-  bt_connected = state;  
+static void prv_bt_connection_status(bool state) { 
+#if defined (DEBUG) 
+   APP_LOG(APP_LOG_LEVEL_DEBUG, "BT connection status changed");
+#endif 
+  bt_connected = state;
+  if (!init) {    
+#if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Not inited");
+#endif
+    return;
+  }
+    
   if (state) {
     if (settings_get_VibrateConnected()) {
      do_vibrate(settings_get_VibrateConnectedType());
@@ -43,7 +53,7 @@ static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
   #if defined (DEBUG) 
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: STATUS LAYER");
   #endif  
-  
+  init = true; //do not vibrate on watchface startup.
   settings_get_theme(ctx);
   graphics_draw_text(ctx, bt_connected ? "B" : "A" , \
     statuses_font, \
