@@ -332,7 +332,7 @@ function getCondition (owmCond, sunrise, sunset, time) {
     case 615:
     case 616:
       return 'u'; 
-    case 700:
+    case 701:
     case 741:
       return '?';
     case 711:
@@ -356,6 +356,7 @@ function getCondition (owmCond, sunrise, sunset, time) {
     case 804:
       return '!';
     default:
+    console.log('unknown condition: '+owmCond);
       return 'h';
   }
 }
