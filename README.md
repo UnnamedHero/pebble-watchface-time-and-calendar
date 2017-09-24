@@ -47,7 +47,7 @@ Nearest plans:
 
 Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
-Lastest stable version is 0.25.0 (available in [Pebble Store](https://apps.getpebble.com/applications/596fb1650dfc321335000144))
+Lastest stable version is 0.33.0 (available in [Pebble Store](https://apps.getpebble.com/applications/596fb1650dfc321335000144))
 
 Lastest development version is 0.32.0
 

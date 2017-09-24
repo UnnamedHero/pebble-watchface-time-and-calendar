@@ -1,15 +1,22 @@
 # Changelog
+
+---
+#### 0.33.0 (pebble store)
+ - fix mist recognition
+
 ---
 #### 0.32.0 (develop)
  - improve js message sender
  - fix some vibration cases
 
+---
 #### 0.31.0 (develop)
  - fix crash when bluetooh conenction unavailable
  - battery status icon is now font symbols
  - fix vibrate on phone connection and disconnection
  - fix quiet time recognition
 
+---
 #### 0.30.0 (develop)
  - increase time font size #2
  - add option to disable forecast #5
