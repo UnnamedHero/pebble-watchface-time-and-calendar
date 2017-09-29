@@ -1,4 +1,8 @@
 # Changelog
+---
+
+#### 0.35.0 (pebble store)
+ - fix quiet time issues
 
 ---
 #### 0.33.0 (pebble store)
