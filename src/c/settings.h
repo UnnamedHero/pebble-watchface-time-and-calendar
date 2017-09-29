@@ -59,7 +59,7 @@ char* settings_get_clockformat();
 //char* settings_get_WeatherAPIKey();
 API_STATUS settings_get_WeatherAPIKeyStatus();
 PERIOD settings_get_WeatherUpdatePeriod();
-bool settings_get_RespectQuietTime();
+bool settings_get_VibrateDuringQuietTime();
 bool settings_get_VibrateDuringCharging();
 bool settings_get_VibrateConnected();
 VIBE settings_get_VibrateConnectedType();
@@ -84,6 +84,7 @@ uint8_t settings_get_SwitchBackTimeout();
 bool settings_get_ForecastEnabled();
 
 #if defined (PBL_PLATFORM_APLITE)
+bool settings_get_QT();
 uint8_t settings_get_QTHourBegin();
 uint8_t settings_get_QTHourEnd();
 uint8_t settings_get_QTMinBegin();

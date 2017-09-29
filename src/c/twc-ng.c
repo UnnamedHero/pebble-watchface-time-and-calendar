@@ -57,7 +57,7 @@ static void prv_init() {
   const bool animated = true;
   //window_stack_push(get_forecast_window(), !animated);
   window_stack_push(get_time_window(), !animated);
-  accel_tap_service_subscribe(accel_tap_handler);
+  accel_tap_service_subscribe(accel_tap_handler);  
 }
 
 static void prv_deinit(void) {

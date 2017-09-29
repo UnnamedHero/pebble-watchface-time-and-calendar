@@ -323,7 +323,7 @@ module.exports = [
       },
       {
         "type": "toggle",
-        "messageKey": "RespectQuietTime",
+        "messageKey": "VibrateDuringQuietTime",
         "label": "Vibe during Quiet Time",
         "defaultValue": false
       },

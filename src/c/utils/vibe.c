@@ -55,12 +55,16 @@ static void prv_ticktimer(struct tm* timer) {
 }
 
 void do_vibrate(VIBE vibe_pattern) {
-  #if defined (DEBUG) 
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "VIBE : %i", vibe_pattern);
-  #endif
+
   if (!can_vibrate()) {
+#if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Can't vibe now !");
+#endif    
     return;
   }
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "VIBE bzbz: %i", vibe_pattern);
+  #endif
   
   switch (vibe_pattern) {
     case VP_SHORT:
@@ -80,10 +84,10 @@ void do_vibrate(VIBE vibe_pattern) {
 
 bool can_vibrate() {
   bool qt = is_quiet_time();
-  bool res = settings_get_RespectQuietTime() ? !qt : true;
+  bool res = settings_get_VibrateDuringQuietTime() ? true : !qt ;
   BatteryChargeState cs = battery_state_service_peek();
   #if defined (DEBUG) 
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "is qt: %d; respect: %d, charged: %d; plugged: %d", qt, settings_get_RespectQuietTime(),cs.is_charging, cs.is_plugged);
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "is qt: %d; vib_on_qt: %d, charged: %d; plugged: %d", qt, settings_get_VibrateDuringQuietTime(),cs.is_charging, cs.is_plugged);
   #endif
   return res && !(cs.is_charging || cs.is_plugged);
 

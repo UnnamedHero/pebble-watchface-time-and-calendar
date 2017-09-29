@@ -10,7 +10,7 @@ typedef struct ClaySettings {
   PERIOD WeatherUpdatePeriod;
   char ClockFormat[8];
   char DateFormat[12];
-  uint8_t RespectQuietTime;
+  uint8_t VibrateDuringQuietTime;
 #if defined (PBL_PLATFORM_APLITE)
   uint8_t QT;
   uint8_t QTHourBegin;
@@ -58,7 +58,7 @@ static void prv_default_settings() {
   settings.WeatherUpdatePeriod = P_1H;
   settings.FontColorHex = 0xffffff;
   settings.BackgroundColorHex = 0x000000;  
-  settings.RespectQuietTime = 0;
+  settings.VibrateDuringQuietTime = 0;
 #if defined (PBL_PLATFORM_APLITE)
   settings.QT = 0;
   settings.QTHourBegin = 23;
@@ -139,8 +139,8 @@ static bool get_bool (uint8_t settings_bool) {
     return settings_bool == 1;
 }
 
-bool settings_get_RespectQuietTime() {
-  return get_bool(settings.RespectQuietTime);
+bool settings_get_VibrateDuringQuietTime() {
+  return get_bool(settings.VibrateDuringQuietTime);
 }
 
 bool settings_get_VibrateDuringCharging() {
@@ -245,6 +245,9 @@ CAL_WEEK_VIEW settings_get_CalendarWeekView() {
 }
 
 #if defined (PBL_PLATFORM_APLITE)
+bool settings_get_QT() {
+  return get_bool(settings.QT);
+}
 uint8_t settings_get_QTHourBegin() {
   return settings.QTHourBegin;
 }
@@ -408,9 +411,14 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     settings.VibrateConnectedType = get_vibe(vibr_conn_type->value->cstring);
   }
 
+  Tuple *vibr_onqt = dict_find(iter, MESSAGE_KEY_VibrateDuringQuietTime);
+  if (vibr_onqt) {
+      settings.VibrateDuringQuietTime = vibr_onqt->value->uint8;
+  }
+
   Tuple *vibr_disconn = dict_find(iter, MESSAGE_KEY_VibrateDisconnected);
   if (vibr_disconn) {
-      settings.VibrateDisconnected = vibr_disconn->value->uint8;
+    settings.VibrateDisconnected = vibr_onqt->value->uint8;
   }
 
   Tuple *vibr_disconn_type = dict_find(iter, MESSAGE_KEY_VibrateDisconnectedType);
