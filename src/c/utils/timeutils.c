@@ -11,11 +11,16 @@ static int prv_get_mins(int hour, int min) {
 }
 
 static bool prv_is_time_quiet(int begin, int end, int now) {
-  bool within_24h = begin < end;
+  bool within_24h = begin <= end;
   int min = within_24h ? begin : end;
   int max = !within_24h ? begin : end;
   bool between = (now >= min) && (now <= max);
-  return within_24h ? within_24h && between : !(between || within_24h);
+  if (within_24h) {
+    return within_24h && between;
+  } else {
+    bool not_equal_state = !(between || within_24h);
+    return now == begin || now == end ? !not_equal_state : not_equal_state;
+  } 
 }
 
 bool aplite_quiet_time_is_active() {

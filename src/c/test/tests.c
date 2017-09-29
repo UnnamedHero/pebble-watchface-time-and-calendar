@@ -29,11 +29,16 @@ int ll_test_helper(void) {
 
 
 bool is_time_quiet(int begin, int end, int now) {
-  bool within_24h = begin < end;
+  bool within_24h = begin <= end;
   int min = within_24h ? begin : end;
   int max = !within_24h ? begin : end;
   bool between = (now >= min) && (now <= max);
-  return within_24h ? within_24h && between : !(between || within_24h);
+  if (within_24h) {
+  	return within_24h && between;
+  } else {
+  	bool not_equal_state = !(between || within_24h);
+  	return now == begin || now == end ? !not_equal_state : not_equal_state;
+  } 
 }
 
 void test_is_between_numbers(void) {
@@ -43,7 +48,13 @@ void test_is_between_numbers(void) {
 
 	CU_ASSERT_TRUE(is_time_quiet(200, 100, 50));
 	CU_ASSERT_TRUE(is_time_quiet(200, 100, 250));
-	CU_ASSERT_FALSE(is_time_quiet(200, 100, 150));	
+	CU_ASSERT_FALSE(is_time_quiet(200, 100, 150));
+
+	CU_ASSERT_TRUE(is_time_quiet(100, 200, 100));
+	CU_ASSERT_TRUE(is_time_quiet(100, 200, 200));
+	CU_ASSERT_TRUE(is_time_quiet(100, 100, 100));
+	CU_ASSERT_TRUE(is_time_quiet(200, 100, 200));
+	CU_ASSERT_TRUE(is_time_quiet(200, 100, 100));
 }
 
 void test_linked_list(void)
