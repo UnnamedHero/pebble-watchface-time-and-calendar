@@ -3,6 +3,7 @@
 #include "../settings.h"
 #include "../utils/include/timeutils.h"
 #include "../utils/include/vibe.h"
+#include "../utils/include/ticktimerhelper.h"
 
 //static GBitmap *s_bt_icon;
 static GFont statuses_font;
@@ -12,6 +13,7 @@ static void prv_bt_connection_status(bool state);
 static void prv_populate_bt_layer(Layer *, GContext *);
 static bool init = false;
 static bool bt_connected = false;
+
 
 void init_bluetooh_layer(GRect rect) {
   this_layer = layer_create(rect);
@@ -77,6 +79,16 @@ static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
     GTextAlignmentCenter, \
     NULL);    
   }
+
+  if (strcmp(settings_get_ClockFormat(), "%I:%M") == 0) {
+    graphics_draw_text(ctx, is_AM() ? "AM" : "PM" , \
+    fonts_get_system_font(FONT_KEY_GOTHIC_14), \
+    GRect (60, 0, 20, 20), \
+    GTextOverflowModeWordWrap, \
+    GTextAlignmentCenter, \
+    NULL);    
+  }
+  
   //graphics_draw_bitmap_in_rect(ctx, s_bt_icon, GRect(0,0, 20, 20));
 
 //  APP_LOG(APP_LOG_LEVEL_DEBUG, "REDRAW: BT-layer");

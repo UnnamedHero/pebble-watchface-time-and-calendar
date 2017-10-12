@@ -126,11 +126,13 @@ static void prv_post_load_settings() {
   }
 }
 
+// char* settings_get_clockformat() {
+//   return settings.ClockFormat;
+// }
 
-char* settings_get_clockformat() {
+char* settings_get_ClockFormat() {
   return settings.ClockFormat;
 }
-
 // char* settings_get_WeatherAPIKey() {
 //   return settings.WeatherAPIKey;
 // }

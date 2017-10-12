@@ -44,9 +44,7 @@ bool is_quiet_time() {
   return qt;
 }
 
-
 void get_currect_time(DT_FORMAT dtf, char *buffer) {
-
   struct tm *tick_time;
   time_t temp = time(NULL);
   tick_time = localtime(&temp);
@@ -57,7 +55,7 @@ void get_currect_time(DT_FORMAT dtf, char *buffer) {
       strcpy(format, "%Y.%m.%d");
       break;
     case CLOCK_FORMAT:
-      strcpy(format, "%H:%M");
+      strcpy(format, settings_get_ClockFormat());
       break;
     }
   strftime(d_buffer, sizeof(d_buffer), format, tick_time);

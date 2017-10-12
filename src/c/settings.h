@@ -25,7 +25,7 @@ typedef enum Periods {
 
 typedef enum DateTimeFormat {
   YYYY_MM_DD,
-  CLOCK_FORMAT
+  CLOCK_FORMAT,
 } DT_FORMAT;
 
 typedef enum CalendarWeekView {
@@ -54,7 +54,7 @@ void save_settings();
 
 void helper_str_filler(char *item, char* filler);
 
-char* settings_get_clockformat();
+//char* settings_get_clockformat();
 
 //char* settings_get_WeatherAPIKey();
 API_STATUS settings_get_WeatherAPIKeyStatus();
@@ -77,6 +77,7 @@ bool settings_get_CalendarBoldToday();
 bool settings_get_CalendarInvertToday();
 bool settings_get_CalendarSmallOtherDays();
 char* settings_get_DateFormat();
+char* settings_get_ClockFormat();
 int settings_get_BackgroundColorHex();
 int settings_get_FontColorHex();
 void settings_get_theme(GContext *);
