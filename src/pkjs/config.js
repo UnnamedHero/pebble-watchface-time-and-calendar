@@ -54,6 +54,46 @@ module.exports = [
         "defaultValue": "cf_respect"
       },
       {
+        "type": "toggle",
+        "messageKey": "ClockShowSeconds",
+        "group": "seconds",
+        "label": "Show seconds (high battery consumption!)",
+        "defaultValue": false
+      },
+      {
+        "type": "select",
+        "group" : "seconds",
+        "messageKey": "SwitchBackTimeoutSeconds",
+        "label": "Switch back timeout in seconds",
+        "options" : [
+          {
+            "label": "manual switch",
+            "value": "0"
+          },
+          {
+            "label": "15",
+            "value": "15"
+          },
+          {
+            "label": "20",
+            "value": "20"
+          },
+          {
+            "label": "25",
+            "value": "25"
+          },
+          {
+            "label": "30",
+            "value": "30"
+          },
+          {
+            "label": "45",
+            "value": "45"
+          },         
+        ],
+        "defaultValue" : "15"
+      },
+      {
         "type": "select",
         "label": "Week starts on...",
         "messageKey": "SundayFirst",
@@ -201,11 +241,29 @@ module.exports = [
           "defaultValue": "Weather configuration"
         },
         {
+          "type": "select",
+          "messageKey": "WeatherProvider",
+          "label": "Weather provider",
+          "options": [
+            {
+              "label": "OpenWeatherMap",
+              "value": "OWM",
+            },
+            {
+              "label": "disable",
+              "value": "disable",
+            }
+          ],
+          "defaultValue": "OWM"
+        },
+        {
           "type": "text",
+          "group" : "OWM",
           "defaultValue": "Get your own API key at <a href='http://home.openweathermap.org/users/sign_up'>OpenWeatherMap site</a> for free and input in to a field below."
         },
         {
           "type": "input",
+          "group" : "weather",
           "messageKey": "WeatherAPIKey",
           "id": "WeatherAPIKey",
           "label": "API Key",
@@ -213,6 +271,7 @@ module.exports = [
         },
         {
           "type": "select",
+          "group" : "weather",
           "messageKey": "WeatherUpdatePeriod",
           "label": "Update period",
           "options" : [
@@ -237,6 +296,7 @@ module.exports = [
         },
         {
           "type": "select",
+          "group" : "weather",
           "messageKey": "WeatherUnits",
           "label": "Weather units",
           "options" : [
@@ -257,6 +317,7 @@ module.exports = [
         },
         {
           "type": "select",
+          "group" : "weather",
           "messageKey": "ForecastType",
           "label": "Forecast type",
           "options" : [
@@ -276,11 +337,13 @@ module.exports = [
           "defaultValue": "ft_3h"
         },
         {
-          "type": "text",          
+          "type": "text",
+          "group" : "weather",     
           "defaultValue": "Shake your Pebble to view forecast. Set timeout for auto switch back."
         },
         {
           "type": "select",
+          "group" : "weather",
           "messageKey": "SwitchBackTimeout",
           "label": "Switch back timeout in seconds",
           "options" : [
