@@ -39,7 +39,7 @@ typedef struct ClaySettings {
   uint8_t CalendarInvertToday;
   uint8_t CalendarSmallOtherDays;
   uint8_t SwitchBackTimeout;
-  uint8_t ClockFormatSettings;
+  CLOCK_FORMAT_SETTINGS ClockFormatSettings;
   // bool showPebbleConnection;
   // bool showPebbleBattery;
   // bool showPebbleBatteryPercents;
@@ -84,7 +84,7 @@ static void prv_default_settings() {
   settings.CalendarBoldToday = 0;
   settings.CalendarInvertToday = 1;
   settings.SwitchBackTimeout = 15;
-  prv_get_time_format();
+
 }
 
 static void increase_current_storage_version(int current) {
@@ -93,7 +93,7 @@ static void increase_current_storage_version(int current) {
 }
 
 static void prv_get_time_format() {
-  if (settings.ClockFormatSettings == 0) {
+  if (settings.ClockFormatSettings == CF_RESPECT_PEBBLE) {
       clock_is_24h_style() ? strcpy(settings.ClockFormat, "%H:%M") : \
                              strcpy(settings.ClockFormat, "%I:%M");
   }
@@ -103,7 +103,8 @@ static void prv_post_load_settings() {
 
   helper_str_filler(settings.DateFormat, "%Y.%m.%d\0");
   helper_str_filler(settings.ClockFormat, "%H:%M\0");
-
+  prv_get_time_format();
+  
   bool has_storage_version = persist_exists(storage_version_key);
 
   const int last_storage_version = has_storage_version ? \
@@ -253,6 +254,10 @@ CAL_WEEK_VIEW settings_get_CalendarWeekView() {
   return settings.CalendarWeeks;
 }
 
+CLOCK_FORMAT_SETTINGS settings_get_ClockFormatSettings() {
+  return settings.ClockFormatSettings;
+}
+
 #if defined (PBL_PLATFORM_APLITE)
 bool settings_get_QT() {
   return get_bool(settings.QT);
@@ -336,19 +341,16 @@ void settings_get_theme(GContext *ctx) {
 
 void populate_settings(DictionaryIterator *iter, void *context) {
 
-  const uint8_t clock_format_respect_pebble = 0;
-  const uint8_t clock_format_24h = 1;
-  const uint8_t clock_format_12h = 2;
   Tuple *clock_format_t = dict_find(iter, MESSAGE_KEY_ClockFormat);
   if (clock_format_t) {
     if (strcmp(clock_format_t->value->cstring, "cf_respect") == 0) {
-      settings.ClockFormatSettings = clock_format_respect_pebble;
+      settings.ClockFormatSettings = CF_RESPECT_PEBBLE;
       clock_is_24h_style() ? strcpy(settings.ClockFormat, "%H:%M") : \
                              strcpy(settings.ClockFormat, "%I:%M");
     } else {
       strcpy(settings.ClockFormat, clock_format_t->value->cstring);
       settings.ClockFormatSettings = \
-        strcmp(settings.ClockFormat, "%H:%M") == 0 ? clock_format_24h : clock_format_12h;
+        strcmp(settings.ClockFormat, "%H:%M") == 0 ? CF_24H : CF_24H;
     }
   }
 

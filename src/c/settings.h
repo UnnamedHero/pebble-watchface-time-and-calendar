@@ -46,6 +46,12 @@ typedef enum APYKeyStatus {
   API_OK
 } API_STATUS;
 
+typedef enum ClockFormatSettings {
+  CF_RESPECT_PEBBLE,
+  CF_24H,
+  CF_12H  
+} CLOCK_FORMAT_SETTINGS;
+
 typedef void (*callback_ptr)();
 
 void init_settings(callback_ptr callback);
@@ -83,6 +89,7 @@ int settings_get_FontColorHex();
 void settings_get_theme(GContext *);
 uint8_t settings_get_SwitchBackTimeout();
 bool settings_get_ForecastEnabled();
+CLOCK_FORMAT_SETTINGS settings_get_ClockFormatSettings();
 
 #if defined (PBL_PLATFORM_APLITE)
 bool settings_get_QT();
