@@ -58,4 +58,5 @@ module.exports = {
     "disabled" : "отключен",
     "Shake your Pebble to view forecast. Set timeout for auto switch back." : "Потрясите часами, чтобы переключиться на окно показа прогноза погоды. Выставите таймаут в секундах ниже для автоматического переключения назад.",
     "Switch back timeout in seconds" : "Переключаться назад автоматически через..."
+    "You can support developer by donating via <a href='https://www.paypal.me/eugenemikhaylov'>Paypal</a>" : "Вы можете поддержать разработчика, сделав перевод через <a href='https://www.paypal.me/eugenemikhaylov'>Paypal</a>"
   };

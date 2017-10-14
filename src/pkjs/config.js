@@ -449,6 +449,10 @@ module.exports = [
       },
 
     ]
+  },  
+  {
+    "type": "text",          
+    "defaultValue": "You can support developer by donating via <a href='https://www.paypal.me/eugenemikhaylov'>Paypal</a>"
   },
   {
   "type": "submit",

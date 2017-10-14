@@ -79,7 +79,7 @@ static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
     GTextAlignmentCenter, \
     NULL);    
   }
-
+  //if (settings_get_ClockFormatSettings() == CF_RESPECT)
   if (strcmp(settings_get_ClockFormat(), "%I:%M") == 0) {    
     struct tm *tick_time;
     time_t temp = time(NULL);
