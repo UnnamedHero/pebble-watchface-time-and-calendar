@@ -80,9 +80,12 @@ static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
     NULL);    
   }
 
-  if (strcmp(settings_get_ClockFormat(), "%I:%M") == 0) {
-    graphics_draw_text(ctx, is_AM() ? "AM" : "PM" , \
-    fonts_get_system_font(FONT_KEY_GOTHIC_14), \
+  if (strcmp(settings_get_ClockFormat(), "%I:%M") == 0) {    
+    struct tm *tick_time;
+    time_t temp = time(NULL);
+    tick_time = localtime(&temp);
+    graphics_draw_text(ctx, tick_time->tm_hour < 12 ? "AM" : "PM" , \
+    fonts_get_system_font(FONT_KEY_GOTHIC_18), \
     GRect (60, 0, 20, 20), \
     GTextOverflowModeWordWrap, \
     GTextAlignmentCenter, \

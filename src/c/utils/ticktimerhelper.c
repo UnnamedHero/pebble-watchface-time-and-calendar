@@ -7,11 +7,6 @@
 #include <pebble.h>
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed);
-static bool AM = false;
-
-bool is_AM() {
-	return AM;
-}
 #endif
 
 typedef struct TimerHandlerContainer {
@@ -79,8 +74,7 @@ static void prv_ticktimerhelper_launcher(void *handler, void *context) {
 	func(tick_time);
 }
 
-static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
-	AM = tick_time -> tm_hour < 12;
+static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {	
 	if (units_changed == 0) {
 	#if defined (DEBUG) 
 		APP_LOG(APP_LOG_LEVEL_DEBUG, "Seconds units_changed, ignoring tick_handlers");

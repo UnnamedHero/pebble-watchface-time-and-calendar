@@ -6,7 +6,6 @@ void ticktimerhelper_emulate(int);
 #else
 #include <pebble.h>
 typedef void(*ticktimerhandler)(struct tm *);
-bool is_AM();
 #endif
 
 
