@@ -2,6 +2,10 @@
 ---
 
 ---
+#### 0.37.0 (pebble store)
+ - improve AM/PM time detection 
+
+---
 #### 0.36.0 (pebble store)
  - fix AM/PM time settings
  - added AM/PM indicator when AM/PM format is selected
