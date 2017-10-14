@@ -35,7 +35,6 @@ Main features:
 - simple quiet time support for pebble classic watches (other platforms have native support I suppose)
 - english and russian translations.
 
-
 Configurable with Clay for Pebble framework. It means - no external website is needed to load configurartion page, all is done on your smartphone.
 
 Feel free to post any comments on GitHub page, report bugs, ask for features.
@@ -43,15 +42,18 @@ Feel free to post any comments on GitHub page, report bugs, ask for features.
 Nearest plans:
 - add more configurable options;
 - support for color screens (color icons) and pebble time screen size;
-- code cleanup and optimizations, more locales support.
+- code cleanup and optimizations, more locales support;
+- companion app for Android;
 
 Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
 Lastest stable version is 0.35.0 (available in [Pebble Store](https://apps.getpebble.com/applications/596fb1650dfc321335000144))
 
-Lastest development version is 0.32.0
+Lastest development version is 0.36.0
 
-See CHANGELOG for more details.
+You can support me -> donate to [Paypal](https://www.paypal.me/eugenemikhaylov)
+
+See [CHANGELOG](https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/blob/master/CHANGELOG.md) for more details.
 
 ---
 

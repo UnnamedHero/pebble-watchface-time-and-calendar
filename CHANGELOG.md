@@ -1,6 +1,12 @@
 # Changelog
 ---
 
+---
+#### 0.36.0 (pebble store)
+ - fix AM/PM time settings
+ - added AM/PM indicator when AM/PM format is selected
+
+---
 #### 0.35.0 (pebble store)
  - fix quiet time issues
 
