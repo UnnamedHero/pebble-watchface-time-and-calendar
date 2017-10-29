@@ -2,7 +2,7 @@
   "name": "time-and-calendar",
   "author": "Eugene 'EEM' Mikhaylov",
   "description": "Another inplementation of functional watchface with time, calendar and weather",
-  "version": "0.38.0",
+  "version": "0.40.0",
   "license": "GPLv3",
   "keywords": [
     "pebble watchface",
@@ -78,6 +78,8 @@
       "WeatherTimeStamp",
       "WeatherSunrise",
       "WeatherSunset",
+      "WeatherError",
+      "WeatherLocationType",
       "SundayFirst",
       "CalendarWeeks",
       "CalendarWeekDayMark[2]",
