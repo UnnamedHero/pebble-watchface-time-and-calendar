@@ -46,6 +46,14 @@ typedef enum APYKeyStatus {
   API_OK
 } API_STATUS;
 
+typedef enum WeatherStatus {
+  WEATHER_OK,
+  WEATHER_DISABLED,
+  WEATHER_LOCATION_ERROR,
+  WEATHER_API_NOT_SET,
+  WEATHER_API_INVALID,
+} WEATHER_STATUS;
+
 typedef enum ClockFormatSettings {
   CF_RESPECT_PEBBLE,
   CF_24H,
@@ -63,7 +71,7 @@ void helper_str_filler(char *item, char* filler);
 //char* settings_get_clockformat();
 
 //char* settings_get_WeatherAPIKey();
-API_STATUS settings_get_WeatherAPIKeyStatus();
+//API_STATUS settings_get_WeatherAPIKeyStatus();
 PERIOD settings_get_WeatherUpdatePeriod();
 bool settings_get_VibrateDuringQuietTime();
 bool settings_get_VibrateDuringCharging();
@@ -90,6 +98,7 @@ void settings_get_theme(GContext *);
 uint8_t settings_get_SwitchBackTimeout();
 bool settings_get_ForecastEnabled();
 CLOCK_FORMAT_SETTINGS settings_get_ClockFormatSettings();
+WEATHER_STATUS settings_get_WeatherStatus();
 
 #if defined (PBL_PLATFORM_APLITE)
 bool settings_get_QT();

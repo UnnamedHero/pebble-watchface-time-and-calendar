@@ -51,6 +51,21 @@ static void prv_bt_connection_status(bool state) {
   layer_mark_dirty(this_layer);
 }
 
+static void prv_get_weather_error_symbol(char *err_symbol) {
+  switch (settings_get_WeatherStatus()) {
+    case WEATHER_API_INVALID:
+    case WEATHER_API_NOT_SET:
+      snprintf(err_symbol, 2, "%s", "C\0");
+      break;
+    case WEATHER_LOCATION_ERROR:
+      snprintf(err_symbol, 2, "%s", "E\0");
+      break;
+    default:
+      snprintf(err_symbol, 2, "%s", " \0");
+      break;
+}
+}
+
 static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
   #if defined (DEBUG) 
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: STATUS LAYER");
@@ -63,6 +78,7 @@ static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
     GTextOverflowModeWordWrap, \
     GTextAlignmentCenter, \
     NULL);
+/*
   if (settings_get_WeatherAPIKeyStatus() != API_OK) {
     graphics_draw_text(ctx, "C" , \
     statuses_font, \
@@ -71,6 +87,23 @@ static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
     GTextAlignmentCenter, \
     NULL);
   }
+*/
+
+  if (settings_get_WeatherStatus() != WEATHER_OK) {
+    char weather_err_symbol[2] = {"B"};
+    prv_get_weather_error_symbol(weather_err_symbol);
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "%d, BAD status:%s", settings_get_WeatherStatus(), weather_err_symbol);
+    #endif
+    graphics_draw_text(ctx, weather_err_symbol , \
+    statuses_font, \
+    GRect (20, 0, 20, 20), \
+    GTextOverflowModeWordWrap, \
+    GTextAlignmentCenter, \
+    NULL);
+  }
+  
+
   if (is_quiet_time()) {
     graphics_draw_text(ctx, "D" , \
     statuses_font, \

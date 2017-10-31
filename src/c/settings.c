@@ -3,10 +3,10 @@
 #include "utils/include/timeutils.h"
 
 static const uint32_t storage_version_key = 777;
-//static const int current_storage_version = 2;
+//static const int current_storage_version = 3;
 
 typedef struct ClaySettings {
-  API_STATUS WeatherAPIKeyStatus;
+
   PERIOD WeatherUpdatePeriod;
   char ClockFormat[8];
 
@@ -43,6 +43,7 @@ typedef struct ClaySettings {
   // bool showPebbleConnection;
   // bool showPebbleBattery;
   // bool showPebbleBatteryPercents;
+  WEATHER_STATUS WeatherStatus;
 } __attribute__((__packed__)) ClaySettings;
 
 static ClaySettings settings;
@@ -114,7 +115,9 @@ static void prv_post_load_settings() {
       settings.FontColorHex = 0xffffff;
       settings.BackgroundColorHex = 0x000000;
   }
-
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Storage version: %d", last_storage_version);
+  #endif
   switch (last_storage_version) {
     case 0:
       settings.FontColorHex = 0xffffff;
@@ -127,6 +130,7 @@ static void prv_post_load_settings() {
       //increase_current_storage_version(last_storage_version + 1);
       break;
     case 3:
+      //increase_current_storage_version(last_storage_version + 1);
       break;
 
     default:
@@ -307,8 +311,12 @@ uint8_t settings_get_SwitchBackTimeout() {
   return settings.SwitchBackTimeout;
 }
 
-API_STATUS settings_get_WeatherAPIKeyStatus() {
-  return settings.WeatherAPIKeyStatus;
+// API_STATUS settings_get_WeatherAPIKeyStatus() {
+//   return settings.WeatherAPIKeyStatus;
+// }
+
+WEATHER_STATUS settings_get_WeatherStatus() {
+  return settings.WeatherStatus;
 }
 
 void helper_str_filler(char *item, char* filler) {
@@ -354,16 +362,39 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     }
   }
 
-  Tuple *w_api = dict_find(iter, MESSAGE_KEY_WeatherAPIKey);
-  if (w_api) {
-    char *apikey = w_api->value->cstring;
-    if (strcmp(apikey, "not_set") == 0) {
-      settings.WeatherAPIKeyStatus = API_NOT_SET;
-    } else if (strcmp(apikey, "invalid_api_key") == 0) {
-      settings.WeatherAPIKeyStatus = API_INVALID;
-    } else {
-      settings.WeatherAPIKeyStatus = API_OK;
-    }    
+  // Tuple *w_api = dict_find(iter, MESSAGE_KEY_WeatherAPIKey);
+  // if (w_api) {
+  //   char *apikey = w_api->value->cstring;
+  //   if (strcmp(apikey, "not_set") == 0) {
+  //     settings.WeatherAPIKeyStatus = API_NOT_SET;
+  //   } else if (strcmp(apikey, "invalid_api_key") == 0) {
+  //     settings.WeatherAPIKeyStatus = API_INVALID;
+  //   } else {
+  //     settings.WeatherAPIKeyStatus = API_OK;
+  //   }    
+  // }
+
+  Tuple *w_error = dict_find(iter, MESSAGE_KEY_WeatherError);
+  if (w_error) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather Error %d", w_error->value->uint8);
+    #endif
+    switch (w_error->value->uint8) {
+      case 1:
+        settings.WeatherStatus = WEATHER_DISABLED;
+        break;
+      case 2:
+        settings.WeatherStatus = WEATHER_LOCATION_ERROR;
+        break;
+      case 3:
+        settings.WeatherStatus = WEATHER_API_NOT_SET;
+        break;
+      case 4:
+        settings.WeatherStatus = WEATHER_API_INVALID;
+        break;
+    }
+  } else {
+    settings.WeatherStatus = WEATHER_OK;
   }
 
   Tuple *date_fmt = dict_find(iter, MESSAGE_KEY_DateFormat);

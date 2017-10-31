@@ -12,7 +12,7 @@ static bool busy = true;
 
 void init_message_system() {
   app_message_register_inbox_received(prv_inbox_received_handler);
-  app_message_open(400, 128);
+  app_message_open(512, 128);
 
 }
 
@@ -41,11 +41,22 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
       APP_LOG(APP_LOG_LEVEL_DEBUG, "Config received");
     #endif
     populate_settings(iter, context);
-    if (settings_get_WeatherAPIKeyStatus() == API_OK) {
+    if (settings_get_WeatherStatus() == WEATHER_OK) {
       ready_for_weather(true);
       if (settings_get_ForecastEnabled()) {
         ready_for_forecast(false);
       }
+    }
+  }
+
+  Tuple *w_error = dict_find(iter, MESSAGE_KEY_WeatherError);
+  if (w_error) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather Error received.");      
+    #endif
+    populate_settings(iter, context);
+    if (w_error->value->uint8 > 2) { 
+      return;
     }
   }
 

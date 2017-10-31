@@ -114,9 +114,12 @@ void forecast_update(DictionaryIterator *iter, void *context) {
 
   Tuple *f_mark = dict_find(iter, MESSAGE_KEY_WeatherMarkerForecast);
    if (f_mark) {
-
       forecast.ForecastReady = f_mark->value->uint8;
    }
+
+   Tuple *w_err = dict_find(iter, MESSAGE_KEY_WeatherError);
+   const int location_timeout = 600;
+   forecast.ForecastTime = w_err ? forecast.ForecastTime + location_timeout : forecast.ForecastTime;
 
   Tuple *f_qty = dict_find(iter, MESSAGE_KEY_ForecastQty);
    if (f_qty) {
@@ -139,17 +142,6 @@ void forecast_update(DictionaryIterator *iter, void *context) {
         forecast.ForecastTemperature[i] = f_temp->value->int32;
        }
 
-      // Tuple *f_tempmin = dict_find(iter, MESSAGE_KEY_ForecastTemperatureMin + i);
-      // if (f_tempmin) {
-      //   forecast.ForecastTemperatureMin[i] = f_tempmin->value->int32;
-      //  }
-
-      // Tuple *f_tempmax = dict_find(iter, MESSAGE_KEY_ForecastTemperatureMax + i);
-      // if (f_tempmax) {
-      //   forecast.ForecastTemperatureMax[i] = f_tempmax->value->int32;
-      //  }       
-
-
       Tuple *f_cond = dict_find(iter, MESSAGE_KEY_ForecastCondition + i);
       if (f_cond) {
         snprintf(forecast.ForecastCondition[i], sizeof(forecast.ForecastCondition[i]), f_cond->value->cstring);
@@ -167,9 +159,11 @@ void forecast_update(DictionaryIterator *iter, void *context) {
 }
 
 void update_forecast(bool force) {
-  if (settings_get_WeatherAPIKeyStatus() != API_OK) {
+  if (settings_get_WeatherStatus() == WEATHER_API_NOT_SET || \
+      
+  settings_get_WeatherStatus() == WEATHER_API_INVALID) {
     #if defined (DEBUG) 
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "API key is bad, disable forecast request");
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather error, disable forecast request");
     #endif
     return;
   }

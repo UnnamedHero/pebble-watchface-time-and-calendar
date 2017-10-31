@@ -78,7 +78,8 @@ static void prv_ticktimer(struct tm* unneeded) {
 }
 
 void update_weather(bool force) {
-  if (settings_get_WeatherAPIKeyStatus() != API_OK) {
+  if (settings_get_WeatherStatus() == WEATHER_API_INVALID || \
+      settings_get_WeatherStatus() == WEATHER_API_NOT_SET) {
     #if defined (DEBUG) 
       APP_LOG(APP_LOG_LEVEL_DEBUG, "API key is bad, disable weather request");
     #endif
@@ -105,7 +106,8 @@ void prv_populate_this_layer(Layer *me, GContext *ctx) {
   settings_get_theme(ctx);
 
   GRect bounds = layer_get_bounds(me);
-  weather.WeatherReady == 1 && settings_get_WeatherAPIKeyStatus() == API_OK ? \
+  weather.WeatherReady == 1 && (settings_get_WeatherStatus() == WEATHER_OK || \
+  settings_get_WeatherStatus() == WEATHER_LOCATION_ERROR) ? \
     prv_populate_combined_layer (me, ctx) : prv_populate_time_layer(me, ctx, bounds);
 }
 
@@ -161,6 +163,7 @@ void get_weather(DictionaryIterator *iter, void *context) {
 
     weather.WeatherTemperature = w_temp->value->int32;
     weather.WeatherReady = 1;
+    
   }
 
   Tuple *w_desc = dict_find(iter, MESSAGE_KEY_WeatherDesc);
@@ -173,7 +176,9 @@ void get_weather(DictionaryIterator *iter, void *context) {
     snprintf(weather.WeatherCondition, sizeof(weather.WeatherCondition), w_cond->value->cstring);
   }
 
-  weather.WeatherTimeStamp = time(NULL);
+  Tuple *w_err = dict_find(iter, MESSAGE_KEY_WeatherError);
+  const int location_timeout = 600;
+  weather.WeatherTimeStamp = w_err ? time(NULL) - location_timeout : time(NULL);
 
   Tuple *w_press = dict_find(iter, MESSAGE_KEY_WeatherPressure);
   if (w_press) {
