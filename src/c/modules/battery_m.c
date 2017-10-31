@@ -40,26 +40,12 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
   static const char* battery_bar[11] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":"};
   settings_get_theme(ctx);
   static char percent_text[5];
-  //int battery_bar_level;
 
   GRect bb = layer_get_bounds(me);
   GRect percent_text_rect = GRect (0, 0, 34, bb.size.h);
   GRect battery_bar_rect = GRect (34, -2, 24, bb.size.h);
-  //GColor paint_color = GColorFromHEX(settings_get_FontColorHex());
-  //GRect battery_inner_bar_rect;
 
-  // if (s_battery_level.is_plugged || s_battery_level.is_charging) {
-  //   battery_bar_level = bb.size.h;
-  // } else {
-  //   battery_bar_level = s_battery_level.charge_percent / 5; // 2 px per 10%
-  // }
-  // graphics_context_set_fill_color(ctx, paint_color);
-  // graphics_context_set_stroke_color(ctx, paint_color);
-  //battery_inner_bar_rect = GRect(34, bb.size.h - battery_bar_level + 1, 14, battery_bar_level);
   int battery_bar_index = s_battery_level.charge_percent == 0 ? 0 : s_battery_level.charge_percent / 10;
-  #if defined (DEBUG) 
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "battery bar index %d", battery_bar_index);
-  #endif
   snprintf(percent_text, sizeof(percent_text), "%d%%", s_battery_level.charge_percent);
   graphics_draw_text(ctx, percent_text, \
   fonts_get_system_font(FONT_KEY_GOTHIC_18), \
@@ -71,9 +57,6 @@ static void prv_populate_battery_layer(Layer *me, GContext *ctx) {
     battery_bar_rect, \
     GTextOverflowModeWordWrap, \
     GTextAlignmentLeft, NULL);  
-
-  //graphics_draw_rect(ctx, battery_bar_rect);
-  //graphics_fill_rect(ctx, battery_inner_bar_rect, 0, GCornerNone);
 }
 
 Layer* get_layer_battery() {
