@@ -11,10 +11,20 @@ module.exports = function(minified) {
     masterItem.on('change', function() {
       if (master === 'ForecastType') {
         this.get() !== 'ft_off' ? slaveItem.enable() : slaveItem.disable();
-
       } else {
         this.get() ? slaveItem.enable() : slaveItem.disable();
       }
+    });
+    masterItem.trigger('change');
+  }
+
+  function registerGroupToggleById(master, masterValue, group) {
+    var masterItem = clayConfig.getItemById(master);
+    var items = clayConfig.getItemsByGroup(group);
+    masterItem.on('change', function () {
+      items.forEach(function(item) {
+        masterItem.get() === masterValue ? item.show() : item.hide();
+      });  
     });
     masterItem.trigger('change');
   }
@@ -34,10 +44,12 @@ module.exports = function(minified) {
           clayConfig.getItemByMessageKey('ClockShowSeconds').set(false);
           toggleItemByGroup('OWM', '');
           toggleItemByGroup('weather', 'seconds');
+          clayConfig.getItemById('WeatherLocationType').trigger('change');
           break;
         case 'disable':
           toggleItemByGroup('seconds', 'weather');
           toggleItemByGroup('', 'OWM');
+          toggleItemByGroup('', 'weather_id');
           break;
       }
     };
@@ -58,5 +70,6 @@ module.exports = function(minified) {
     registerToggle('ForecastType', 'SwitchBackTimeout');
     registerToggle('ClockShowSeconds', 'SwitchBackTimeoutSeconds');
     weatherToggle();
+    registerGroupToggleById('WeatherLocationType', 'id', 'weather_id');
   });
 };

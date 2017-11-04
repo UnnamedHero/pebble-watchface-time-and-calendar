@@ -271,6 +271,36 @@ module.exports = [
         },
         {
           "type": "select",
+          "group": "weather",
+          "id": "WeatherLocationType",
+          "messageKey": "WeatherLocationType",
+          "label": "Get weather by:",
+          "options": [
+            {
+              "label": "current geolocation",
+              "value": "gps",
+            },
+            {
+              "label": "city ID",
+              "value": "id",
+            },
+          ],
+          "defaultValue": "gps",
+        },
+        {
+          "type": "text",          
+          "group" : "weather_id",
+          "defaultValue": "Get city ID on <a href='http://openweathermap.org/find'>OpenWeatherMap site</a>. Type in search form your city's name, click 'Search', then click on your city in search results"
+        },
+        {
+          "type": "input",          
+          "group": "weather_id",
+          "messageKey": "NP_CityID",
+          "label": "City ID",
+          "defaultValue": "",
+        },
+        {
+          "type": "select",
           "group" : "weather",
           "messageKey": "WeatherUpdatePeriod",
           "label": "Update period",
@@ -373,7 +403,7 @@ module.exports = [
             },         
           ],
           "defaultValue" : "15"
-        }
+        },
     ]
   },
   {
