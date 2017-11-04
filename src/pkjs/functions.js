@@ -70,6 +70,6 @@ module.exports = function(minified) {
     registerToggle('ForecastType', 'SwitchBackTimeout');
     registerToggle('ClockShowSeconds', 'SwitchBackTimeoutSeconds');
     weatherToggle();
-    registerGroupToggleById('WeatherLocationType', 'id', 'weather_id');
+    registerGroupToggleById('WeatherLocationType', 'cid', 'weather_id');
   });
 };

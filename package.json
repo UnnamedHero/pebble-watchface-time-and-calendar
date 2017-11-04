@@ -79,12 +79,13 @@
       "WeatherSunrise",
       "WeatherSunset",
       "WeatherError",
-      "WeatherLocationType",
+      "NP_WeatherLocationType",
       "SundayFirst",
       "CalendarWeeks",
       "CalendarWeekDayMark[2]",
       "CalendarDayMark[2]",
       "CalendarSmallOtherDays",
+      "NP_CityID",
       "dummy"
     ],
     "resources": {

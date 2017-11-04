@@ -1,31 +1,45 @@
 var i18n = require('./../localizator');
 var sender = require('./../sender');
-var messageKeys = require('message_keys');
+var messageKeys = require('message_keys');claySettings
+var messages = require('./weather-helpers').weather_messages;
+
 isForecast = false;
+var claySettingsRaw = localStorage.getItem('clay-settings') || '{}';
+var claySettings = JSON.parse(claySettingsRaw);
 
 exports.getWeather = function(type) {  
   isForecast = false;
 
-  var success = type === 'forecast' ? locationForecast : locationSuccess;  
-
-  return navigator.geolocation.getCurrentPosition(
-    success,
-    locationError,
-    {timeout: 5000, maximumAge: 0}
-    );
+  var success = type === 'forecast' ? locationForecast : locationSuccess;
+  var locator = getHelperKey('NP_WeatherLocationType');
+  console.log("LOCATOR: "+locator);
+  if (!locator) {
+    return;
+  }
+  if (locator === 'cid') {
+    success();
+    return;
+  } else if (locator === 'gps') {
+    navigator.geolocation.getCurrentPosition(
+      success,
+      locationError,
+      {timeout: 10000, maximumAge: 180000}
+      );
+    return;
+  }
 };
 
 
-function getWeatherAPIKey() {
+function getHelperKey(key) {
  var helperSettings = localStorage.getItem('clay-helper');
- var claySettings = localStorage.getItem('clay-settings');
- var weatherAPI = claySettings ? JSON.parse(claySettings).WeatherAPIKey : 'not_set';
 
- if (!helperSettings) {
-   clayHelperSetItem('WeatherAPIKey', weatherAPI);
-   return weatherAPI;
+ var value = claySettings[key] || 'not_set';
+
+ if (!helperSettings) {  
+   clayHelperSetItem(key, weatherAPI);
+   return value;
   }   
-  return JSON.parse(helperSettings).WeatherAPIKey;   
+  return JSON.parse(helperSettings)[key];
 }
 
 function clayHelperSetItem(key, value) {
@@ -226,7 +240,7 @@ function parseResponse(json) {
 
 function locationSuccess(pos) {
   // We will request the weather here
-  var weatherAPIKey = getWeatherAPIKey();
+  var weatherAPIKey = getHelperKey('WeatherAPIKey');
    if (weatherAPIKey == "not_set" || weatherAPIKey == 'invalid_api_key') {
      console.log("Weather ERROR: bad api key: " + weatherAPIKey);
      return ;
@@ -234,25 +248,57 @@ function locationSuccess(pos) {
 
   if (getRequestType() === 'forecast' && get_forecast_matrix() === null) {    
     return;
-  }
+  }  
   
-  var url = 'http://api.openweathermap.org/data/2.5/'+getRequestType()+'?lat=' +
-      pos.coords.latitude +
-      '&lon=' + pos.coords.longitude +
+
+
+  var position;
+  var clayPosSettings = getHelperKey('NP_WeatherLocationType');
+  switch (clayPosSettings) {
+    case 'cid':
+      var cityId = getHelperKey('NP_CityID');
+      if (cityId === 'not_set' || cityId === 'invalid_id') {
+        console.log('CityID Error.');
+        return;
+      }      
+      position = '?id=' + claySettings.NP_CityID;
+      break;
+    case 'gps':
+    default:
+      position = '?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude;
+      break;
+  }
+
+  var url = 'http://api.openweathermap.org/data/2.5/'+getRequestType()+
+      position +
       '&lang=' + i18n.getLang() +
       getTempUnits() + 
       '&appid=' + weatherAPIKey;// + 'ru';
-    return xhrRequest(url, 'GET',
+    xhrRequest(url, 'GET',
     function(responseText) {
     	var json = JSON.parse(responseText);
-    	if (json.cod === 401) {
-    		console.log("Waether ERROR: Invalid API key");
-        setInvalidAPIKey();
-        return;
-    	}
+      console.log('code: ' + json.cod);
+      switch (json.cod) {      
+        case '401': 
+    		  console.log("Waether ERROR: Invalid API key");
+          setInvalidAPIKey();
+          return;
+        case '400':
+          console.log("Invalid City ID");
+          setInvalidLocationID();
+          return;
+     }      
       parseResponse(json);
     }
   );
+}
+function setInvalidLocationID() {
+  clayHelperSetItem('LocationID', 'invalid_id');
+  sendWeather({
+    "ConfigMarker": true,
+    "WeatherError": messages.invalid_location_id,
+  });
+
 }
 
 function setInvalidAPIKey() {  
@@ -261,15 +307,19 @@ function setInvalidAPIKey() {
 
   var bad_api = {
       "ConfigMarker": true,
-      "WeatherAPIKey": message
+      "WeatherError": messages.api_key_invalid,
     };  
     sendWeather(bad_api);
 }
 
 function locationError(err) {  
-  return {
-  	"WeatherError":"Error requesting location!"
-  }
+  console.log('location ERROR: '+err.message);
+  var typeMarker = isForecast ? 'WeatherMarkerForecast' : 'WeatherMarker';
+  sendWeather ({
+    [typeMarker]: true,
+    "ConfigMarker": true,
+  	"WeatherError": messages.location_error,
+  });
 }
 
 //http://openweathermap.org/weather-conditions

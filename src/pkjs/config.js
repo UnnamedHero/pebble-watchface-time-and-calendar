@@ -250,8 +250,8 @@ module.exports = [
               "value": "OWM",
             },
             {
-              "label": "disable",
-              "value": "disable",
+              "label": "disabled",
+              "value": "disabled",
             }
           ],
           "defaultValue": "OWM"
@@ -273,16 +273,16 @@ module.exports = [
           "type": "select",
           "group": "weather",
           "id": "WeatherLocationType",
-          "messageKey": "WeatherLocationType",
-          "label": "Get weather by:",
+          "messageKey": "NP_WeatherLocationType",
+          "label": "Get weather location by:",
           "options": [
             {
-              "label": "current geolocation",
+              "label": "GPS",
               "value": "gps",
             },
             {
               "label": "city ID",
-              "value": "id",
+              "value": "cid",
             },
           ],
           "defaultValue": "gps",
@@ -296,7 +296,7 @@ module.exports = [
           "type": "input",          
           "group": "weather_id",
           "messageKey": "NP_CityID",
-          "label": "City ID",
+          "label": "city ID",
           "defaultValue": "",
         },
         {
@@ -352,7 +352,7 @@ module.exports = [
           "label": "Forecast type",
           "options" : [
             {
-              "label": "Disabled",
+              "label": "disabled",
               "value": "ft_off"
             },
             {
