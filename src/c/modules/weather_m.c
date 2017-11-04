@@ -85,6 +85,12 @@ void update_weather(bool force) {
     #endif
       return;
   }
+  if (settings_get_WeatherStatus() == WEATHER_LOCATION_ID_INVALID) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "City ID invalid, disable weather request");
+    #endif
+    return;
+  }
   if (!force) {
    if (!is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
    #if defined (DEBUG) 
@@ -177,7 +183,7 @@ void get_weather(DictionaryIterator *iter, void *context) {
   }
 
   Tuple *w_err = dict_find(iter, MESSAGE_KEY_WeatherError);
-  const int location_timeout = 600;
+  const int location_timeout = 60;
   weather.WeatherTimeStamp = w_err ? time(NULL) - location_timeout : time(NULL);
 
   Tuple *w_press = dict_find(iter, MESSAGE_KEY_WeatherPressure);

@@ -118,7 +118,7 @@ void forecast_update(DictionaryIterator *iter, void *context) {
    }
 
    Tuple *w_err = dict_find(iter, MESSAGE_KEY_WeatherError);
-   const int location_timeout = 600;
+   const int location_timeout = 60;
    forecast.ForecastTime = w_err ? forecast.ForecastTime + location_timeout : forecast.ForecastTime;
 
   Tuple *f_qty = dict_find(iter, MESSAGE_KEY_ForecastQty);
@@ -168,6 +168,13 @@ void update_forecast(bool force) {
     return;
   }
 
+  if (settings_get_WeatherStatus() == WEATHER_LOCATION_ID_INVALID) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "City ID invalid, disable weather request");
+    #endif
+    return;
+  }
+  
   if (!s_forecast_layer) {
     prv_load_forecast();
   }

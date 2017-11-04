@@ -52,6 +52,7 @@ typedef enum WeatherStatus {
   WEATHER_LOCATION_ERROR,
   WEATHER_API_NOT_SET,
   WEATHER_API_INVALID,
+  WEATHER_LOCATION_ID_INVALID
 } WEATHER_STATUS;
 
 typedef enum ClockFormatSettings {

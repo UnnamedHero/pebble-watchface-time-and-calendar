@@ -369,6 +369,9 @@ void populate_settings(DictionaryIterator *iter, void *context) {
       case 4:
         settings.WeatherStatus = WEATHER_API_INVALID;
         break;
+      case 5:
+        settings.WeatherStatus = WEATHER_LOCATION_ID_INVALID;
+        break;
     }
   } else {
     settings.WeatherStatus = WEATHER_OK;
