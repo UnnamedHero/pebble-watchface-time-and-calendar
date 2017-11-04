@@ -40,10 +40,7 @@ typedef struct ClaySettings {
   uint8_t CalendarSmallOtherDays;
   uint8_t SwitchBackTimeout;
   CLOCK_FORMAT_SETTINGS ClockFormatSettings;
-  // bool showPebbleConnection;
-  // bool showPebbleBattery;
-  // bool showPebbleBatteryPercents;
-  WEATHER_STATUS WeatherStatus;
+  WEATHER_STATUS WeatherStatus;  
 } __attribute__((__packed__)) ClaySettings;
 
 static ClaySettings settings;
@@ -52,11 +49,6 @@ static callback_ptr settings_update_handler = NULL;
 static void prv_post_load_settings();
 static void prv_get_time_format();
 static void prv_default_settings() {
-  
-  //strcpy(settings.ClockFormat, "%H:%M\0");
-  //strcpy(settings.DateFormat, "%Y.%m.%d\0");
-  //snprintf(settings.ClockFormat, sizeof(settings.ClockFormat), "%H:%M");
-  //snprintf(settings.DateFormat, sizeof(settings.DateFormat), "%Y.%m.%d");
   
   settings.WeatherUpdatePeriod = P_1H;
   settings.FontColorHex = 0xffffff;
@@ -145,9 +137,6 @@ static void prv_post_load_settings() {
 char* settings_get_ClockFormat() {
   return settings.ClockFormat;
 }
-// char* settings_get_WeatherAPIKey() {
-//   return settings.WeatherAPIKey;
-// }
 
 static bool get_bool (uint8_t settings_bool) {
     return settings_bool == 1;
@@ -362,18 +351,6 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     }
   }
 
-  // Tuple *w_api = dict_find(iter, MESSAGE_KEY_WeatherAPIKey);
-  // if (w_api) {
-  //   char *apikey = w_api->value->cstring;
-  //   if (strcmp(apikey, "not_set") == 0) {
-  //     settings.WeatherAPIKeyStatus = API_NOT_SET;
-  //   } else if (strcmp(apikey, "invalid_api_key") == 0) {
-  //     settings.WeatherAPIKeyStatus = API_INVALID;
-  //   } else {
-  //     settings.WeatherAPIKeyStatus = API_OK;
-  //   }    
-  // }
-
   Tuple *w_error = dict_find(iter, MESSAGE_KEY_WeatherError);
   if (w_error) {
     #if defined (DEBUG)
@@ -438,18 +415,6 @@ void populate_settings(DictionaryIterator *iter, void *context) {
       settings.QTMinEnd = qtme->value->uint8;
    }
 
-
-  // Tuple *qtb = dict_find(iter, MESSAGE_KEY_QuietTimeBegin);
-  // if (qtb) {
-  //     settings.QTHourBegin = get_hour_from_str(qtb->value->cstring);
-  //     settings.QTMinBegin = get_mins_from_str(qtb->value->cstring);
-  // }
-  //
-  // Tuple *qte = dict_find(iter, MESSAGE_KEY_QuietTimeEnd);
-  // if (qte) {
-  //     settings.QTHourEnd = get_hour_from_str(qte->value->cstring);
-  //     settings.QTMinEnd = get_mins_from_str(qte->value->cstring);
-  // }
 #endif
 
   Tuple *vibr_conn = dict_find(iter, MESSAGE_KEY_VibrateConnected);
