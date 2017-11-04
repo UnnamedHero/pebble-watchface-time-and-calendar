@@ -44,7 +44,7 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
     if (settings_get_WeatherStatus() == WEATHER_OK) {
       ready_for_weather(true);
       if (settings_get_ForecastEnabled()) {
-        ready_for_forecast(false);
+        ready_for_forecast(true);
       }
     }
   }
