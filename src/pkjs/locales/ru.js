@@ -62,5 +62,9 @@ module.exports = {
     "Weather provider": "Поставщик погоды",
     "Get weather location by:" : "Определять местоположение для показа погоды через:",
     "city ID": "Код города",
-    "manual switch": "встряхиванием"
+    "manual switch": "встряхиванием",
+    "Show seconds (high battery consumption!)": "Показывать секунды(высокий расход заряда!)",
+    "Time Font": "Шрифт для отображения времени",
+    "Normal font": "Обычный",
+    "Digital font": "Цифровые часы"
   };

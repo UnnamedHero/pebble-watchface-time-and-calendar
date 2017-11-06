@@ -1,12 +1,16 @@
 # Changelog
----
+
+#### 0.40.0 (beta)
+ - improve GPS location handling, reduce battery consumption
+ - add ability to get weather by city ID
+ - add digital font for time
 
 ---
-#### 0.37.0 (develop)
+#### 0.37.0 (beta)
  - improve AM/PM time detection 
 
 ---
-#### 0.36.0 (develop)
+#### 0.36.0 (beta)
  - fix AM/PM time settings
  - added AM/PM indicator when AM/PM format is selected
 
@@ -19,19 +23,19 @@
  - fix mist recognition
 
 ---
-#### 0.32.0 (develop)
+#### 0.32.0 (beta)
  - improve js message sender
  - fix some vibration cases
 
 ---
-#### 0.31.0 (develop)
+#### 0.31.0 (beta)
  - fix crash when bluetooh conenction unavailable
  - battery status icon is now font symbols
  - fix vibrate on phone connection and disconnection
  - fix quiet time recognition
 
 ---
-#### 0.30.0 (develop)
+#### 0.30.0 (beta)
  - increase time font size #2
  - add option to disable forecast #5
  - key sign appear on top panel if something wrong with weather api key
@@ -51,22 +55,22 @@
  - calendar current day and day of a week visual options
 
 ---
-#### 0.21.0 (developer version)
+#### 0.21.0 (beta version)
  - add calendar current day and day of a week visual options
  - weather font fixes
  
 ---
-#### 0.20.0 (developer version)
+#### 0.20.0 (beta version)
  - add initial forecast support (every 6 hours, 4 times, no configurable yet)
  - forecast window autoclosing after 15 seconds;
 
 ---
-#### 0.10.0 (developer version)
+#### 0.10.0 (beta version)
  - bug fixes
  - weather is force updating after closing settings dialog
 
 ---
-#### 0.9.1 (developer version)
+#### 0.9.1 (beta version)
 - Some redesign:
     - Increased battery percent text size
     - New time font

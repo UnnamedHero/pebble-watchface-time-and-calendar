@@ -86,6 +86,7 @@
       "CalendarDayMark[2]",
       "CalendarSmallOtherDays",
       "NP_CityID",
+      "TimeFont",
       "dummy"
     ],
     "resources": {
@@ -116,6 +117,24 @@
           "type": "font",
           "name": "TIME_BOLD_58",
           "file": "fonts/BebasNeue_Bold.ttf"
+        },
+        {
+          "characterRegex": "[:0-9]",
+          "type": "font",
+          "name": "TIME_SECS_BOLD_40",
+          "file": "fonts/BebasNeue_Bold.ttf"
+        },
+        {
+          "characterRegex": "[:0-9]",
+          "type": "font",
+          "name": "DIGITAL_SECS_BOLD_42",
+          "file": "fonts/ds-digital.ttf"
+        },
+        {
+          "characterRegex": "[:0-9]",
+          "type": "font",
+          "name": "DIGITAL_BOLD_48",
+          "file": "fonts/ds-digital.ttf"
         },
         {
           "type": "font",

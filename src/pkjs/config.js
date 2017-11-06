@@ -54,6 +54,22 @@ module.exports = [
         "defaultValue": "cf_respect"
       },
       {
+        "type": "select",
+        "messageKey": "TimeFont",
+        "label": "Time Font",
+        "options" : [
+          {
+            "label": "Normal font",
+            "value": "bebas",
+          },
+          {
+            "label": "Digital font",
+            "value": "digital",
+          },
+        ],
+        "defaultValue": "bebas",
+      },
+      {
         "type": "toggle",
         "messageKey": "ClockShowSeconds",
         "group": "seconds",
@@ -241,6 +257,13 @@ module.exports = [
           "defaultValue": "Weather configuration"
         },
         {
+          "type": "input",
+          "messageKey": "WeatherAPIKey",
+          "id": "test",
+          "label": "test",
+          "defaultValue": ""        
+        },
+        {
           "type": "select",
           "messageKey": "WeatherProvider",
           "label": "Weather provider",
@@ -251,7 +274,7 @@ module.exports = [
             },
             {
               "label": "disabled",
-              "value": "disabled",
+              "value": "disable",
             }
           ],
           "defaultValue": "OWM"

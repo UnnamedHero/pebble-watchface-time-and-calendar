@@ -40,7 +40,9 @@ typedef struct ClaySettings {
   uint8_t CalendarSmallOtherDays;
   uint8_t SwitchBackTimeout;
   CLOCK_FORMAT_SETTINGS ClockFormatSettings;
-  WEATHER_STATUS WeatherStatus;  
+  WEATHER_STATUS WeatherStatus;
+  uint8_t ClockShowSeconds;
+  TIME_FONT TimeFont;
 } __attribute__((__packed__)) ClaySettings;
 
 static ClaySettings settings;
@@ -77,7 +79,7 @@ static void prv_default_settings() {
   settings.CalendarBoldToday = 0;
   settings.CalendarInvertToday = 1;
   settings.SwitchBackTimeout = 15;
-
+  settings.ClockShowSeconds = 0;
 }
 
 static void increase_current_storage_version(int current) {
@@ -94,8 +96,8 @@ static void prv_get_time_format() {
 
 static void prv_post_load_settings() {  
 
-  helper_str_filler(settings.DateFormat, "%Y.%m.%d\0");
-  helper_str_filler(settings.ClockFormat, "%H:%M\0");
+  helper_str_filler(settings.DateFormat, "%Y.%m.%d");
+  helper_str_filler(settings.ClockFormat, "%H:%M");
   prv_get_time_format();
   
   bool has_storage_version = persist_exists(storage_version_key);
@@ -212,6 +214,11 @@ bool settings_get_ForecastEnabled() {
   return get_bool(settings.ForecastEnabled);
 }
 
+bool settings_get_ClockShowSeconds() {
+  return get_bool(settings.ClockShowSeconds);
+}
+
+
 static PERIOD get_period (char *settings_per) {
   if (strcmp(settings_per, "15") == 0) {
       return P_15MIN;
@@ -300,9 +307,9 @@ uint8_t settings_get_SwitchBackTimeout() {
   return settings.SwitchBackTimeout;
 }
 
-// API_STATUS settings_get_WeatherAPIKeyStatus() {
-//   return settings.WeatherAPIKeyStatus;
-// }
+TIME_FONT settings_get_TimeFont() {
+  return settings.TimeFont;
+}
 
 WEATHER_STATUS settings_get_WeatherStatus() {
   return settings.WeatherStatus;
@@ -516,6 +523,21 @@ void populate_settings(DictionaryIterator *iter, void *context) {
      settings.SwitchBackTimeout = swtime->value->uint8;
   }
 
+  Tuple *clock_sec = dict_find(iter, MESSAGE_KEY_ClockShowSeconds);
+  if (clock_sec) {
+    settings.ClockShowSeconds = clock_sec->value->uint8;
+  }
+
+  Tuple *time_f = dict_find(iter, MESSAGE_KEY_TimeFont);
+  if (time_f) {
+    if (strcmp(time_f->value->cstring, "bebas") == 0) {
+      settings.TimeFont = TF_BEBAS;
+    }
+
+    if (strcmp(time_f->value->cstring, "digital") == 0) {
+      settings.TimeFont = TF_DIGITAL;
+    }
+  }
 
   save_settings();
 //  settings_update_handler();

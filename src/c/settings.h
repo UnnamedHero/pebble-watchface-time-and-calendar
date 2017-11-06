@@ -61,6 +61,11 @@ typedef enum ClockFormatSettings {
   CF_12H  
 } CLOCK_FORMAT_SETTINGS;
 
+typedef enum TimeFont {
+  TF_BEBAS,
+  TF_DIGITAL
+} TIME_FONT;
+
 typedef void (*callback_ptr)();
 
 void init_settings(callback_ptr callback);
@@ -100,6 +105,8 @@ uint8_t settings_get_SwitchBackTimeout();
 bool settings_get_ForecastEnabled();
 CLOCK_FORMAT_SETTINGS settings_get_ClockFormatSettings();
 WEATHER_STATUS settings_get_WeatherStatus();
+bool settings_get_ClockShowSeconds();
+TIME_FONT settings_get_TimeFont();
 
 #if defined (PBL_PLATFORM_APLITE)
 bool settings_get_QT();

@@ -8,7 +8,7 @@
 
 static Layer *s_this_layer;
 static GFont s_wfont;
-static GFont s_tfont;
+static GFont s_tfont, s_tdigfont;
 static void prv_populate_this_layer(Layer *, GContext *);
 static void prv_populate_combined_layer(Layer *, GContext *);
 static void prv_populate_time_layer(Layer *, GContext *, GRect);
@@ -55,6 +55,7 @@ void init_weather_layer(GRect bounds) {
   s_this_layer = layer_create(bounds);
   s_wfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
   s_tfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_TIME_BOLD_58));
+  s_tdigfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_DIGITAL_BOLD_48));
   prv_load_weather();
   layer_set_update_proc(s_this_layer, prv_populate_this_layer);
   ticktimerhelper_register(prv_ticktimer);
@@ -66,6 +67,7 @@ void deinit_weather_layer() {
   }
   fonts_unload_custom_font(s_wfont);
   fonts_unload_custom_font(s_tfont);
+  fonts_unload_custom_font(s_tdigfont);  
 }
 
 Layer* get_layer_weather() {
@@ -145,6 +147,16 @@ void prv_populate_combined_layer(Layer *me, GContext *ctx) {
     NULL);          
 }
 
+static GFont prv_get_time_font() {
+  switch (settings_get_TimeFont()) {
+    case TF_BEBAS:
+      return s_tfont;
+    case TF_DIGITAL:
+      return s_tdigfont;      
+  }
+  return TF_BEBAS;
+}
+
 static void prv_populate_time_layer(Layer *me, GContext *ctx, GRect rect) {
   #if defined (DEBUG) 
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: TIME");
@@ -155,7 +167,7 @@ static void prv_populate_time_layer(Layer *me, GContext *ctx, GRect rect) {
 
   const int time_font_voffset = 6; //crunch for vertical alignment
   graphics_draw_text(ctx, time_txt, \
-      s_tfont, \
+      prv_get_time_font(), \
       GRect (rect.origin.x, rect.origin.y - time_font_voffset, rect.size.w, rect.size.h), \
       GTextOverflowModeWordWrap, \
       GTextAlignmentCenter, \
