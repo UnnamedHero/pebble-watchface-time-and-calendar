@@ -257,11 +257,11 @@ function locationSuccess(pos) {
   switch (clayPosSettings) {
     case 'cid':
       var cityId = getHelperKey('NP_CityID');
-      if (cityId === 'not_set' || cityId === 'invalid_id') {
+      if (!cityId || cityId === 'not_set' || cityId === 'invalid_id') {
         console.log('CityID Error.');
         return;
       }      
-      position = '?id=' + claySettings.NP_CityID;
+      position = '?id=' + cityId;
       break;
     case 'gps':
     default:
@@ -280,11 +280,13 @@ function locationSuccess(pos) {
       console.log('code: ' + json.cod);
       switch (json.cod) {      
         case '401': 
+        case 401:
     		  console.log("Waether ERROR: Invalid API key");
           setInvalidAPIKey();
           return;
         case '400':
-          console.log("Invalid City ID");
+        case 400:
+          console.log("Invalid City ID " + getHelperKey('NP_CityID'));
           setInvalidLocationID();
           return;
      }      
