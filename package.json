@@ -128,13 +128,13 @@
           "characterRegex": "[:0-9]",
           "type": "font",
           "name": "DIGITAL_SECS_BOLD_42",
-          "file": "fonts/ds-digital.ttf"
+          "file": "fonts/digital-7.ttf"
         },
         {
           "characterRegex": "[:0-9]",
           "type": "font",
           "name": "DIGITAL_BOLD_46",
-          "file": "fonts/ds-digital.ttf"
+          "file": "fonts/digital-7.ttf"
         },
         {
           "type": "font",
