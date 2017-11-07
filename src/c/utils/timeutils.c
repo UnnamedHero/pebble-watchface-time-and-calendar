@@ -57,7 +57,14 @@ void get_currect_time(DT_FORMAT dtf, char *buffer) {
     case CLOCK_FORMAT:
       strcpy(format, settings_get_ClockFormat());
       break;
+    case DT_CLOCK_SECS:
+      strcpy(format, settings_get_ClockFormat());
+      strcat(format, ":%S");
+      break;
     }
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "time string %s", format);
+  #endif
   strftime(d_buffer, sizeof(d_buffer), format, tick_time);
   strcpy(buffer, d_buffer);
 }

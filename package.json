@@ -121,7 +121,7 @@
         {
           "characterRegex": "[:0-9]",
           "type": "font",
-          "name": "TIME_SECS_BOLD_40",
+          "name": "TIME_SECS_BOLD_44",
           "file": "fonts/BebasNeue_Bold.ttf"
         },
         {
@@ -133,7 +133,7 @@
         {
           "characterRegex": "[:0-9]",
           "type": "font",
-          "name": "DIGITAL_BOLD_48",
+          "name": "DIGITAL_BOLD_46",
           "file": "fonts/ds-digital.ttf"
         },
         {

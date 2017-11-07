@@ -9,6 +9,7 @@
 static Layer *s_this_layer;
 static GFont s_wfont;
 static GFont s_tfont, s_tdigfont;
+static GFont s_tfont_sec, s_tdigitfont_sec;
 static void prv_populate_this_layer(Layer *, GContext *);
 static void prv_populate_combined_layer(Layer *, GContext *);
 static void prv_populate_time_layer(Layer *, GContext *, GRect);
@@ -17,6 +18,7 @@ static void prv_load_weather();
 static void prv_send_data_failed();
 static void prv_timer_timeout_handler(void*);
 static void prv_ticktimer(struct tm*);
+static void prv_ticktimer_clock(struct tm*);
 static AppTimer *s_timeout_timer;
 static const int timeout = 5000;
 
@@ -55,10 +57,13 @@ void init_weather_layer(GRect bounds) {
   s_this_layer = layer_create(bounds);
   s_wfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
   s_tfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_TIME_BOLD_58));
-  s_tdigfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_DIGITAL_BOLD_48));
+  s_tdigfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_DIGITAL_BOLD_46));
+  s_tfont_sec = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_TIME_SECS_BOLD_44));
+  s_tdigitfont_sec = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_DIGITAL_SECS_BOLD_42));
   prv_load_weather();
   layer_set_update_proc(s_this_layer, prv_populate_this_layer);
   ticktimerhelper_register(prv_ticktimer);
+  ticktimerhelper_register_clock(prv_ticktimer_clock);
 }
 
 void deinit_weather_layer() {
@@ -68,6 +73,8 @@ void deinit_weather_layer() {
   fonts_unload_custom_font(s_wfont);
   fonts_unload_custom_font(s_tfont);
   fonts_unload_custom_font(s_tdigfont);  
+  fonts_unload_custom_font(s_tfont_sec);
+  fonts_unload_custom_font(s_tdigitfont_sec);  
 }
 
 Layer* get_layer_weather() {
@@ -76,6 +83,10 @@ Layer* get_layer_weather() {
 
 static void prv_ticktimer(struct tm* unneeded) {
   update_weather(false);
+  layer_mark_dirty(s_this_layer);
+}
+
+static void prv_ticktimer_clock(struct tm* unneeded) {  
   layer_mark_dirty(s_this_layer);
 }
 
@@ -150,11 +161,11 @@ void prv_populate_combined_layer(Layer *me, GContext *ctx) {
 static GFont prv_get_time_font() {
   switch (settings_get_TimeFont()) {
     case TF_BEBAS:
-      return s_tfont;
+      return settings_get_ClockShowSeconds() == SEC_SHOWING ? s_tfont_sec : s_tfont;
     case TF_DIGITAL:
-      return s_tdigfont;      
+      return settings_get_ClockShowSeconds() == SEC_SHOWING ? s_tdigitfont_sec : s_tdigfont;      
   }
-  return TF_BEBAS;
+  return s_tfont;
 }
 
 static void prv_populate_time_layer(Layer *me, GContext *ctx, GRect rect) {
@@ -163,9 +174,13 @@ static void prv_populate_time_layer(Layer *me, GContext *ctx, GRect rect) {
   #endif
 
   static char time_txt[33];
-  get_currect_time(CLOCK_FORMAT, time_txt);
+  settings_get_ClockShowSeconds() == SEC_SHOWING ? \
+    get_currect_time(DT_CLOCK_SECS, time_txt) :\
+    get_currect_time(CLOCK_FORMAT, time_txt);
+    
 
-  const int time_font_voffset = 6; //crunch for vertical alignment
+
+  int time_font_voffset = settings_get_ClockShowSeconds() == SEC_SHOWING ? 0 : 6; //crunch for vertical alignment
   graphics_draw_text(ctx, time_txt, \
       prv_get_time_font(), \
       GRect (rect.origin.x, rect.origin.y - time_font_voffset, rect.size.w, rect.size.h), \
@@ -178,10 +193,8 @@ void get_weather(DictionaryIterator *iter, void *context) {
 
   Tuple *w_temp = dict_find(iter, MESSAGE_KEY_WeatherTemperature);
   if (w_temp) {
-
     weather.WeatherTemperature = w_temp->value->int32;
-    weather.WeatherReady = 1;
-    
+    weather.WeatherReady = 1;    
   }
 
   Tuple *w_desc = dict_find(iter, MESSAGE_KEY_WeatherDesc);

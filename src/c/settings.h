@@ -2,6 +2,7 @@
 
 #include <pebble.h>
 #define SETTINGS_KEY 1
+#define SETTINGS_SECONDS 2
 
 typedef enum Update_Flag {
   UF_NOTHING,
@@ -26,6 +27,7 @@ typedef enum Periods {
 typedef enum DateTimeFormat {
   YYYY_MM_DD,
   CLOCK_FORMAT,
+  DT_CLOCK_SECS
 } DT_FORMAT;
 
 typedef enum CalendarWeekView {
@@ -66,6 +68,12 @@ typedef enum TimeFont {
   TF_DIGITAL
 } TIME_FONT;
 
+typedef enum ClockShowSeconds {
+  SEC_DISABLED,
+  SEC_ENABLED,
+  SEC_SHOWING
+} CLOCK_SECONDS;
+
 typedef void (*callback_ptr)();
 
 void init_settings(callback_ptr callback);
@@ -105,9 +113,13 @@ uint8_t settings_get_SwitchBackTimeout();
 bool settings_get_ForecastEnabled();
 CLOCK_FORMAT_SETTINGS settings_get_ClockFormatSettings();
 WEATHER_STATUS settings_get_WeatherStatus();
-bool settings_get_ClockShowSeconds();
 TIME_FONT settings_get_TimeFont();
+CLOCK_SECONDS settings_get_ClockShowSeconds();
+uint8_t settings_get_SwitchBackTimeoutSeconds();
+void settings_set_ClockShowSeconds_showing();
+void settings_set_ClockShowSeconds_enabled();
 
+//void save_settings_seconds();
 #if defined (PBL_PLATFORM_APLITE)
 bool settings_get_QT();
 uint8_t settings_get_QTHourBegin();

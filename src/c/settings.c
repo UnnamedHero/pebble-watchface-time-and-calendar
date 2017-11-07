@@ -5,6 +5,9 @@
 static const uint32_t storage_version_key = 777;
 //static const int current_storage_version = 3;
 
+static CLOCK_SECONDS seconds_settings;
+void save_settings_seconds();
+
 typedef struct ClaySettings {
 
   PERIOD WeatherUpdatePeriod;
@@ -41,8 +44,9 @@ typedef struct ClaySettings {
   uint8_t SwitchBackTimeout;
   CLOCK_FORMAT_SETTINGS ClockFormatSettings;
   WEATHER_STATUS WeatherStatus;
-  uint8_t ClockShowSeconds;
+  CLOCK_SECONDS ClockShowSeconds;
   TIME_FONT TimeFont;
+  uint8_t SwitchBackTimeoutSeconds;
 } __attribute__((__packed__)) ClaySettings;
 
 static ClaySettings settings;
@@ -79,7 +83,7 @@ static void prv_default_settings() {
   settings.CalendarBoldToday = 0;
   settings.CalendarInvertToday = 1;
   settings.SwitchBackTimeout = 15;
-  settings.ClockShowSeconds = 0;
+  //settings.ClockShowSeconds = SEC_DISABLED;
 }
 
 static void increase_current_storage_version(int current) {
@@ -214,11 +218,6 @@ bool settings_get_ForecastEnabled() {
   return get_bool(settings.ForecastEnabled);
 }
 
-bool settings_get_ClockShowSeconds() {
-  return get_bool(settings.ClockShowSeconds);
-}
-
-
 static PERIOD get_period (char *settings_per) {
   if (strcmp(settings_per, "15") == 0) {
       return P_15MIN;
@@ -315,6 +314,24 @@ WEATHER_STATUS settings_get_WeatherStatus() {
   return settings.WeatherStatus;
 }
 
+CLOCK_SECONDS settings_get_ClockShowSeconds() {
+  return seconds_settings;
+}
+
+void settings_set_ClockShowSeconds_showing() {
+  seconds_settings = SEC_SHOWING;
+  save_settings_seconds();  
+}
+
+void settings_set_ClockShowSeconds_enabled() {
+  seconds_settings = SEC_ENABLED;
+  save_settings_seconds();  
+}
+
+uint8_t settings_get_SwitchBackTimeoutSeconds() {
+  return settings.SwitchBackTimeoutSeconds;
+}
+
 void helper_str_filler(char *item, char* filler) {
   if (strlen(item) == 0) {
     strcpy(item, filler);
@@ -327,14 +344,25 @@ static void prv_load_settings() {
 
   // Read settings from persistent storage, if they exist
   persist_read_data(SETTINGS_KEY, &settings, sizeof(settings));
+  if (persist_exists(SETTINGS_SECONDS)) {
+    seconds_settings = (CLOCK_SECONDS)persist_read_int(SETTINGS_SECONDS);
+  } else {
+    seconds_settings = SEC_DISABLED;
+  }
   prv_post_load_settings();
 }
 
 void save_settings() {
     persist_write_data(SETTINGS_KEY, &settings, sizeof(settings));
+    save_settings_seconds();
     //persist_write_int(storage_version_key, current_storage_version);
     settings_update_handler();
 }
+
+void save_settings_seconds() {
+  persist_write_int(SETTINGS_SECONDS, (int)seconds_settings);
+}
+
 
 void settings_get_theme(GContext *ctx) {
     graphics_context_set_fill_color(ctx, GColorFromHEX(settings.BackgroundColorHex));
@@ -525,7 +553,10 @@ void populate_settings(DictionaryIterator *iter, void *context) {
 
   Tuple *clock_sec = dict_find(iter, MESSAGE_KEY_ClockShowSeconds);
   if (clock_sec) {
-    settings.ClockShowSeconds = clock_sec->value->uint8;
+    seconds_settings = clock_sec->value->uint8;
+    if (seconds_settings != SEC_DISABLED) {
+      settings.WeatherStatus = WEATHER_DISABLED;
+    }
   }
 
   Tuple *time_f = dict_find(iter, MESSAGE_KEY_TimeFont);
@@ -539,8 +570,12 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     }
   }
 
+  Tuple *sw_secs_timeout = dict_find(iter, MESSAGE_KEY_SwitchBackTimeoutSeconds);
+  if (sw_secs_timeout) {
+    settings.SwitchBackTimeoutSeconds = sw_secs_timeout->value->uint8;
+  }
+
   save_settings();
-//  settings_update_handler();
 }
 
 void init_settings(callback_ptr callback) {

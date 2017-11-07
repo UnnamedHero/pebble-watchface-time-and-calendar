@@ -11,6 +11,7 @@ typedef void(*ticktimerhandler)(struct tm *);
 
 void start_ticktimerhelper();
 void stop_ticktimerhelper();
-
+void reload_timer();
 void ticktimerhelper_register(ticktimerhandler);
+void ticktimerhelper_register_clock(ticktimerhandler);
 
