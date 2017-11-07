@@ -86,7 +86,7 @@ void send_message(Tuplet *data, int data_array_size, message_failed_callback_ptr
       APP_LOG(APP_LOG_LEVEL_DEBUG, "JS not ready yet");
     #endif
     busy = false;
-    message_failed_callback();
+    //message_failed_callback();
   }
   
   if (!is_bt_connected()) {
