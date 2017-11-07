@@ -4,6 +4,7 @@ var customFunctions = require('./functions');
 var messageKeys = require('message_keys');
 var i18n = require('./localizator');
 var sender = require('./sender');
+var messages = require('./weather_providers/weather-helpers').weather_messages;
 
 var clay = new Clay(i18n.translate(clayConfig), customFunctions, { autoHandleEvents: false });
 
@@ -41,8 +42,12 @@ Pebble.addEventListener('webviewclosed', function(e) {
   var newDateFormat = dateFormat.replace(new RegExp ('\\.','g'), dateSeparator);
   dict[messageKeys.DateFormat] = newDateFormat;
   dict[messageKeys.ConfigMarker] = true;
+
   var sw_timeout_str = dict[messageKeys.SwitchBackTimeout];
   dict[messageKeys.SwitchBackTimeout] = parseInt(sw_timeout_str, 10);
+  
+  var sw_secs_timeout_str = dict[messageKeys.SwitchBackTimeoutSeconds];
+  dict[messageKeys.SwitchBackTimeoutSeconds] = parseInt(sw_secs_timeout_str, 10);
   
   var mySettings = {
     'WeatherAPIKey' : dict[messageKeys.WeatherAPIKey],
@@ -64,7 +69,7 @@ Pebble.addEventListener('ready',
 
 var providers =  {
   'OWM' : './weather_providers/openweathermap',
-  'disabled': 'dummy',
+  'disable': 'dummy',
 }
 
 Pebble.addEventListener('appmessage', function(e) {
@@ -75,6 +80,11 @@ Pebble.addEventListener('appmessage', function(e) {
   var providerKey = JSON.parse(localStorage.getItem('clay-settings')).WeatherProvider;  
   //console.log(providerKey);
   if (providerKey === 'disable') {
+    
+    sender.send({
+      'ConfigMarker': true,
+      "WeatherError": messages.weather_disabled,
+    });
     return;
   }
   var provider = require(providers[providerKey]);    
