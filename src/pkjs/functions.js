@@ -38,21 +38,22 @@ module.exports = function(minified) {
     });
   }
 
-  var weatherF = function() {
-      switch (this.get()) {
-        case 'OWM': 
-          clayConfig.getItemByMessageKey('ClockShowSeconds').set(false);
-          toggleItemByGroup('OWM', '');
-          toggleItemByGroup('weather', 'seconds');
-          clayConfig.getItemById('WeatherLocationType').trigger('change');
-          break;
-        case 'disable':
-          toggleItemByGroup('seconds', 'weather');
-          toggleItemByGroup('', 'OWM');
-          toggleItemByGroup('', 'weather_id');
-          break;
-      }
-    };
+  function weatherF() {
+    clayConfig.getItemById('test').set(this.get());
+    switch (this.get()) {
+      case 'OWM': 
+        clayConfig.getItemByMessageKey('ClockShowSeconds').set(false);
+        toggleItemByGroup('OWM', '');
+        toggleItemByGroup('weather', 'seconds');
+        clayConfig.getItemById('WeatherLocationType').trigger('change');
+        break;
+      case 'disable':
+        toggleItemByGroup('seconds', 'weather');
+        toggleItemByGroup('', 'OWM');
+        toggleItemByGroup('', 'weather_id');
+        break;
+    }
+  }
 
   function weatherToggle() {
     var masterItem = clayConfig.getItemByMessageKey('WeatherProvider');
@@ -68,8 +69,9 @@ module.exports = function(minified) {
     registerToggle('QuietTime', 'QuietTimeBegin');
     registerToggle('QuietTime', 'QuietTimeEnd');
     registerToggle('ForecastType', 'SwitchBackTimeout');
-    registerToggle('ClockShowSeconds', 'SwitchBackTimeoutSeconds');
-    weatherToggle();
+    registerToggle('ClockShowSeconds', 'SwitchBackTimeoutSeconds');        
     registerGroupToggleById('WeatherLocationType', 'cid', 'weather_id');
+    weatherToggle();
+    
   });
 };
