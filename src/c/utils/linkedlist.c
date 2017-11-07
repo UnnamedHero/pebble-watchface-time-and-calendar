@@ -20,7 +20,7 @@ typedef struct LinkedList {
 
 
 static void prv_ll_fill_default_values(LinkedList *ll);
-static void prv_linkedlist_remove_item(LinkedListItem *);
+//static void prv_linkedlist_remove_item(LinkedListItem *);
 
 LinkedList* init_linkedlist() {
 	LinkedList *ll = malloc(sizeof(LinkedList));
@@ -103,10 +103,10 @@ static void prv_ll_fill_default_values(LinkedList *ll) {
 
 }
 
-static void prv_linkedlist_remove_item(LinkedListItem *item) {
-	if (item) {
-		item->next = NULL;
-		item->data = NULL;
-		free(item);
-	}
-}
+// static void prv_linkedlist_remove_item(LinkedListItem *item) {
+// 	if (item) {
+// 		item->next = NULL;
+// 		item->data = NULL;
+// 		free(item);
+// 	}
+// }
