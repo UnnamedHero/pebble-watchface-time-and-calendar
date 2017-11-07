@@ -11,6 +11,7 @@ var clay = new Clay(i18n.translate(clayConfig), customFunctions, { autoHandleEve
 console.log(messageKeys.QuietTimeBegin);
 
 Pebble.addEventListener('showConfiguration', function(e) {
+
   Pebble.openURL(clay.generateUrl());
 });
 
@@ -48,6 +49,9 @@ Pebble.addEventListener('webviewclosed', function(e) {
   
   var sw_secs_timeout_str = dict[messageKeys.SwitchBackTimeoutSeconds];
   dict[messageKeys.SwitchBackTimeoutSeconds] = parseInt(sw_secs_timeout_str, 10);
+
+  var psa_str=dict[messageKeys.PebbleShakeAction];
+  dict[messageKeys.PebbleShakeAction] = parseInt(psa_str, 10);
   
   var mySettings = {
     'WeatherAPIKey' : dict[messageKeys.WeatherAPIKey],
@@ -76,14 +80,14 @@ Pebble.addEventListener('appmessage', function(e) {
 
   var dict = e.payload;
 //  var provider = require('./weather_providers/dummy');
-
-  var providerKey = JSON.parse(localStorage.getItem('clay-settings')).WeatherProvider;  
+  var clay = localStorage.getItem('clay-settings');  
+  var providerKey = clay ? JSON.parse(localStorage.getItem('clay-settings')).WeatherProvider : 'disable';
   //console.log(providerKey);
   if (providerKey === 'disable') {
     
     sender.send({
       'ConfigMarker': true,
-      "WeatherError": messages.weather_disabled,
+      "WeatherError": messages.weather_disabled,      
     });
     return;
   }
