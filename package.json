@@ -39,7 +39,6 @@
       "DateFormat",
       "DateFormatSeparator",
       "SwitchBackTimeoutSeconds",
-      "ClockShowSeconds",
       "ConfigMarker",
       "JSReady",
       "VibrateDuringQuietTime",
@@ -87,6 +86,7 @@
       "CalendarSmallOtherDays",
       "NP_CityID",
       "TimeFont",
+      "PebbleShakeAction",
       "dummy"
     ],
     "resources": {

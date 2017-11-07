@@ -125,6 +125,11 @@ void prv_populate_this_layer(Layer *me, GContext *ctx) {
   settings_get_theme(ctx);
 
   GRect bounds = layer_get_bounds(me);
+  if (settings_get_ClockShowSeconds() == SEC_SHOWING) {
+    prv_populate_time_layer(me, ctx, bounds);
+    return;
+  }
+
   weather.WeatherReady == 1 && (settings_get_WeatherStatus() == WEATHER_OK || \
   settings_get_WeatherStatus() == WEATHER_LOCATION_ERROR) ? \
     prv_populate_combined_layer (me, ctx) : prv_populate_time_layer(me, ctx, bounds);

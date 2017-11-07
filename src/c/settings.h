@@ -74,6 +74,12 @@ typedef enum ClockShowSeconds {
   SEC_SHOWING
 } CLOCK_SECONDS;
 
+typedef enum PebbleShakeAction {
+  PSA_NOTHING,
+  PSA_FORECAST,
+  PSA_SECONDS,
+} PEBBLE_SHAKE_ACTION;
+
 typedef void (*callback_ptr)();
 
 void init_settings(callback_ptr callback);
@@ -115,9 +121,11 @@ CLOCK_FORMAT_SETTINGS settings_get_ClockFormatSettings();
 WEATHER_STATUS settings_get_WeatherStatus();
 TIME_FONT settings_get_TimeFont();
 CLOCK_SECONDS settings_get_ClockShowSeconds();
+PEBBLE_SHAKE_ACTION settings_get_PebbleShakeAction();
 uint8_t settings_get_SwitchBackTimeoutSeconds();
 void settings_set_ClockShowSeconds_showing();
 void settings_set_ClockShowSeconds_enabled();
+void settings_set_ClockShowSeconds_disabled();
 
 //void save_settings_seconds();
 #if defined (PBL_PLATFORM_APLITE)

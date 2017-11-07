@@ -44,9 +44,9 @@ typedef struct ClaySettings {
   uint8_t SwitchBackTimeout;
   CLOCK_FORMAT_SETTINGS ClockFormatSettings;
   WEATHER_STATUS WeatherStatus;
-  CLOCK_SECONDS ClockShowSeconds;
   TIME_FONT TimeFont;
   uint8_t SwitchBackTimeoutSeconds;
+  PEBBLE_SHAKE_ACTION PebbleShakeAction;
 } __attribute__((__packed__)) ClaySettings;
 
 static ClaySettings settings;
@@ -318,6 +318,10 @@ CLOCK_SECONDS settings_get_ClockShowSeconds() {
   return seconds_settings;
 }
 
+PEBBLE_SHAKE_ACTION settings_get_PebbleShakeAction() {
+  return settings.PebbleShakeAction;
+}
+
 void settings_set_ClockShowSeconds_showing() {
   seconds_settings = SEC_SHOWING;
   save_settings_seconds();  
@@ -325,6 +329,11 @@ void settings_set_ClockShowSeconds_showing() {
 
 void settings_set_ClockShowSeconds_enabled() {
   seconds_settings = SEC_ENABLED;
+  save_settings_seconds();  
+}
+
+void settings_set_ClockShowSeconds_disabled() {
+  seconds_settings = SEC_DISABLED;
   save_settings_seconds();  
 }
 
@@ -551,11 +560,28 @@ void populate_settings(DictionaryIterator *iter, void *context) {
      settings.SwitchBackTimeout = swtime->value->uint8;
   }
 
-  Tuple *clock_sec = dict_find(iter, MESSAGE_KEY_ClockShowSeconds);
-  if (clock_sec) {
-    seconds_settings = clock_sec->value->uint8;
-    if (seconds_settings != SEC_DISABLED) {
-      settings.WeatherStatus = WEATHER_DISABLED;
+  // Tuple *clock_sec = dict_find(iter, MESSAGE_KEY_ClockShowSeconds);
+  // if (clock_sec) {
+  //   seconds_settings = clock_sec->value->uint8;
+  //   if (seconds_settings != SEC_DISABLED) {
+  //     settings.WeatherStatus = WEATHER_DISABLED;
+  //   }
+  // }
+  Tuple *psa = dict_find(iter, MESSAGE_KEY_PebbleShakeAction);
+  if (psa) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "shake action %d", psa->value->uint8);
+    #endif    
+    switch (psa->value->uint8) {
+      case 0:
+        settings.PebbleShakeAction = PSA_NOTHING;
+        break;
+      case 1: 
+        settings.PebbleShakeAction = PSA_FORECAST;
+        break;
+      case 2:
+        settings.PebbleShakeAction = PSA_SECONDS;
+        break;
     }
   }
 

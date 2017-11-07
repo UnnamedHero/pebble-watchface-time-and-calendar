@@ -5,8 +5,7 @@ module.exports = [
   },
   {
     "type": "section",
-    "items":
-    [
+    "items": [
       {
         "type": "heading",
         "defaultValue": "Interface settings"
@@ -22,7 +21,28 @@ module.exports = [
         "messageKey": "FontColor",
         "label": "Font color",
         "defaultValue": "FFFFFF",
-      }
+      },
+      {
+        "type": "select",
+        "messageKey": "PebbleShakeAction",
+        "group": "seconds",
+        "label": "Action on Pebble shake",
+        "options": [
+          {
+            "label": "Do nothing",
+            "value": "0",
+          },
+          {
+            "label": "Show forecast",
+            "value": "1",
+          },
+          {            
+            "label": "Show seconds",
+            "value": "2",
+          }
+        ],
+        "defaultValue": "0"
+      },      
     ]
   },
   {
@@ -70,17 +90,10 @@ module.exports = [
         "defaultValue": "bebas",
       },
       {
-        "type": "toggle",
-        "messageKey": "ClockShowSeconds",
-        "group": "seconds",
-        "label": "Show seconds (high battery consumption!)",
-        "defaultValue": false
-      },
-      {
         "type": "select",
         "group" : "seconds",
         "messageKey": "SwitchBackTimeoutSeconds",
-        "label": "Switch back timeout in seconds",
+        "label": "Seconds are shown for, in seconds",
         "options" : [
           {
             "label": "manual switch",
@@ -142,7 +155,6 @@ module.exports = [
             "label" : "december 31, 2017",
             "value": "%B %d, %Y"
           }
-
         ],
         "defaultValue": "%Y.%m.%d"
       },
@@ -257,27 +269,20 @@ module.exports = [
           "defaultValue": "Weather configuration"
         },
         {
-          "type": "input",
-          "messageKey": "WeatherAPIKey",
-          "id": "test",
-          "label": "test",
-          "defaultValue": ""        
-        },
-        {
           "type": "select",
           "messageKey": "WeatherProvider",
           "label": "Weather provider",
           "options": [
             {
               "label": "OpenWeatherMap",
-              "value": "OWM",
+              "value": "OWM"
             },
             {
               "label": "disabled",
-              "value": "disable",
+              "value": "disable"
             }
           ],
-          "defaultValue": "OWM"
+          "defaultValue": "disable"
         },
         {
           "type": "text",
@@ -308,7 +313,7 @@ module.exports = [
               "value": "cid",
             },
           ],
-          "defaultValue": "gps",
+          "defaultValue": "gps"
         },
         {
           "type": "text",          
@@ -320,7 +325,7 @@ module.exports = [
           "group": "weather_id",
           "messageKey": "NP_CityID",
           "label": "city ID",
-          "defaultValue": "",
+          "defaultValue": ""
         },
         {
           "type": "select",
@@ -390,15 +395,10 @@ module.exports = [
           "defaultValue": "ft_3h"
         },
         {
-          "type": "text",
-          "group" : "weather",     
-          "defaultValue": "Shake your Pebble to view forecast. Set timeout for auto switch back."
-        },
-        {
           "type": "select",
           "group" : "weather",
           "messageKey": "SwitchBackTimeout",
-          "label": "Switch back timeout in seconds",
+          "label": "Show forecast window, in seconds",
           "options" : [
             {
               "label": "manual switch",

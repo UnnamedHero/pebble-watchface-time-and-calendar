@@ -175,6 +175,13 @@ void update_forecast(bool force) {
     return;
   }
   
+  if (settings_get_PebbleShakeAction() != PSA_FORECAST) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Shake action is not about show forecast, skipping");
+    #endif
+    return;    
+  }
+  
   if (!s_forecast_layer) {
     prv_load_forecast();
   }

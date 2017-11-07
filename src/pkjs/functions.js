@@ -5,28 +5,44 @@ module.exports = function(minified) {
        master.get() ? slave.enable() : slave.disable();
   }
 
-  function registerToggle(master, slave, type) {
+  var dataToggle = {
+    'ForecastType': 'ft_off',
+    
+  };
+
+  var dataToggleReversed = {
+    'PebbleShakeAction': '2',
+  };
+
+  function registerToggle(master, slave, type) {    
     var masterItem = clayConfig.getItemByMessageKey(master);
     var slaveItem = clayConfig.getItemByMessageKey(slave);
     masterItem.on('change', function() {
-      if (master === 'ForecastType') {
-        this.get() !== 'ft_off' ? slaveItem.enable() : slaveItem.disable();
+      if (dataToggle[master]) {
+        this.get() !== dataToggle[master] ? slaveItem.enable() : slaveItem.disable();
+      } else if (dataToggleReversed[master]) {
+          this.get() !== dataToggleReversed[master] ? slaveItem.disable() : slaveItem.enable();
       } else {
+  
+      // if (master === 'ForecastType') {
+      //   this.get() === 'ft_off' ? slaveItem.enable() : slaveItem.disable();
+      // } else {
         this.get() ? slaveItem.enable() : slaveItem.disable();
       }
     });
     masterItem.trigger('change');
   }
 
-  function registerGroupToggleById(master, masterValue, group) {
+  function registerGroupHideById(master, masterValue, group) {
     var masterItem = clayConfig.getItemById(master);
+    
     var items = clayConfig.getItemsByGroup(group);
     masterItem.on('change', function () {
       items.forEach(function(item) {
         masterItem.get() === masterValue ? item.show() : item.hide();
       });  
     });
-    masterItem.trigger('change');
+    masterItem.trigger('change');    
   }
 
   function toggleItemByGroup(showGroup, hideGroup) {
@@ -39,16 +55,14 @@ module.exports = function(minified) {
   }
 
   function weatherF() {
-    clayConfig.getItemById('test').set(this.get());
     switch (this.get()) {
       case 'OWM': 
-        clayConfig.getItemByMessageKey('ClockShowSeconds').set(false);
         toggleItemByGroup('OWM', '');
-        toggleItemByGroup('weather', 'seconds');
+        toggleItemByGroup('weather', '');
         clayConfig.getItemById('WeatherLocationType').trigger('change');
         break;
       case 'disable':
-        toggleItemByGroup('seconds', 'weather');
+        toggleItemByGroup('', 'weather');
         toggleItemByGroup('', 'OWM');
         toggleItemByGroup('', 'weather_id');
         break;
@@ -69,9 +83,8 @@ module.exports = function(minified) {
     registerToggle('QuietTime', 'QuietTimeBegin');
     registerToggle('QuietTime', 'QuietTimeEnd');
     registerToggle('ForecastType', 'SwitchBackTimeout');
-    registerToggle('ClockShowSeconds', 'SwitchBackTimeoutSeconds');        
-    registerGroupToggleById('WeatherLocationType', 'cid', 'weather_id');
+    registerToggle('PebbleShakeAction', 'SwitchBackTimeoutSeconds');
+    registerGroupHideById('WeatherLocationType', 'cid', 'weather_id');   
     weatherToggle();
-    
   });
 };
