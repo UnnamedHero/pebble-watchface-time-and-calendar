@@ -60,6 +60,10 @@ static void prv_get_weather_error_symbol(char *err_symbol) {
     case WEATHER_LOCATION_ID_INVALID:
       snprintf(err_symbol, 2, "%s", "E\0");
       break;
+    case WEATHER_UNKNOWN_ERROR:
+      snprintf(err_symbol, 2, "%s", "F\0");
+      break;
+  
     default:
       snprintf(err_symbol, 2, "%s", " \0");
       break;

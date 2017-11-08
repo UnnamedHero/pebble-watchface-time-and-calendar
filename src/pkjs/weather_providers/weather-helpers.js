@@ -4,5 +4,6 @@ exports.weather_messages = {
     location_error: 2,
     api_key_invalid: 3,
     api_key_not_set: 4,
-    invalid_location_id: 5,  
+    invalid_location_id: 5,
+    unknown_error: 6,
 };

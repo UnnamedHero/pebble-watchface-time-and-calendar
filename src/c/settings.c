@@ -416,6 +416,9 @@ void populate_settings(DictionaryIterator *iter, void *context) {
       case 5:
         settings.WeatherStatus = WEATHER_LOCATION_ID_INVALID;
         break;
+      case 6:
+        settings.WeatherStatus = WEATHER_UNKNOWN_ERROR;
+        break;
     }
   } else {
     settings.WeatherStatus = WEATHER_OK;

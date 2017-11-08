@@ -70,6 +70,9 @@ function xhrRequest (url, type, callback) {
   xhr.onload = function () {
     callback(this.responseText);
   };
+  xhr.onerror = function() {
+    setUnknownError();
+  };
   xhr.open(type, url);
   xhr.send();
 }
@@ -173,7 +176,8 @@ function processForecast(parsed) {
   var weather_data = {
      "WeatherMarkerForecast": true,
      "ForecastQty": forecast_matrix.length,
-     "ForecastTime": parsed.list[0].dt
+     "ForecastTime": parsed.list[0].dt,
+     "WeatherError": messages.weather_ok,
   };
   var fill_obj = {
     'main.temp': messageKeys['ForecastTemperature'],
@@ -228,7 +232,8 @@ function parseResponse(json) {
      "WeatherWindDirection": getWindDirection(json.wind.deg),
      "WeatherHumidity": json.main.humidity,
      "WeatherSunrise": getTimeStr(json.sys.sunrise),
-     "WeatherSunset": getTimeStr(json.sys.sunset)
+     "WeatherSunset": getTimeStr(json.sys.sunset),
+     "WeatherError": messages.weather_ok,
     };
 
     if (!isForecast) {      
@@ -248,10 +253,7 @@ function locationSuccess(pos) {
 
   if (getRequestType() === 'forecast' && get_forecast_matrix() === null) {    
     return;
-  }  
-  
-
-
+  }
   var position;
   var clayPosSettings = getHelperKey('NP_WeatherLocationType');
   switch (clayPosSettings) {
@@ -275,7 +277,7 @@ function locationSuccess(pos) {
       getTempUnits() + 
       '&appid=' + weatherAPIKey;// + 'ru';
     xhrRequest(url, 'GET',
-    function(responseText) {
+    function(responseText) {      
     	var json = JSON.parse(responseText);
       console.log('code: ' + json.cod);
       switch (json.cod) {      
@@ -283,24 +285,30 @@ function locationSuccess(pos) {
         case 401:
     		  console.log("Waether ERROR: Invalid API key");
           setInvalidAPIKey();
-          return;
+          break;
         case '400':
         case 400:
           console.log("Invalid City ID " + getHelperKey('NP_CityID'));
           setInvalidLocationID();
-          return;
-     }      
-      parseResponse(json);
+          break;
+        case '200':
+        case 200:
+          parseResponse(json);
+          break;
+        default:
+          console.log('Unknown Error');
+          setUnknownError();        
+     }            
     }
   );
 }
+
 function setInvalidLocationID() {
   clayHelperSetItem('LocationID', 'invalid_id');
   sendWeather({
     "ConfigMarker": true,
     "WeatherError": messages.invalid_location_id,
   });
-
 }
 
 function setInvalidAPIKey() {  
@@ -314,6 +322,12 @@ function setInvalidAPIKey() {
     sendWeather(bad_api);
 }
 
+function setUnknownError() {
+  sendWeather({
+    'ConfigMarker': true,
+    'WeatherError': messages.unknown_error,
+  });
+}
 function locationError(err) {  
   console.log('location ERROR: '+err.message);
   var typeMarker = isForecast ? 'WeatherMarkerForecast' : 'WeatherMarker';
