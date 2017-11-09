@@ -4,7 +4,9 @@
  - improve GPS location handling, reduce battery consumption
  - add ability to get weather by city ID
  - add digital font for time
-
+ - add ability to show seconds
+ - add two shakes setting instead of one shake to avoid accidental switches
+ 
 ---
 #### 0.37.0 (beta)
  - improve AM/PM time detection 
