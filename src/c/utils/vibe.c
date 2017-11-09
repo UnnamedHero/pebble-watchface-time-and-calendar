@@ -26,9 +26,6 @@ static void prv_ticktimer(struct tm* timer) {
     return;
   }  
   bool do_vibr = false;
-  #if defined (DEBUG) 
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Periodic is %d", settings_get_VibratePeriodicPeroid());
-  #endif
   switch (settings_get_VibratePeriodicPeroid()) {
     case P_15MIN:
       do_vibr = timer->tm_min % 15 == 0;
@@ -83,12 +80,22 @@ void do_vibrate(VIBE vibe_pattern) {
 }
 
 bool can_vibrate() {
-  bool qt = is_quiet_time();
-  bool res = settings_get_VibrateDuringQuietTime() ? true : !qt ;
-  BatteryChargeState cs = battery_state_service_peek();
-  #if defined (DEBUG) 
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "is qt: %d; vib_on_qt: %d, charged: %d; plugged: %d", qt, settings_get_VibrateDuringQuietTime(),cs.is_charging, cs.is_plugged);
-  #endif
-  return res && !(cs.is_charging || cs.is_plugged);
+  if (is_quiet_time() && !settings_get_VibrateDuringQuietTime()) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Do not vibrate during quiet time");
+    #endif
+    return false;
+  }
 
+  BatteryChargeState cs = battery_state_service_peek();
+  if ((cs.is_charging || cs.is_plugged) && !settings_get_VibrateDuringCharging()) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Do not vibrate during charge plugged in");
+    #endif
+    return false;
+  }
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "quiet time: %d, is plugged in: %d", is_quiet_time(), (cs.is_charging || cs.is_plugged));
+  #endif
+  return true;
 }
