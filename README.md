@@ -1,6 +1,6 @@
 # Time-and-Calendar watchface
 
-Welcome to a "Time-and-Calendar" watchface for Pebble smartwatch. Watch was was created as a trubute to such watchfaces as TCW (https://github.com/alexsum/TCW) and Timely (https://github.com/cynorg/PebbleTimely). The main goal of watchface creation is self-education process on mine. 
+Welcome to a "Time-and-Calendar" watchface for Pebble smartwatch. Watch was was created as a trubute to such watchfaces as TCW (https://github.com/alexsum/TCW) and Timely (https://github.com/cynorg/PebbleTimely). 
 
 ![][screen1]
 ![][screen2]
@@ -49,7 +49,7 @@ Development versions can be downloaded from [google drive](https://drive.google.
 
 Lastest stable version is 0.35.0 (available in [Pebble Store](https://apps.getpebble.com/applications/596fb1650dfc321335000144))
 
-Lastest development version is [0.37.0](https://drive.google.com/open?id=0B9g5sjcPqSJfNzhlakxBQjU4MjQ)
+Lastest beta version is [0.37.0](https://drive.google.com/open?id=0B9g5sjcPqSJfNzhlakxBQjU4MjQ)
 
 You can support me -> donate to [Paypal](https://www.paypal.me/eugenemikhaylov)
 
@@ -59,4 +59,6 @@ See [CHANGELOG](https://github.com/UnnamedHero/pebble-watchface-time-and-calenda
 
 Credits:
 - Time font: Bebas Neue, [official site](http://www.fontfabric.com/bebas-neue/)
+- Digital Font: Digital-7 [official site](http://www.styleseven.com/php/get_product.php?product=Digital-7)
 - Climate icons: based on [Climacons font](https://github.com/christiannaths/Climacons-Font) and [Weather-icons](https://github.com/erikflowers/weather-icons)
+- Question Mark Icon by [Freepik](http://www.freepik.com") [from Flaticon.com](https://www.flaticon.com/") is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
