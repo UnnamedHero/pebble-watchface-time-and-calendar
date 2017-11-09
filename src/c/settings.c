@@ -47,6 +47,7 @@ typedef struct ClaySettings {
   TIME_FONT TimeFont;
   uint8_t SwitchBackTimeoutSeconds;
   PEBBLE_SHAKE_ACTION PebbleShakeAction;
+  uint8_t ShakeTwice;
 } __attribute__((__packed__)) ClaySettings;
 
 static ClaySettings settings;
@@ -300,6 +301,10 @@ bool settings_get_CalendarInvertToday() {
 
 char *settings_get_DateFormat() {
   return settings.DateFormat;
+}
+
+bool settings_get_ShakeTwice() {
+  return get_bool(settings.ShakeTwice);
 }
 
 uint8_t settings_get_SwitchBackTimeout() {
@@ -602,6 +607,11 @@ void populate_settings(DictionaryIterator *iter, void *context) {
   Tuple *sw_secs_timeout = dict_find(iter, MESSAGE_KEY_SwitchBackTimeoutSeconds);
   if (sw_secs_timeout) {
     settings.SwitchBackTimeoutSeconds = sw_secs_timeout->value->uint8;
+  }
+
+  Tuple *sh_twice = dict_find(iter, MESSAGE_KEY_ShakeTwice);
+  if (sh_twice) {
+    settings.ShakeTwice = sh_twice->value->uint8;
   }
 
   save_settings();

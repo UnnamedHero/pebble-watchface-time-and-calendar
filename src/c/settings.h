@@ -127,6 +127,7 @@ uint8_t settings_get_SwitchBackTimeoutSeconds();
 void settings_set_ClockShowSeconds_showing();
 void settings_set_ClockShowSeconds_enabled();
 void settings_set_ClockShowSeconds_disabled();
+bool settings_get_ShakeTwice();
 
 //void save_settings_seconds();
 #if defined (PBL_PLATFORM_APLITE)

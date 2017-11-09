@@ -5,7 +5,7 @@
 #include "../windows/include/time-window.h"
 #include "../windows/include/forecast-window.h"
 
-
+static int shakes = 0;
 typedef struct state state, *st;
 typedef void (*accel_handler)();
 
@@ -13,9 +13,9 @@ struct state {
   accel_handler handler;
 };
 
-//static bool main_window_active = true;
 static AppTimer *s_timeout_timer;
 static void prv_timer_timeout_handler(void*);
+static void prv_timer_shake_handler(void*);
 
 static state *current_state;
 static state clock_and_weather, clock_and_weather_forecast, no_forecast, \
@@ -25,20 +25,50 @@ static void prv_init_timer(uint8_t timeout);
 static void prv_set_init_state();
 static void prv_init_states();
 
-static void accel_tap_handler(AccelAxisType axis, int32_t direction) { 
+static void manage_shakes() {
+  if (!settings_get_ShakeTwice()) {
     current_state->handler();
+  }
+  switch (shakes) {
+    case 0:
+      if (current_state == &clock_and_weather_forecast || current_state == &seconds_clock_showing) {
+        #if defined (DEBUG)
+          APP_LOG(APP_LOG_LEVEL_DEBUG, "Shake one time to switch back");
+        #endif
+        current_state->handler();
+        return;
+      }
+      #if defined (DEBUG)
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Shakes+1");
+      #endif
+      shakes = 1;
+      app_timer_cancel(s_timeout_timer);
+      app_timer_register(2500, prv_timer_shake_handler, NULL);
+      break;
+    case 1:
+      #if defined (DEBUG)
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "SHAKE_SHAKE!!!!");
+      #endif
+      app_timer_cancel(s_timeout_timer);
+      shakes = 0;
+      current_state->handler();      
+      break;
+  }
+}
+
+static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
+   manage_shakes();
 }
 
 void init_states() {    
     prv_init_states();
-    prv_set_init_state();    
+    prv_set_init_state();
     accel_tap_service_subscribe(accel_tap_handler);    
 }
 
 void notify_settings_changed() {
     prv_set_init_state();
 }
-
   
 static void cw_accel_handler() {
   #if defined (DEBUG)
@@ -46,8 +76,7 @@ static void cw_accel_handler() {
   #endif  
   window_stack_push(get_forecast_window(), false);      
   current_state = &clock_and_weather_forecast;
-  prv_init_timer(settings_get_SwitchBackTimeout());
-  //reload_timer();
+  prv_init_timer(settings_get_SwitchBackTimeout());  
 }
   
 static void cw_f_accel_handler() {
@@ -56,15 +85,13 @@ static void cw_f_accel_handler() {
   #endif  
   window_stack_push(get_time_window(), true);
   app_timer_cancel(s_timeout_timer);
-  prv_set_init_state();
-  //reload_timer();
+  prv_set_init_state();  
 }
   
 static void cw_no_forecast_handler() {
   #if defined (DEBUG)
     APP_LOG(APP_LOG_LEVEL_DEBUG, "cw_no_forecast handler");
-  #endif
-  //reload_timer();
+  #endif  
 }
  
 static void seconds_clock_handler() {
@@ -134,6 +161,13 @@ static void prv_init_timer(uint8_t swback_timeout) {
   }  
 }
   
-static void prv_timer_timeout_handler (void *context) {  
+static void prv_timer_timeout_handler(void *context) {  
   current_state->handler();
+}
+
+static void prv_timer_shake_handler(void *context) {
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Double shake timeout");
+  #endif
+  shakes = 0;
 }

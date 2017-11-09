@@ -87,6 +87,7 @@
       "NP_CityID",
       "TimeFont",
       "PebbleShakeAction",
+      "ShakeTwice",
       "dummy"
     ],
     "resources": {

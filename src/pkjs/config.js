@@ -42,7 +42,13 @@ module.exports = [
           }
         ],
         "defaultValue": "0"
-      },      
+      },
+      {
+        "type": "toggle",
+        "messageKey": "ShakeTwice",
+        "label": "Shake twice to perform action",
+        "defaultValue": false,
+      },
     ]
   },
   {
