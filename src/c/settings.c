@@ -406,6 +406,9 @@ void populate_settings(DictionaryIterator *iter, void *context) {
       APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather Error %d", w_error->value->uint8);
     #endif
     switch (w_error->value->uint8) {
+      case 0:
+        settings.WeatherStatus = WEATHER_OK;
+        break;
       case 1:
         settings.WeatherStatus = WEATHER_DISABLED;
         break;
@@ -425,10 +428,8 @@ void populate_settings(DictionaryIterator *iter, void *context) {
         settings.WeatherStatus = WEATHER_UNKNOWN_ERROR;
         break;
     }
-  } else {
-    settings.WeatherStatus = WEATHER_OK;
   }
-
+  
   Tuple *date_fmt = dict_find(iter, MESSAGE_KEY_DateFormat);
   if (date_fmt) {
     strcpy(settings.DateFormat, date_fmt->value->cstring);    
