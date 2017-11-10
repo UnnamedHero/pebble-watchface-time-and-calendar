@@ -46,7 +46,7 @@ module.exports = [
       {
         "type": "toggle",
         "messageKey": "ShakeTwice",
-        "label": "Shake twice to perform action",
+        "label": "Shake several times to perform action",
         "defaultValue": false,
       },
     ]

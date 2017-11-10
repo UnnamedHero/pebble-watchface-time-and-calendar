@@ -69,6 +69,6 @@ module.exports = {
     "Do nothing": "Ничего не делать",
     "Show forecast": "Показать прогноз погоды",
     "Show seconds": "Показать секунды",
-    "Shake twice to perform action": "Потрясти дважды для выполнения действия",
+    "Shake twice to perform action": "Потрясти несколько раз для выполнения действия",
     "Seconds are shown for, in seconds": "Секунды показываются в течении, в секундах"
   };
