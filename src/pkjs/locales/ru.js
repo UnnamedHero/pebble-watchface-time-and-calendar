@@ -32,7 +32,7 @@ module.exports = {
     "double short pulse" : "двойная короткая",
     "triple short pulse" : "тройная короткая",
     "long pulse" : "однократная длинная",
-    "Vide on phone disconnect" : "Вибрировать при потере связи с телефоном",
+    "Vibe on phone disconnect" : "Вибрировать при потере связи с телефоном",
     "Periodic Vibration" : "Периодическая вибрация",
     "Period" : "Периодичность",
     "Calendar settings" : "Настройка календаря",
@@ -69,6 +69,9 @@ module.exports = {
     "Do nothing": "Ничего не делать",
     "Show forecast": "Показать прогноз погоды",
     "Show seconds": "Показать секунды",
-    "Shake twice to perform action": "Потрясти несколько раз для выполнения действия",
-    "Seconds are shown for, in seconds": "Секунды показываются в течении, в секундах"
+    "Shake several times to perform action": "Потрясти несколько раз для срабатывания действия",
+    "Seconds are shown for, in seconds": "Секунды показываются в течении, в секундах",
+    "If you have any trouble with configuration, please read <a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki'>this article</a>" : "Если у Вас возникли вопросы по настройке, пожалуйста прочтите <a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/ru:Home'>эту статью</a>",
+    "<a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/en%3Asettings#city-id'>Where can I get my city ID?</a>": "<a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/ru%3Asettings#city-id'>Где мне взять код города?</a>",
+    "<a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/en%3Asettings#shake-twice'>How to do shakes right</a>": "<a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/ru%3Asettings#shake-twice'>Как правильно трясти часами</a>"
   };

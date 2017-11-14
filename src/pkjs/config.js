@@ -4,6 +4,10 @@ module.exports = [
     "defaultValue": "Watchface configuration"
   },
   {
+    "type": "text",
+    "defaultValue": "If you have any trouble with configuration, please read <a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki'>this article</a>"
+  },
+  {
     "type": "section",
     "items": [
       {
@@ -49,6 +53,10 @@ module.exports = [
         "label": "Shake several times to perform action",
         "defaultValue": false,
       },
+      {
+        "type": "text",
+        "defaultValue": "<a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/en%3Asettings#shake-twice'>How to do shakes right</a>"
+      }
     ]
   },
   {
@@ -324,7 +332,7 @@ module.exports = [
         {
           "type": "text",          
           "group" : "weather_id",
-          "defaultValue": "Get city ID on <a href='http://openweathermap.org/find'>OpenWeatherMap site</a>. Type in search form your city's name, click 'Search', then click on your city in search results"
+          "defaultValue": "<a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/en%3Asettings#city-id'>Where can I get my city ID?</a>"
         },
         {
           "type": "input",          
@@ -487,7 +495,7 @@ module.exports = [
         "type": "toggle",
         "messageKey": "VibrateDisconnected",
         "id": "VibrateDisconnected",
-        "label": "Vide on phone disconnect",
+        "label": "Vibe on phone disconnect",
         "defaultValue": true
       },
       {
@@ -541,7 +549,7 @@ module.exports = [
             "value": "3h"
           }
         ],
-        "defaultValue": "1h"
+        "defaultValue": "60"
       },
       {
         "type": "select",
