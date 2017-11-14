@@ -93,16 +93,20 @@ static void prv_ticktimer_clock(struct tm* unneeded) {
 void update_weather(bool force) {
   if (settings_get_WeatherStatus() == WEATHER_API_INVALID || \
       settings_get_WeatherStatus() == WEATHER_API_NOT_SET) {
-    #if defined (DEBUG) 
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "API key is bad, disable weather request");
-    #endif
+    if (!force) {
+      #if defined (DEBUG) 
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "API key is bad, disable weather request");
+      #endif
       return;
+    }
   }
   if (settings_get_WeatherStatus() == WEATHER_LOCATION_ID_INVALID) {
+    if (!force) {
     #if defined (DEBUG)
       APP_LOG(APP_LOG_LEVEL_DEBUG, "City ID invalid, disable weather request");
-    #endif
+    #endif      
     return;
+    }
   }
   if (!force) {
    if (!is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {

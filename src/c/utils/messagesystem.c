@@ -41,12 +41,12 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
       APP_LOG(APP_LOG_LEVEL_DEBUG, "Config received");
     #endif
     populate_settings(iter, context);
-    if (settings_get_WeatherStatus() == WEATHER_OK) {
+    //if (settings_get_WeatherStatus() == WEATHER_OK) {
       ready_for_weather(true);
-      if (settings_get_ForecastEnabled()) {
+//      if (settings_get_ForecastEnabled()) {
         ready_for_forecast(true);
-      }
-    }
+  //    }
+//    }
   }
 
   Tuple *w_error = dict_find(iter, MESSAGE_KEY_WeatherError);
@@ -55,7 +55,8 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
       APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather Error received.");      
     #endif
     populate_settings(iter, context);
-    if (w_error->value->uint8 > 2) { 
+    uint8_t w_err = w_error->value->uint8;
+    if (w_err > 2) { 
       return;
     }
   }
