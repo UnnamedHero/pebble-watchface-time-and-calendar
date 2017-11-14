@@ -306,7 +306,7 @@ function locationSuccess(pos) {
 function setInvalidLocationID() {
   clayHelperSetItem('LocationID', 'invalid_id');
   sendWeather({
-    "ConfigMarker": true,
+//    "ConfigMarker": true,
     "WeatherError": messages.invalid_location_id,
   });
 }
@@ -316,7 +316,7 @@ function setInvalidAPIKey() {
   clayHelperSetItem('WeatherAPIKey', message)
 
   var bad_api = {
-      "ConfigMarker": true,
+      //"ConfigMarker": true,
       "WeatherError": messages.api_key_invalid,
     };  
     sendWeather(bad_api);
@@ -324,16 +324,14 @@ function setInvalidAPIKey() {
 
 function setUnknownError() {
   sendWeather({
-    'ConfigMarker': true,
+//    'ConfigMarker': true,
     'WeatherError': messages.unknown_error,
   });
 }
 function locationError(err) {  
   console.log('location ERROR: '+err.message);
-  var typeMarker = isForecast ? 'WeatherMarkerForecast' : 'WeatherMarker';
   sendWeather ({
-    [typeMarker]: true,
-    "ConfigMarker": true,
+  //  "ConfigMarker": true,
   	"WeatherError": messages.location_error,
   });
 }
