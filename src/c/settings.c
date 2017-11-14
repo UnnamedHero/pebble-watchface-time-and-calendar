@@ -235,7 +235,8 @@ static PERIOD get_period (char *settings_per) {
   if (strcmp(settings_per, "3h") == 0) {
       return P_3H;
   }
-  return P_6H;
+    
+  return P_1H;
 }
 
 PERIOD settings_get_VibratePeriodicPeroid() {
@@ -490,7 +491,7 @@ void populate_settings(DictionaryIterator *iter, void *context) {
 
   Tuple *vibr_disconn = dict_find(iter, MESSAGE_KEY_VibrateDisconnected);
   if (vibr_disconn) {
-    settings.VibrateDisconnected = vibr_onqt->value->uint8;
+    settings.VibrateDisconnected = vibr_disconn->value->uint8;
   }
 
   Tuple *vibr_disconn_type = dict_find(iter, MESSAGE_KEY_VibrateDisconnectedType);
