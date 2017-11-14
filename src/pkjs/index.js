@@ -86,7 +86,7 @@ Pebble.addEventListener('appmessage', function(e) {
   if (providerKey === 'disable') {
     
     sender.send({
-      'ConfigMarker': true,
+//      'ConfigMarker': true,
       "WeatherError": messages.weather_disabled,      
     });
     return;
