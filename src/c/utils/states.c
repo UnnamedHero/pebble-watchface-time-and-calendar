@@ -28,16 +28,18 @@ static void prv_init_states();
 static void manage_shakes() {
   if (!settings_get_ShakeTwice()) {
     current_state->handler();
+    return;
+  }
+  if (current_state == &clock_and_weather_forecast || current_state == &seconds_clock_showing) {
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Shake one time to switch back");
+  #endif
+    shakes = 0;
+    current_state->handler();
+    return;
   }
   switch (shakes) {
     case 0:
-      if (current_state == &clock_and_weather_forecast || current_state == &seconds_clock_showing) {
-        #if defined (DEBUG)
-          APP_LOG(APP_LOG_LEVEL_DEBUG, "Shake one time to switch back");
-        #endif
-        current_state->handler();
-        return;
-      }
       #if defined (DEBUG)
         APP_LOG(APP_LOG_LEVEL_DEBUG, "Shakes+1");
       #endif
