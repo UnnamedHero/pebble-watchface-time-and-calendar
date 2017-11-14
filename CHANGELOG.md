@@ -1,4 +1,9 @@
 # Changelog
+#### 0.41.0 (beta)
+ - fix settings update handler
+ - fix vibrate on disconnect option
+ - fix typos in settings
+ - add links to Github wiki in settings
 
 #### 0.40.0 (beta)
  - improve GPS location handling, reduce battery consumption

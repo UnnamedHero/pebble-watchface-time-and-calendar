@@ -49,7 +49,7 @@ Development versions can be downloaded from [google drive](https://drive.google.
 
 Lastest stable version is 0.35.0 (available in [Pebble Store](https://apps.getpebble.com/applications/596fb1650dfc321335000144))
 
-Lastest beta version is [0.37.0](https://drive.google.com/open?id=0B9g5sjcPqSJfNzhlakxBQjU4MjQ)
+Lastest beta version is [0.41.0](https://drive.google.com/open?id=18wiNH5LI-qDOieaxRh0uQCvheG4HKKvH)
 
 You can support me -> donate to [Paypal](https://www.paypal.me/eugenemikhaylov)
 
