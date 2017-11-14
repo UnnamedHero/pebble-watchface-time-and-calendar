@@ -23,10 +23,6 @@ module.exports = function(minified) {
       } else if (dataToggleReversed[master]) {
           this.get() !== dataToggleReversed[master] ? slaveItem.disable() : slaveItem.enable();
       } else {
-  
-      // if (master === 'ForecastType') {
-      //   this.get() === 'ft_off' ? slaveItem.enable() : slaveItem.disable();
-      // } else {
         this.get() ? slaveItem.enable() : slaveItem.disable();
       }
     });
