@@ -82,16 +82,6 @@ static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
     GTextOverflowModeWordWrap, \
     GTextAlignmentCenter, \
     NULL);
-/*
-  if (settings_get_WeatherAPIKeyStatus() != API_OK) {
-    graphics_draw_text(ctx, "C" , \
-    statuses_font, \
-    GRect (20, 0, 20, 20), \
-    GTextOverflowModeWordWrap, \
-    GTextAlignmentCenter, \
-    NULL);
-  }
-*/
 
   if (settings_get_WeatherStatus() != WEATHER_OK) {
     char weather_err_symbol[2] = {"B"};
@@ -107,7 +97,6 @@ static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
     NULL);
   }
   
-
   if (is_quiet_time()) {
     graphics_draw_text(ctx, "D" , \
     statuses_font, \
