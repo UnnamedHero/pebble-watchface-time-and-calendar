@@ -1,5 +1,8 @@
 #simple automate 
 
+#specify PEBBLE_PHONE in .env file
+include .env
+
 build:
 	pebble build -- --enable-debug
 
@@ -47,6 +50,5 @@ shot:
 
 shot_dio:
 	PEBBLE_PHONE="" pebble screenshot --emulator diorite	
-
 	
 .PHONY: test build
