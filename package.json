@@ -10,6 +10,9 @@
     "Calendar",
     "Weather"
   ],
+  "scripts": {
+    "build": "NODE_ENV=production babel src/js --out-dir src/pkjs"
+  },
   "private": true,
   "dependencies": {
     "pebble-clay": "^1.0.4"
@@ -154,5 +157,14 @@
         }
       ]
     }
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-eslint": "^9.0.0",
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
   }
 }
