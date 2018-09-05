@@ -1,24 +1,7 @@
-
-function getLang () {
-  const countryCodes = {
-    'ru-RU' : 'ru',
-    'en-US' : 'en'
-  };
-  const lang = countryCodes[navigator.language];
-  return lang ? lang : 'en';
-}
-
-exports.getLang = getLang;
-
-  var currentLocaleModulePath = './locales/' + getLang();
-  var defaultLocaleModulePath = './locales/en';
-
-  try {
-    var locale = require('./locales/'+getLang());
-  } catch (ex) {
-    var locale = require('./locales/en');
-  }
-
+const countryCodes = {
+  'ru-RU' : 'ru',
+  'en-US' : 'en'
+};
 function localizator(config) {
 
   function translateValue(val) {

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     "Watchface configuration" : "Настройка",
     "Date and time settings" : "Настройка даты и времени",
     "Clock format" : "Настройка отображения времени",
