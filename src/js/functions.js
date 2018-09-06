@@ -1,86 +1,110 @@
-module.exports = function(minified) {
-  var clayConfig = this;
+export default function () {
+  const clayConfig = this;
 
-  function toggleItem(master, slave) {
-       master.get() ? slave.enable() : slave.disable();
-  }
+  // const toggleItem = (master, slave) => {
+  //      master.get() ? slave.enable() : slave.disable();
+  // }
 
-  var dataToggle = {
-    'ForecastType': 'ft_off',
-    
-  };
+  // const dataToggle = {
+  //   ForecastType: 'ft_off',
+  // };
 
-  var dataToggleReversed = {
-    'PebbleShakeAction': '2',
-  };
+  // const dataToggleReversed = {
+  //   PebbleShakeAction: '2',
+  // };
 
-  function registerToggle(master, slave, type) {    
-    var masterItem = clayConfig.getItemByMessageKey(master);
-    var slaveItem = clayConfig.getItemByMessageKey(slave);
-    masterItem.on('change', function() {
-      if (dataToggle[master]) {
-        this.get() !== dataToggle[master] ? slaveItem.enable() : slaveItem.disable();
-      } else if (dataToggleReversed[master]) {
-          this.get() !== dataToggleReversed[master] ? slaveItem.disable() : slaveItem.enable();
+  const registerToggle = items => items.forEach((item) => {
+    const [master, slave] = item;
+    const masterItem = clayConfig.getItemByMessageKey(master);
+    const slaveItem = clayConfig.getItemByMessageKey(slave);
+    masterItem.on('change', () => {
+      if (masterItem.get()) {
+        slaveItem.enable();
       } else {
-        this.get() ? slaveItem.enable() : slaveItem.disable();
+        slaveItem.disable();
       }
     });
     masterItem.trigger('change');
-  }
+    //   if (dataToggle[master]) {
+    //     this.get() !== dataToggle[master] ? slaveItem.enable() : slaveItem.disable();
+    //   } else if (dataToggleReversed[master]) {
+    //       this.get() !== dataToggleReversed[master] ? slaveItem.disable() : slaveItem.enable();
+    //   } else {
+    //     this.get() ? slaveItem.enable() : slaveItem.disable();
+    //   }
+    // });
+  });
 
-  function registerGroupHideById(master, masterValue, group) {
-    var masterItem = clayConfig.getItemById(master);
-    
-    var items = clayConfig.getItemsByGroup(group);
-    masterItem.on('change', function () {
-      items.forEach(function(item) {
-        masterItem.get() === masterValue ? item.show() : item.hide();
-      });  
-    });
-    masterItem.trigger('change');    
-  }
+  // function registerGroupHideById(master, masterValue, group) {
+  //   var masterItem = clayConfig.getItemById(master);
 
-  function toggleItemByGroup(showGroup, hideGroup) {
-    clayConfig.getItemsByGroup(showGroup).forEach(function(item) {
-      item.show();
-    });
-    clayConfig.getItemsByGroup(hideGroup).forEach(function(item) {
-      item.hide();
-    });
-  }
+  //   var items = clayConfig.getItemsByGroup(group);
+  //   masterItem.on('change', function () {
+  //     items.forEach(function(item) {
+  //       masterItem.get() === masterValue ? item.show() : item.hide();
+  //     });
+  //   });
+  //   masterItem.trigger('change');
+  // }
 
-  function weatherF() {
+  // function toggleItemByGroup(showGroup, hideGroup) {
+  //   clayConfig.getItemsByGroup(showGroup).forEach(function(item) {
+  //     item.show();
+  //   });
+  //   clayConfig.getItemsByGroup(hideGroup).forEach(function(item) {
+  //     item.hide();
+  //   });
+  // }
+
+  const showGroups = groups => groups
+    .forEach((group) => {
+      clayConfig.getItemsByGroup(group)
+        .forEach((item) => {
+          item.show();
+        });
+    });
+
+  const hideGroups = groups => groups
+    .forEach((group) => {
+      clayConfig.getItemsByGroup(group)
+        .forEach((item) => {
+          item.hide();
+        });
+    });
+
+
+  const weatherF = () => {
     switch (this.get()) {
-      case 'OWM': 
-        toggleItemByGroup('OWM', '');
-        toggleItemByGroup('weather', '');
+      case 'OWM':
+        showGroups(['OWM', 'weather']);
         clayConfig.getItemById('WeatherLocationType').trigger('change');
         break;
       case 'disable':
-        toggleItemByGroup('', 'weather');
-        toggleItemByGroup('', 'OWM');
-        toggleItemByGroup('', 'weather_id');
+        hideGroups(['OWM', 'weather', 'weather_id']);
+        break;
+      default:
         break;
     }
-  }
+  };
 
-  function weatherToggle() {
-    var masterItem = clayConfig.getItemByMessageKey('WeatherProvider');
+  const weatherToggle = () => {
+    const masterItem = clayConfig.getItemByMessageKey('WeatherProvider');
     masterItem.on('change', weatherF);
     weatherF.call(masterItem);
-  }
+  };
 
-  clayConfig.on(clayConfig.EVENTS.AFTER_BUILD, function() {
-    registerToggle('VibrateConnected', 'VibrateConnectedType');
-    registerToggle('VibrateDisconnected', 'VibrateDisconnectedType');
-    registerToggle('VibratePeriodic', 'VibratePeriodicType');
-    registerToggle('VibratePeriodic', 'VibratePeriodicPeroid');
-    registerToggle('QuietTime', 'QuietTimeBegin');
-    registerToggle('QuietTime', 'QuietTimeEnd');
-    registerToggle('ForecastType', 'SwitchBackTimeout');
-    registerToggle('PebbleShakeAction', 'SwitchBackTimeoutSeconds');
-    registerGroupHideById('WeatherLocationType', 'cid', 'weather_id');   
+  clayConfig.on(clayConfig.EVENTS.AFTER_BUILD, () => {
+    registerToggle([
+      ['VibrateConnected', 'VibrateConnectedType'],
+      ['VibrateDisconnected', 'VibrateDisconnectedType'],
+      ['VibratePeriodic', 'VibratePeriodicType'],
+      ['VibratePeriodic', 'VibratePeriodicPeroid'],
+      ['QuietTime', 'QuietTimeBegin'],
+      ['QuietTime', 'QuietTimeEnd'],
+      ['ForecastType', 'SwitchBackTimeout'],
+      ['PebbleShakeAction', 'SwitchBackTimeoutSeconds'],
+      ['WeatherLocationType', 'cid', 'weather_id'],
+    ]);
     weatherToggle();
   });
-};
+}
