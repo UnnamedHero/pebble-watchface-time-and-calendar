@@ -1,21 +1,21 @@
-var Clay = require('pebble-clay');
-var clayConfig = require('./config');
-var customFunctions = require('./functions');
-var messageKeys = require('message_keys');
-var i18n = require('./localizator');
-var sender = require('./sender');
-var messages = require('./weather_providers/weather-helpers').weather_messages;
+import Clay from 'pebble-clay';
+import messageKeys from 'message_keys'; //eslint-disable-line
+import clayConfig from './config';
+import customFunctions from './functions';
+import localizator from './localizator';
+import sendToPebble from './sender';
 
-var clay = new Clay(i18n.translate(clayConfig), customFunctions, { autoHandleEvents: false });
+let messages = require('./weather_providers/weather-helpers').weather_messages;
 
-console.log(messageKeys.QuietTimeBegin);
+const clay = new Clay(localizator(clayConfig), customFunctions, { autoHandleEvents: false });
 
-Pebble.addEventListener('showConfiguration', function(e) {
+// console.log(messageKeys.QuietTimeBegin);
 
-  Pebble.openURL(clay.generateUrl());
+Pebble.addEventListener('showConfiguration', () => { //eslint-disable-line
+  Pebble.openURL(clay.generateUrl()); //eslint-disable-line
 });
 
-Pebble.addEventListener('webviewclosed', function(e) {
+Pebble.addEventListener('webviewclosed', (e) => { //eslint-disable-line
   if (e && !e.response) {
     return;
   }
@@ -24,83 +24,75 @@ Pebble.addEventListener('webviewclosed', function(e) {
   //   console.log(item + ":"+" "+ messageKeys[item]);
   // });
 
-  var dict = clay.getSettings(e.response);
+  const dict = clay.getSettings(e.response);
   // Object.keys(dict).forEach(function(item) {
   //   console.log(item + ":"+" "+ dict[item]);
   // });
 
-  var watch = Pebble.getActiveWatchInfo();
-  if (watch.platform === 'aplite') {  
-    var qtb = dict[messageKeys.QuietTimeBegin].split(":",2);
-    var qte = dict[messageKeys.QuietTimeEnd].split(":",2);
+  const watch = Pebble.getActiveWatchInfo(); //eslint-disable-line
+  if (watch.platform === 'aplite') {
+    const qtb = dict[messageKeys.QuietTimeBegin].split(':', 2);
+    const qte = dict[messageKeys.QuietTimeEnd].split(':', 2);
     dict[messageKeys.QuietTimeBegin] = parseInt(qtb[0], 10);
     dict[messageKeys.QuietTimeBegin + 1] = parseInt(qtb[1], 10);
     dict[messageKeys.QuietTimeEnd] = parseInt(qte[0], 10);
     dict[messageKeys.QuietTimeEnd + 1] = parseInt(qte[1], 10);
   }
-  var dateFormat = dict[messageKeys.DateFormat];
-  var dateSeparator = dict[messageKeys.DateFormatSeparator];
-  var newDateFormat = dateFormat.replace(new RegExp ('\\.','g'), dateSeparator);
+  const dateFormat = dict[messageKeys.DateFormat];
+  const dateSeparator = dict[messageKeys.DateFormatSeparator];
+  const newDateFormat = dateFormat.replace(new RegExp('\\.', 'g'), dateSeparator);
   dict[messageKeys.DateFormat] = newDateFormat;
   dict[messageKeys.ConfigMarker] = true;
 
-  var sw_timeout_str = dict[messageKeys.SwitchBackTimeout];
-  dict[messageKeys.SwitchBackTimeout] = parseInt(sw_timeout_str, 10);
-  
-  var sw_secs_timeout_str = dict[messageKeys.SwitchBackTimeoutSeconds];
-  dict[messageKeys.SwitchBackTimeoutSeconds] = parseInt(sw_secs_timeout_str, 10);
+  const switchBackTimeout = dict[messageKeys.SwitchBackTimeout];
+  dict[messageKeys.SwitchBackTimeout] = parseInt(switchBackTimeout, 10);
 
-  var psa_str=dict[messageKeys.PebbleShakeAction];
-  dict[messageKeys.PebbleShakeAction] = parseInt(psa_str, 10);
-  
-  var mySettings = {
-    'WeatherAPIKey' : dict[messageKeys.WeatherAPIKey],
-    'NP_CityID': dict[messageKeys.NP_CityID],
-    'NP_WeatherLocationType': dict[messageKeys.NP_WeatherLocationType],
+  const switchBackTimeoutSeconds = dict[messageKeys.SwitchBackTimeoutSeconds];
+  dict[messageKeys.SwitchBackTimeoutSeconds] = parseInt(switchBackTimeoutSeconds, 10);
+
+  const pebbleShakeAction = dict[messageKeys.PebbleShakeAction];
+  dict[messageKeys.PebbleShakeAction] = parseInt(pebbleShakeAction, 10);
+
+  const helperSettings = {
+    WeatherAPIKey: dict[messageKeys.WeatherAPIKey],
+    NP_CityID: dict[messageKeys.NP_CityID],
+    NP_WeatherLocationType: dict[messageKeys.NP_WeatherLocationType],
   };
-  
-  localStorage.setItem('clay-helper', JSON.stringify(mySettings));
-  sender.send(dict);
+
+  localStorage.setItem('clay-helper', JSON.stringify(helperSettings));
+  sendToPebble(dict);
 });
 
 
-Pebble.addEventListener('ready',
-  function(e) {
-    console.log('PebbleKit JS ready!');
-    sender.send({'JSReady': 1});
-  }
-);
+Pebble.addEventListener('ready', () => { //eslint-disable-line
+  console.log('PebbleKit JS ready!');
+  sendToPebble({ JSReady: 1 });
+});
 
-var providers =  {
-  'OWM' : './weather_providers/openweathermap',
-  'disable': 'dummy',
-}
+let providers = {
+  OWM: './weather_providers/openweathermap',
+  disable: 'dummy',
+};
 
-Pebble.addEventListener('appmessage', function(e) {
-
-  var dict = e.payload;
-//  var provider = require('./weather_providers/dummy');
-  var clay = localStorage.getItem('clay-settings');  
-  var providerKey = clay ? JSON.parse(localStorage.getItem('clay-settings')).WeatherProvider : 'disable';
-  //console.log(providerKey);
+Pebble.addEventListener('appmessage', (e) => { //eslint-disable-line
+  const message = e.payload;
+  const claySettings = localStorage.getItem('clay-settings');
+  const providerKey = claySettings ? JSON.parse(localStorage.getItem('clay-settings')).WeatherProvider : 'disable';
   if (providerKey === 'disable') {
-    
-    sender.send({
-//      'ConfigMarker': true,
-      "WeatherError": messages.weather_disabled,      
+    sendToPebble({
+      WeatherError: messages.weather_disabled,
     });
     return;
   }
-  var provider = require(providers[providerKey]);    
+  const provider = require(providers[providerKey]);
 
-  if (dict.WeatherMarkerForecast === 1) {
+  if (message.WeatherMarkerForecast === 1) {
     console.log("Go for a forecast");
     provider.getWeather('forecast');
     return;
   }
-  if (dict.WeatherMarker === 1) {
+  if (message.WeatherMarker === 1) {
     console.log("Go for a weather");
     provider.getWeather();
-    return;
   }
 });
