@@ -6,6 +6,7 @@ const countryCodes = {
 };
 
 const locales = {
+  en: {},
   ru,
 };
 
