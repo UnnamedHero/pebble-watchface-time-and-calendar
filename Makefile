@@ -6,10 +6,10 @@ include .env
 babel:
 	npm run build
 
-build:
+build: babel
 	pebble build -- --enable-debug
 
-build-release:
+build-release: babel
 	pebble build 
 
 test:	
