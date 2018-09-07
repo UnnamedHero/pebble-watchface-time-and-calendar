@@ -1,15 +1,13 @@
+
 import Clay from 'pebble-clay';
 import messageKeys from 'message_keys'; //eslint-disable-line
 import clayConfig from './config';
 import customFunctions from './functions';
 import localizator from './localizator';
 import sendToPebble from './sender';
-
-let messages = require('./weather_providers/weather-helpers').weather_messages;
+import getWeather from './weather';
 
 const clay = new Clay(localizator(clayConfig), customFunctions, { autoHandleEvents: false });
-
-// console.log(messageKeys.QuietTimeBegin);
 
 Pebble.addEventListener('showConfiguration', () => { //eslint-disable-line
   Pebble.openURL(clay.generateUrl()); //eslint-disable-line
@@ -20,14 +18,7 @@ Pebble.addEventListener('webviewclosed', (e) => { //eslint-disable-line
     return;
   }
 
-  // Object.keys(messageKeys).forEach(function(item) {
-  //   console.log(item + ":"+" "+ messageKeys[item]);
-  // });
-
   const dict = clay.getSettings(e.response);
-  // Object.keys(dict).forEach(function(item) {
-  //   console.log(item + ":"+" "+ dict[item]);
-  // });
 
   const watch = Pebble.getActiveWatchInfo(); //eslint-disable-line
   if (watch.platform === 'aplite') {
@@ -63,36 +54,31 @@ Pebble.addEventListener('webviewclosed', (e) => { //eslint-disable-line
   sendToPebble(dict);
 });
 
-
 Pebble.addEventListener('ready', () => { //eslint-disable-line
   console.log('PebbleKit JS ready!');
   sendToPebble({ JSReady: 1 });
 });
 
-let providers = {
-  OWM: './weather_providers/openweathermap',
-  disable: 'dummy',
+const makeWeatherOptions = (isForecast) => {
+  const claySettings = JSON.parse(localStorage.getItem('clay-settings') || '{}');
+  return {
+    // TODO: dev
+    // provider: claySettings.WeatherProvider,
+    provider: 'OWM',
+    apiKey: claySettings.WeatherAPIKey || 'not_set',
+    locationType: claySettings.NP_WeatherLocationType,
+    cityId: claySettings.NP_CityID || 'not_set',
+    units: claySettings.WeatherUnits,
+    type: isForecast ? 'forecast' : 'weather',
+    forecastType: claySettings.ForecastType,
+  };
 };
 
-Pebble.addEventListener('appmessage', (e) => { //eslint-disable-line
+Pebble.addEventListener('appmessage', async (e) => { //eslint-disable-line
   const message = e.payload;
-  const claySettings = localStorage.getItem('clay-settings');
-  const providerKey = claySettings ? JSON.parse(localStorage.getItem('clay-settings')).WeatherProvider : 'disable';
-  if (providerKey === 'disable') {
-    sendToPebble({
-      WeatherError: messages.weather_disabled,
-    });
-    return;
-  }
-  const provider = require(providers[providerKey]);
+  const isForecastRequest = message.WeatherMarkerForecast === 1;
+  const options = makeWeatherOptions(isForecastRequest);
 
-  if (message.WeatherMarkerForecast === 1) {
-    console.log("Go for a forecast");
-    provider.getWeather('forecast');
-    return;
-  }
-  if (message.WeatherMarker === 1) {
-    console.log("Go for a weather");
-    provider.getWeather();
-  }
+  const pebbleWeather = await getWeather(options);
+  sendToPebble(pebbleWeather);
 });
