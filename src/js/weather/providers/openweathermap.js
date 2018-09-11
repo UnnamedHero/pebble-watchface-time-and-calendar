@@ -39,7 +39,7 @@ const getTemperatureUnits = (unitsKey) => {
 
 export const makeUrl = async (options) => {
   const addr = 'http://api.openweathermap.org/data/2.5/';
-  const requestType = options.isForecast ? 'forecast' : 'weather';
+  const requestType = options.type;
   const { errors, location } = await getLocation(options);
   // const errors = {};
   // const location = '?id=524901';
@@ -90,7 +90,7 @@ const makeForecast = (weather, forecastType) => {
 };
 
 export const makeWeatherObj = (options, weatherResponse) => {
-  if (options.isForecast) {
+  if (options.type === 'forecast') {
     return makeForecast(weatherResponse, options.forecastType);
   }
   return makeWeather(weatherResponse);
