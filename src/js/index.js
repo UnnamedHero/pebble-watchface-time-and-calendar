@@ -45,9 +45,12 @@ Pebble.addEventListener('webviewclosed', (e) => { //eslint-disable-line
   dict[messageKeys.PebbleShakeAction] = parseInt(pebbleShakeAction, 10);
 
   const helperSettings = {
-    WeatherAPIKey: dict[messageKeys.WeatherAPIKey],
-    NP_CityID: dict[messageKeys.NP_CityID],
-    NP_WeatherLocationType: dict[messageKeys.NP_WeatherLocationType],
+    provider: dict[messageKeys.WeatherProvider],
+    apiKey: dict[messageKeys.WeatherAPIKey],
+    cityId: dict[messageKeys.NP_CityID],
+    locationType: dict[messageKeys.NP_WeatherLocationType],
+    units: dict[messageKeys.WeatherUnits],
+    forecastType: dict[messageKeys.ForecastType],
   };
 
   localStorage.setItem('clay-helper', JSON.stringify(helperSettings));
@@ -59,26 +62,14 @@ Pebble.addEventListener('ready', () => { //eslint-disable-line
   sendToPebble({ JSReady: 1 });
 });
 
-const makeWeatherOptions = (isForecast) => {
-  const claySettings = JSON.parse(localStorage.getItem('clay-settings') || '{}');
-  return {
-    // TODO: dev
-    // provider: claySettings.WeatherProvider,
-    provider: 'OWM',
-    apiKey: claySettings.WeatherAPIKey || 'not_set',
-    locationType: claySettings.NP_WeatherLocationType,
-    cityId: claySettings.NP_CityID || 'not_set',
-    units: claySettings.WeatherUnits,
-    type: isForecast ? 'forecast' : 'weather',
-    forecastType: claySettings.ForecastType,
-  };
-};
-
 Pebble.addEventListener('appmessage', async (e) => { //eslint-disable-line
   const message = e.payload;
   const isForecastRequest = message.WeatherMarkerForecast === 1;
-  const options = makeWeatherOptions(isForecastRequest);
-
+  const data = JSON.parse(localStorage.getItem('clay-helper') || '{}');
+  const options = {
+    ...data,
+    type: isForecastRequest ? 'forecast' : 'weather',
+  };
   const pebbleWeather = await getWeather(options);
   sendToPebble(pebbleWeather);
 });
