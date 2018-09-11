@@ -19,6 +19,9 @@ export default function () {
     // // const [master, slave] = item;
     // Disabled due to babel polyfill error
     const masterItem = clayConfig.getItemByMessageKey(item[0]);
+    if (!masterItem) {
+      return;
+    }
     console.log(`i: ${item[0]}, ${masterItem}`);
     const slaveItem = clayConfig.getItemByMessageKey(item[1]);
     masterItem.on('change', () => {
