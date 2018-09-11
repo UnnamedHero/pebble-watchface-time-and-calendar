@@ -117,11 +117,27 @@ export default function () {
         },
       },
     },
+    {
+      selectId: 'WeatherLocationType',
+      values: {
+        gps: {
+          hideGroups: ['weather_id'],
+          showGroups: [],
+        },
+        cid: {
+          hideGroups: [],
+          showGroups: ['weather_id'],
+        },
+      },
+    },
   ];
 
   const registerSelectToggles = () => toggleSelectTable
     .forEach((select) => {
       const item = clayConfig.getItemById(select.selectId);
+      if (!item) {
+        return;
+      }
       item.on('change', () => {
         const groups = select.values[item.get()];
         showGroups(groups.showGroups);
