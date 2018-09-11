@@ -14,9 +14,13 @@ export default function () {
   // };
 
   const registerToggle = items => items.forEach((item) => {
-    const [master, slave] = item;
-    const masterItem = clayConfig.getItemByMessageKey(master);
-    const slaveItem = clayConfig.getItemByMessageKey(slave);
+    // const master = item[0];
+    // const slave = item[1];
+    // // const [master, slave] = item;
+    // Disabled due to babel polyfill error
+    const masterItem = clayConfig.getItemByMessageKey(item[0]);
+    console.log(`i: ${item[0]}, ${masterItem}`);
+    const slaveItem = clayConfig.getItemByMessageKey(item[1]);
     masterItem.on('change', () => {
       if (masterItem.get()) {
         slaveItem.enable();
