@@ -78,6 +78,7 @@ export default function () {
 
 
   const weatherF = () => {
+    console.log(this.get());
     switch (this.get()) {
       case 'OWM':
         showGroups(['OWM', 'weather']);
@@ -97,6 +98,41 @@ export default function () {
     weatherF.call(masterItem);
   };
 
+  // const toggleBySelectValue
+
+  const toggleSelectTable = [
+    {
+      selectId: 'WeatherProvider',
+      values: {
+        OWM: {
+          hideGroups: [],
+          showGroups: ['OWM', 'weather'],
+          hook: () => {
+            clayConfig.getItemById('WeatherLocationType').trigger('change');
+          },
+        },
+        disable: {
+          hideGroups: ['OWM', 'weather', 'weather_id'],
+          showGroups: [],
+        },
+      },
+    },
+  ];
+
+  const registerSelectToggles = () => toggleSelectTable
+    .forEach((select) => {
+      const item = clayConfig.getItemById(select.selectId);
+      item.on('change', () => {
+        const groups = select.values[item.get()];
+        showGroups(groups.showGroups);
+        hideGroups(groups.hideGroups);
+        if (groups.hook) {
+          groups.hook();
+        }
+      });
+      item.trigger('change');
+    });
+
   clayConfig.on(clayConfig.EVENTS.AFTER_BUILD, () => {
     registerToggle([
       ['VibrateConnected', 'VibrateConnectedType'],
@@ -107,8 +143,9 @@ export default function () {
       ['QuietTime', 'QuietTimeEnd'],
       ['ForecastType', 'SwitchBackTimeout'],
       ['PebbleShakeAction', 'SwitchBackTimeoutSeconds'],
-      ['WeatherLocationType', 'cid', 'weather_id'],
+      // ['WeatherLocationType', 'cid', 'weather_id'],
     ]);
-    weatherToggle();
+    registerSelectToggles();
+    // weatherToggle();
   });
 }
