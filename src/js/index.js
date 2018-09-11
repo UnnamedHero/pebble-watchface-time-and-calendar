@@ -1,15 +1,13 @@
+
 import Clay from 'pebble-clay';
 import messageKeys from 'message_keys'; //eslint-disable-line
 import clayConfig from './config';
 import customFunctions from './functions';
 import localizator from './localizator';
 import sendToPebble from './sender';
-
-let messages = require('./weather_providers/weather-helpers').weather_messages;
+import getWeather from './weather';
 
 const clay = new Clay(localizator(clayConfig), customFunctions, { autoHandleEvents: false });
-
-// console.log(messageKeys.QuietTimeBegin);
 
 Pebble.addEventListener('showConfiguration', () => { //eslint-disable-line
   Pebble.openURL(clay.generateUrl()); //eslint-disable-line
@@ -20,14 +18,7 @@ Pebble.addEventListener('webviewclosed', (e) => { //eslint-disable-line
     return;
   }
 
-  // Object.keys(messageKeys).forEach(function(item) {
-  //   console.log(item + ":"+" "+ messageKeys[item]);
-  // });
-
   const dict = clay.getSettings(e.response);
-  // Object.keys(dict).forEach(function(item) {
-  //   console.log(item + ":"+" "+ dict[item]);
-  // });
 
   const watch = Pebble.getActiveWatchInfo(); //eslint-disable-line
   if (watch.platform === 'aplite') {
@@ -54,45 +45,31 @@ Pebble.addEventListener('webviewclosed', (e) => { //eslint-disable-line
   dict[messageKeys.PebbleShakeAction] = parseInt(pebbleShakeAction, 10);
 
   const helperSettings = {
-    WeatherAPIKey: dict[messageKeys.WeatherAPIKey],
-    NP_CityID: dict[messageKeys.NP_CityID],
-    NP_WeatherLocationType: dict[messageKeys.NP_WeatherLocationType],
+    provider: dict[messageKeys.WeatherProvider],
+    apiKey: dict[messageKeys.WeatherAPIKey],
+    cityId: dict[messageKeys.NP_CityID],
+    locationType: dict[messageKeys.NP_WeatherLocationType],
+    units: dict[messageKeys.WeatherUnits],
+    forecastType: dict[messageKeys.ForecastType],
   };
 
   localStorage.setItem('clay-helper', JSON.stringify(helperSettings));
   sendToPebble(dict);
 });
 
-
 Pebble.addEventListener('ready', () => { //eslint-disable-line
   console.log('PebbleKit JS ready!');
   sendToPebble({ JSReady: 1 });
 });
 
-let providers = {
-  OWM: './weather_providers/openweathermap',
-  disable: 'dummy',
-};
-
-Pebble.addEventListener('appmessage', (e) => { //eslint-disable-line
+Pebble.addEventListener('appmessage', async (e) => { //eslint-disable-line
   const message = e.payload;
-  const claySettings = localStorage.getItem('clay-settings');
-  const providerKey = claySettings ? JSON.parse(localStorage.getItem('clay-settings')).WeatherProvider : 'disable';
-  if (providerKey === 'disable') {
-    sendToPebble({
-      WeatherError: messages.weather_disabled,
-    });
-    return;
-  }
-  const provider = require(providers[providerKey]);
-
-  if (message.WeatherMarkerForecast === 1) {
-    console.log("Go for a forecast");
-    provider.getWeather('forecast');
-    return;
-  }
-  if (message.WeatherMarker === 1) {
-    console.log("Go for a weather");
-    provider.getWeather();
-  }
+  const isForecastRequest = message.WeatherMarkerForecast === 1;
+  const data = JSON.parse(localStorage.getItem('clay-helper') || '{}');
+  const options = {
+    ...data,
+    type: isForecastRequest ? 'forecast' : 'weather',
+  };
+  const pebbleWeather = await getWeather(options);
+  sendToPebble(pebbleWeather);
 });
