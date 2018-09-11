@@ -285,6 +285,7 @@ export default [
       {
         type: 'select',
         messageKey: 'WeatherProvider',
+        id: 'WeatherProvider',
         label: 'Weather provider',
         options: [
           {
