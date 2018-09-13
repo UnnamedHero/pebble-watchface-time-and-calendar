@@ -1,6 +1,7 @@
 import dateFns from 'date-fns';
 import messageKeys from 'message_keys'; //eslint-disable-line
 import { conditions, getWindDirectionSymbol, messages } from './weatherAttributeTables';
+import errorHandler from './errorHandler';
 
 const sunStorageKey = 'SunTimes';
 
@@ -80,11 +81,7 @@ const makeForecast = (forecast) => {
   };
 };
 
-export const makeError = code => ({
-  WeatherMarker: true,
-  WeatherError: code,
-});
-
+export const makeError = (code, type) => errorHandler(code, type);
 
 export default (data, type) => {
   switch (type) {
@@ -93,6 +90,6 @@ export default (data, type) => {
     case 'forecast':
       return makeForecast(data);
     default:
-      return makeError(data);
+      return makeError(data, type);
   }
 };
