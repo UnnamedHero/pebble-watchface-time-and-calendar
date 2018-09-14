@@ -41,8 +41,7 @@ export const makeUrl = async (options) => {
   const addr = 'http://api.openweathermap.org/data/2.5/';
   const requestType = options.type;
   const { errors, location } = await getLocation(options);
-  // const errors = {};
-  // const location = '?id=524901';
+  console.log(`location errer: ${errors.message}`);
   const temperatureUnits = getTemperatureUnits(options.units);
   const key = `&appid=${options.apiKey}`;
 
@@ -52,7 +51,7 @@ export const makeUrl = async (options) => {
 
 const makeWeather = weather => ({
   temperature: Math.round(weather.main.temp),
-  condition: weather.weather[0].id, // weather.sys.sunrise * 1000, weather.sys.sunset * 1000),
+  condition: weather.weather[0].id,
   // desc: weather.weather[0].description,
   timeStamp: weather.dt,
   pressure: Math.round(weather.main.pressure * 0.75) - 14,
