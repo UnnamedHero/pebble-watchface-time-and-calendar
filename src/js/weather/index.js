@@ -24,18 +24,22 @@ export default async (options) => {
     console.log(`makeUrl: ${errors.message}`);
     return makePebbleWeatherObject({ WeatherError: messages.location_error }, options.type);
   }
+
   let weatherResponse;
   try {
-    console.log(`try to get weather data with ${url}`);
     weatherResponse = await request(url);
   } catch (e) {
-    console.log(`error getting weather ${e}`);
     return makePebbleWeatherObject({ WeatherError: messages.unknown_error }, options.type);
   }
-  const weatherPOJO = JSON.parse(weatherResponse);
+
+  let weatherPOJO;
+  try {
+    weatherPOJO = JSON.parse(weatherResponse);
+  } catch (e) {
+    return makePebbleWeatherObject({ WeatherError: messages.unknown_error }, options.type);
+  }
 
   const code = String(weatherPOJO.cod);
-  console.log(`response code ${code} at ${options.type}`);
   if (code === '401') {
     return makePebbleWeatherObject({ WeatherError: messages.api_key_invalid });
   }
@@ -43,10 +47,8 @@ export default async (options) => {
     return makePebbleWeatherObject({ WeatherError: messages.invalid_location_id });
   }
   if (code !== '200') {
-    return makePebbleWeatherObject({ WeatherError: messages.unknown_error });
+    return makePebbleWeatherObject({ WeatherError: messages.unknown_error }, options.type);
   }
-  console.log('making weather object');
   const weatherObj = provider.makeWeatherObj(options, weatherPOJO);
-  console.log(`finally! getting PEBBLE weather object ${options.type}`);
   return makePebbleWeatherObject(weatherObj, options.type);
 };
