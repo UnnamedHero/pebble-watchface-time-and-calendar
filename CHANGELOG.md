@@ -1,5 +1,8 @@
 # Changelog
 
+#### 0.43.0 (beta)
+ - fix forecast condition symbol
+
 #### 0.42.0 (beta)
  - fix weather and forecast show
 
