@@ -47,7 +47,7 @@ Nearest plans:
 
 Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
-Lastest beta version is [0.42.0](https://drive.google.com/open?id=1Eiqmc9KHBo1RxGPe5BIO3UenVOhTfe57) 14/09/2018
+Lastest beta version is [0.43.0](https://drive.google.com/open?id=1-NKGUA00oibzvrihV0fiHY_OBQ9h0R4a) 14/09/2018
 
 You can support me -> donate to [Paypal](https://www.paypal.me/eugenemikhaylov)
 
