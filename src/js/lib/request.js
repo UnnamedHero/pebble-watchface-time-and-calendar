@@ -1,21 +1,12 @@
-export default (url, type = 'GET') => new Promise((resolve, reject) => {
+export default (url, type = 'GET') => new Promise((resolve) => {
   const xhr = new XMLHttpRequest();
-  xhr.onload = () => {
-    if (xhr.status >= 200 && xhr.status < 300) {
-      resolve(xhr.responseText);
-    } else {
-      reject(new Error({
-        status: xhr.status,
-        statusText: xhr.statusText,
-      }));
-    }
-  };
+  xhr.timeout = 10000;
+  xhr.onload = () => resolve(xhr.responseText);
   xhr.onerror = () => {
-    reject(new Error({
-      status: xhr.status,
-      statusText: xhr.statusText,
-    }));
+    // console.log(`error: ${JSON.stringify(xhr)}`);
+    resolve(JSON.stringify({ cod: '520' }));
   };
-  xhr.open(type, url);
+  xhr.ontimeout = () => resolve(JSON.stringify({ cod: '408' }));
+  xhr.open(type, url, true);
   xhr.send();
 });
