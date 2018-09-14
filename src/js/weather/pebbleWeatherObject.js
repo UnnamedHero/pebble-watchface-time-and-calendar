@@ -84,6 +84,10 @@ const makeForecast = (forecast) => {
 export const makeError = (code, type) => errorHandler(code, type);
 
 export default (data, type) => {
+  const { WeatherError } = data;
+  if (WeatherError) {
+    return makeError(data, type);
+  }
   switch (type) {
     case 'weather':
       return makeWeather(data);
