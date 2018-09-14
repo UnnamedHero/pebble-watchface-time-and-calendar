@@ -39,15 +39,9 @@ Configurable with Clay for Pebble framework. It means - no external website is n
 
 Feel free to post any comments on GitHub page, report bugs, ask for features.
 
-Nearest plans:
-- add more configurable options;
-- support for color screens (color icons) and pebble time screen size;
-- code cleanup and optimizations, more locales support;
-- companion app for Android;
-
 Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
-Lastest beta version is [0.43.0](https://drive.google.com/open?id=1-NKGUA00oibzvrihV0fiHY_OBQ9h0R4a) 14/09/2018
+Lastest beta version is [0.44.0](https://drive.google.com/open?id=1DD85bz__cYQCBTUfz_IQzqY-0ecy15Zp) 14/09/2018 (Drive application automatically open pbw file and show its content. To download pbw press down arrow on the top right corner.)
 
 You can support me -> donate to [Paypal](https://www.paypal.me/eugenemikhaylov)
 
@@ -59,4 +53,4 @@ Credits:
 - Time font: Bebas Neue, [official site](http://www.fontfabric.com/bebas-neue/)
 - Digital Font: Digital-7 [official site](http://www.styleseven.com/php/get_product.php?product=Digital-7)
 - Climate icons: based on [Climacons font](https://github.com/christiannaths/Climacons-Font) and [Weather-icons](https://github.com/erikflowers/weather-icons)
-- Question Mark Icon by [Freepik](http://www.freepik.com") [from Flaticon.com](https://www.flaticon.com/") is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+- Question Mark Icon by [Freepik](http://www.freepik.com) [from Flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
