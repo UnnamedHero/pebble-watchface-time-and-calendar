@@ -5,6 +5,7 @@ node_modules
 pebble-screenshot*.*
 .*.swp
 Thumbs.db
-package-lock.json
 .vscode
 .env
+src/pkjs/**
+

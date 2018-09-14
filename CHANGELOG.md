@@ -1,4 +1,8 @@
 # Changelog
+
+#### 0.42.0 (beta)
+ - fix weather and forecast show
+
 #### 0.41.0 (beta)
  - fix settings update handler
  - fix vibrate on disconnect option

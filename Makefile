@@ -3,10 +3,13 @@
 #specify PEBBLE_PHONE in .env file
 include .env
 
-build:
+babel:
+	npm run build
+
+build: babel
 	pebble build -- --enable-debug
 
-build-release:
+build-release: babel
 	pebble build 
 
 test:	

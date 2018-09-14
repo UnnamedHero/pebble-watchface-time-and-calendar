@@ -47,9 +47,7 @@ Nearest plans:
 
 Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
-Lastest stable version is 0.35.0 (available in [Pebble Store](https://apps.getpebble.com/applications/596fb1650dfc321335000144))
-
-Lastest beta version is [0.41.0](https://drive.google.com/open?id=18wiNH5LI-qDOieaxRh0uQCvheG4HKKvH)
+Lastest beta version is [0.42.0](https://drive.google.com/open?id=1Eiqmc9KHBo1RxGPe5BIO3UenVOhTfe57) 14/09/2018
 
 You can support me -> donate to [Paypal](https://www.paypal.me/eugenemikhaylov)
 
