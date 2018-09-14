@@ -2,6 +2,7 @@ import dateFns from 'date-fns';
 import { messages } from './weatherAttributeTables';
 
 const storageKey = 'errors';
+const millisecondsInSecond = 1000;
 
 const loadErrors = () => JSON.parse(localStorage.getItem(storageKey) || '{}');
 const saveErrors = errors => localStorage.setItem(storageKey, JSON.stringify(errors));
@@ -44,7 +45,7 @@ const typeTable = {
 
 export default (pebbleObject, type) => {
   const { WeatherError } = pebbleObject;
-  console.log(`error: ${WeatherError}`);
+  // console.log(`error: ${WeatherError}`);
   if (maxAttempts[WeatherError] === 1) {
     resetErrors();
     return pebbleObject;
@@ -52,22 +53,19 @@ export default (pebbleObject, type) => {
 
   const allErrors = loadErrors();
   const error = allErrors[WeatherError];
-  console.log('try1');
-  console.log(`error: ${error}`);
-  console.log('try2');
+  // console.log(`error: ${error}`);
+
   const currentAttempt = error.attempts ? error.attempts + 1 : 1;
   const currentType = typeTable[type];
-  console.log('try3');
   if (currentAttempt >= maxAttempts[WeatherError]) {
-    console.log('try max attempts');
-    const nextTime = Date.parse(dateFns.addMinutes(new Date(), currentType.offsetInMinutes));
+    const newTime = dateFns.addMinutes(new Date(), currentType.offsetInMinutes);
+    const nextTime = Date.parse(newTime) / millisecondsInSecond;
     return {
       [currentType.marker]: true,
       [currentType.stamp]: nextTime,
       WeatherError,
     };
   }
-  console.log('try4');
   const newErrors = {
     ...zeroErrors,
     [WeatherError]: {
@@ -75,8 +73,8 @@ export default (pebbleObject, type) => {
     },
   };
   saveErrors(newErrors);
-  const nextTime = Date.parse(dateFns.addMinutes(new Date(), currentType.offsetInMinutes / 2));
-  console.log('return!');
+  const newTime = dateFns.addMinutes(new Date(), currentType.offsetInMinutes / 2);
+  const nextTime = Date.parse(newTime) / millisecondsInSecond;
   return {
     [currentType.marker]: true,
     [currentType.stamp]: nextTime,
