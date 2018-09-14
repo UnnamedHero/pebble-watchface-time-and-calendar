@@ -6,12 +6,13 @@ import errorHandler from './errorHandler';
 const sunStorageKey = 'SunTimes';
 
 const isDayAt = (sunrise, sunset, time) => dateFns
-  .isWithinRange(time, new Date(sunrise), new Date(sunset));
+  .isWithinRange(time, sunrise, sunset);
 
 const getConditionSymbol = (conditionCode, sunrise, sunset, time = new Date()) => {
   const symbol = conditions[conditionCode].symbol || 'h';
   if (conditionCode >= 800 && conditionCode <= 803) {
     const [day, night] = symbol;
+    console.log(`up ${sunrise} down ${sunset} time ${time}`);
     return isDayAt(sunrise, sunset, time) ? day : night;
   }
   return symbol;
@@ -28,10 +29,7 @@ const formatTime = (time, formatString) => {
 };
 
 const saveSunTimes = (sunrise, sunset) => {
-  const item = {
-    sunrise: sunrise * 1000,
-    sunset: sunset * 1000,
-  };
+  const item = { sunrise, sunset };
   localStorage.setItem(sunStorageKey, JSON.stringify(item));
 };
 
@@ -61,7 +59,8 @@ const makeWeather = (weather) => {
 const makeForecast = (forecast) => {
   const { sunrise = new Date(), sunset = new Date() } = getSunTimes();
   const forecastData = forecast.reduce((acc, item, index) => {
-    const conditionSymbol = getConditionSymbol(item.condition, sunrise, sunset, item.timeStamp);
+    const timeStamp = item.timeStamp * 1000;
+    const conditionSymbol = getConditionSymbol(item.condition, sunrise, sunset, timeStamp);
     const forecastItem = {
       [messageKeys.ForecastTemperature + index]: item.temperature,
       // item.timeStamp + 60 means add one minute to timeStamp.
