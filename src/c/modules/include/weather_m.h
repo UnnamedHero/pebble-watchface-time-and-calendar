@@ -1,6 +1,6 @@
 #pragma once
 
-#define WEATHER_KEY 2
+#define WEATHER_KEY 4
 
 void init_weather_layer(GRect);
 void deinit_weather_layer();
