@@ -1,6 +1,11 @@
 # Changelog
 
-#### 0.43.0 (beta)
+#### 0.45.0 (beta)
+ - increame GPS cache time to 30 mins (issue #18)
+ - show basic time instead of deprecated weather description on forecast screen feature (issue #17)
+ - add feature to invert background and font colors on specified time (issue #16)
+
+#### 0.44.0 (beta)
  - fix weather caching!
 
 #### 0.43.0 (beta)
