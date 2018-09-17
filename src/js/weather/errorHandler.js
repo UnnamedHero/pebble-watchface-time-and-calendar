@@ -10,7 +10,7 @@ const saveErrors = errors => localStorage.setItem(storageKey, JSON.stringify(err
 const maxAttempts = {
   [messages.weather_ok]: 1,
   [messages.weather_disabled]: 1,
-  [messages.location_error]: 5,
+  [messages.location_error]: 8,
   [messages.invalid_location_id]: 1,
   [messages.unknown_error]: 5,
   [messages.api_key_invalid]: 1,
@@ -34,12 +34,12 @@ const typeTable = {
   weather: {
     marker: 'WeatherMarker',
     stamp: 'WeatherTimeStamp',
-    offsetInMinutes: 60,
+    offsetInMinutes: 15,
   },
   forecast: {
     marker: 'WeatherMarkerForecast',
     stamp: 'ForecastTime',
-    offsetInMinutes: 120,
+    offsetInMinutes: 30,
   },
 };
 

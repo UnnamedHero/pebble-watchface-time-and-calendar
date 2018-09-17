@@ -74,4 +74,7 @@ export default {
   "If you have any trouble with configuration, please read <a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki'>this article</a>": "Если у Вас возникли вопросы по настройке, пожалуйста прочтите <a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/ru:Home'>эту статью</a>",
   "<a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/en%3Asettings#city-id'>Where can I get my city ID?</a>": "<a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/ru%3Asettings#city-id'>Где мне взять код города?</a>",
   "<a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/en%3Asettings#shake-twice'>How to do shakes right</a>": "<a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki/ru%3Asettings#shake-twice'>Как правильно трясти часами</a>",
+  'Use different colors on specified time': 'Использовать другие настройки цвета в определённое время',
+  'Shift background color': 'Альтернативный цвет фона',
+  'Shift font color': 'Альтернативный цвет шрифта',
 };

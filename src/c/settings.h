@@ -128,8 +128,15 @@ void settings_set_ClockShowSeconds_showing();
 void settings_set_ClockShowSeconds_enabled();
 void settings_set_ClockShowSeconds_disabled();
 bool settings_get_ShakeTwice();
+bool settings_get_ColorTimeShift();
+uint8_t settings_get_ColorShiftHourBegin();
+uint8_t settings_get_ColorShiftMinuteBegin();
+uint8_t settings_get_ColorShiftHourEnd();
+uint8_t settings_get_ColorShiftMinuteEnd();
+int settings_get_ShiftBackgroundColor();
+int settings_get_ShiftFontColor();
+bool is_time_to_shift();
 
-//void save_settings_seconds();
 #if defined (PBL_PLATFORM_APLITE)
 bool settings_get_QT();
 uint8_t settings_get_QTHourBegin();

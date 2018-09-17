@@ -12,7 +12,7 @@ const getLocation = async (options) => {
   }
 
   try {
-    const pos = await getGeoPosition({ timeout: 10000, maximumAge: 180000 });
+    const pos = await getGeoPosition();
     const location = `?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`;
     return { errors, location };
   } catch (e) {

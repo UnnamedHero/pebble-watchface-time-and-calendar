@@ -96,8 +96,13 @@ static void populate_calendar_values() {
 }
 
 static void prv_set_inverted_theme(GContext *ctx) {
+  if(settings_get_ColorTimeShift()) {
+    graphics_context_set_text_color(ctx, GColorFromHEX(settings_get_ShiftBackgroundColor()));
+    graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_ShiftFontColor()));
+  } else {
     graphics_context_set_text_color(ctx, GColorFromHEX(settings_get_BackgroundColorHex()));
-    graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_FontColorHex()));  
+    graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_FontColorHex()));
+  }
 }
 
 static void prv_populate_this_layer(Layer *me, GContext *ctx) {
@@ -116,7 +121,12 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
   int current_date_index =current_week_day_abbr_index + s_get_calendar_begin() + 7;
   GRect backgrnd = GRect(bounds.origin.x + 1, bounds.origin.y, bounds.size.w - 6, bounds.size.h - 1);  
 
-  graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_FontColorHex()));  
+  if (is_time_to_shift()) {
+    graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_ShiftFontColor()));
+  } else {
+    graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_FontColorHex()));
+  }
+  
   graphics_fill_rect(ctx, backgrnd, 0, GCornerNone);
   settings_get_theme(ctx);  
   for (int iy = 0; iy < 4; iy ++) {
