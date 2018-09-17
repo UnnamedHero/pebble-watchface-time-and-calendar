@@ -3,9 +3,10 @@
 #include "include/weather_m.h"
 #include "../settings.h"
 #include "../3rdparty/locale_framework/localize.h"
+#include "../utils/include/timeutils.h"
 
 static Layer *s_weather_full_layer;
-static GFont s_wfont, s_wfont_sm;
+static GFont s_wfont, s_wfont_sm, s_wfont_xsm;
 static void prv_populate_weather_full_layer(Layer *, GContext *);
 
 static const int descline_height = 20;
@@ -17,13 +18,15 @@ void init_weather_full_layer(GRect rect) {
   //s_weather_full_layer = layer;
   layer_set_update_proc(s_weather_full_layer, prv_populate_weather_full_layer);
   s_wfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_42));
-  s_wfont_sm = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));  
+  s_wfont_sm = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
+	s_wfont_xsm = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_26));
 }
 
 void deinit_weather_full_layer() {
 	layer_destroy(s_weather_full_layer);
 	fonts_unload_custom_font(s_wfont);
 	fonts_unload_custom_font(s_wfont_sm);
+	fonts_unload_custom_font(s_wfont_xsm);
 }
 
 Layer* get_layer_weather_full() {
@@ -38,19 +41,30 @@ static void prv_populate_weather_full_layer(Layer *me, GContext *ctx) {
 	GRect bb = layer_get_bounds(me);
 	const int item_width = bb.size.w / 5;
 
-	settings_get_theme(ctx);	
-	
+	settings_get_theme(ctx);
+
+	static char time_txt[16];
+	get_currect_time(CLOCK_FORMAT, time_txt);
 	GRect descline_rect = GRect (1, 0, bb.size.w, descline_height);	
 	static char descline[64];
-	snprintf(descline, sizeof(descline), "%d°, %s",\
+	snprintf(descline, sizeof(descline), "%d°,          %s",\
 		get_WeatherTemperature(),\
-		get_WeatherDesc());
+		time_txt);
 	graphics_draw_text(ctx, descline, \
 	    fonts_get_system_font(FONT_KEY_GOTHIC_24), \
     	descline_rect, \
     	GTextOverflowModeWordWrap, \
     	GTextAlignmentLeft, \
     	NULL);        
+
+	GRect current_condition_rect = GRect (40, 0, 60, descline_height);	
+	graphics_draw_text(ctx, get_WeatherCondition(), \
+	    s_wfont_xsm, \
+    	current_condition_rect, \
+    	GTextOverflowModeWordWrap, \
+    	GTextAlignmentLeft, \
+    	NULL);        
+
 
 	const int wind_x = 0;
 	const int wind_y = descline_height + 5;
@@ -61,7 +75,7 @@ static void prv_populate_weather_full_layer(Layer *me, GContext *ctx) {
 	GRect wind_sp_rect = GRect (wind_txt_x, wind_txt_y, item_width -5,  text_height);
 
 	graphics_draw_text(ctx, get_WeatherWindDirection(), \
-	    s_wfont, \
+	    s_wfont_sm, \
     	wind_rect, \
     	GTextOverflowModeWordWrap, \
     	GTextAlignmentCenter, \
@@ -84,7 +98,7 @@ static void prv_populate_weather_full_layer(Layer *me, GContext *ctx) {
 	GRect pressure_rect = GRect (press_x, press_y, item_width , icon_height);	
 	GRect pressure_text_rect = GRect (press_txt_x, press_txt_y, item_width,  text_height);	
 	graphics_draw_text(ctx, "w", \
-	    s_wfont, \
+	    s_wfont_sm, \
     	pressure_rect, \
     	GTextOverflowModeWordWrap, \
     	GTextAlignmentCenter, \
@@ -108,7 +122,7 @@ static void prv_populate_weather_full_layer(Layer *me, GContext *ctx) {
 	GRect hum_rect = GRect (hum_x, hum_y, item_width , icon_height);	
 	GRect hum_text_rect = GRect (hum_txt_x, hum_txt_y, item_width, text_height);	
 	graphics_draw_text(ctx, "x", \
-	    s_wfont, \
+	    s_wfont_sm, \
     	hum_rect, \
     	GTextOverflowModeWordWrap, \
     	GTextAlignmentCenter, \
