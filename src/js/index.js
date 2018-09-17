@@ -20,15 +20,23 @@ Pebble.addEventListener('webviewclosed', (e) => { //eslint-disable-line
 
   const dict = clay.getSettings(e.response);
 
-  const watch = Pebble.getActiveWatchInfo(); //eslint-disable-line
-  if (watch.platform === 'aplite') {
-    const qtb = dict[messageKeys.QuietTimeBegin].split(':', 2);
-    const qte = dict[messageKeys.QuietTimeEnd].split(':', 2);
-    dict[messageKeys.QuietTimeBegin] = parseInt(qtb[0], 10);
-    dict[messageKeys.QuietTimeBegin + 1] = parseInt(qtb[1], 10);
-    dict[messageKeys.QuietTimeEnd] = parseInt(qte[0], 10);
-    dict[messageKeys.QuietTimeEnd + 1] = parseInt(qte[1], 10);
-  }
+  const fixTimeField = fields => fields.forEach((field) => {
+    if (dict[field]) {
+      const timeValue = dict[field].split(':', 2);
+      dict[field] = parseInt(timeValue[0], 10);
+      dict[field + 1] = parseInt(timeValue[1], 10);
+    }
+  });
+
+  fixTimeField(
+    [
+      messageKeys.QuietTimeBegin,
+      messageKeys.QuietTimeEnd,
+      messageKeys.ColorShiftTimeBegin,
+      messageKeys.ColorShiftTimeEnd,
+    ],
+  );
+
   const dateFormat = dict[messageKeys.DateFormat];
   const dateSeparator = dict[messageKeys.DateFormatSeparator];
   const newDateFormat = dateFormat.replace(new RegExp('\\.', 'g'), dateSeparator);
