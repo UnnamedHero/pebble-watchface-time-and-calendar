@@ -10,7 +10,6 @@
 #include "3rdparty/locale_framework/localize.h"
 #include "utils/include/states.h"
 
-
 void settings_update_handler() {
   #if defined (DEBUG)
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Update Settings in twc-ng");
@@ -22,6 +21,7 @@ void settings_update_handler() {
 
 static void prv_init() {
   start_ticktimerhelper();
+  init_time_utils();
   init_message_system();
   init_vibrate();
   init_settings(settings_update_handler);
