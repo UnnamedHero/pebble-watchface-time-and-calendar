@@ -41,6 +41,11 @@
     "messageKeys": [
       "BackgroundColor",
       "FontColor",
+      "ColorTimeShift",
+      "ColorShiftTimeBegin",
+      "ColorShiftTimeEnd",
+      "ShiftBackgroundColor",
+      "ShiftFontColor",
       "ClockFormat",
       "DateFormat",
       "DateFormatSeparator",
