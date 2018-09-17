@@ -42,7 +42,7 @@ static void prv_window_unload(Window *window) {
 
 static void prv_populate_fc_layer(Layer *me, GContext *ctx) {
   GRect this_rect = layer_get_bounds(me);
-  graphics_context_set_fill_color(ctx, GColorFromHEX(settings_get_BackgroundColorHex()));  
+  settings_get_theme(ctx);
   graphics_fill_rect(ctx, this_rect, 0, GCornerNone);  
 };
 
