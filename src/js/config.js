@@ -27,6 +27,47 @@ export default [
         defaultValue: 'FFFFFF',
       },
       {
+        type: 'toggle',
+        messageKey: 'ColorTimeShift',
+        id: 'ColorTimeShift',
+        label: 'Use different colors on specified time',
+        defaultValue: false,
+      },
+      {
+        type: 'input',
+        messageKey: 'ColorShiftTimeBegin',
+        group: 'ColorShiftTime',
+        label: 'start at:',
+        defaultValue: '23:00:00',
+        attributes: {
+          type: 'time',
+        },
+      },
+      {
+        type: 'input',
+        messageKey: 'ColorShiftTimeEnd',
+        group: 'ColorShiftTime',
+        label: 'end at:',
+        defaultValue: '06:00:00',
+        attributes: {
+          type: 'time',
+        },
+      },
+      {
+        type: 'color',
+        messageKey: 'ShiftBackgroundColor',
+        group: 'ColorShiftTime',
+        label: 'Shift background color',
+        defaultValue: 'FFFFFF',
+      },
+      {
+        type: 'color',
+        messageKey: 'ShiftFontColor',
+        group: 'ColorShiftTime',
+        label: 'Shift font color',
+        defaultValue: '000000',
+      },
+      {
         type: 'select',
         messageKey: 'PebbleShakeAction',
         group: 'seconds',
