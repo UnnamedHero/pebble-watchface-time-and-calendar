@@ -1,26 +1,63 @@
 #include <pebble.h>
 #include "include/timeutils.h"
 #include "../settings.h"
+#include "include/ticktimerhelper.h"
 #include "../3rdparty/locale_framework/localize.h"
 
 int period_to_mins(PERIOD per);
 
-#if defined (PBL_PLATFORM_APLITE)
-static int prv_get_mins(int hour, int min) {
-  return hour * MINUTES_PER_HOUR + min;
+static tm currentTime;
+
+bool is_within_range(int current, int begin, int end) {
+  if (current == begin || current == end) {
+    return true;
+  }
+  bool is_ragged_interval = begin > end;
+  int max = begin >= end ? begin : end;
+  int min = begin >= end ? end : begin;  
+  bool is_between = current >= min && current <= max;
+  if (!is_ragged_interval) {
+    return is_between;
+  }
+  return current < begin ? false : !is_between;  
 }
 
+int get_mins(int hour, int min) {
+  return (hour * MINUTES_PER_HOUR) + min;
+}
+
+tm* get_Time() {
+  return &currentTime;
+}
+
+static void prv_utils_handler(tm* tick_time) {
+  currentTime = *tick_time;
+}
+
+void init_time_utils() {  
+  time_t temp = time(NULL);
+  currentTime = *(localtime(&temp));
+  ticktimerhelper_register(prv_utils_handler);
+}
+
+#if defined (PBL_PLATFORM_APLITE)
+
 static bool prv_is_time_quiet(int begin, int end, int now) {
-  bool within_24h = begin <= end;
-  int min = within_24h ? begin : end;
-  int max = !within_24h ? begin : end;
-  bool between = (now >= min) && (now <= max);
-  if (within_24h) {
-    return within_24h && between;
-  } else {
-    bool not_equal_state = !(between || within_24h);
-    return now == begin || now == end ? !not_equal_state : not_equal_state;
-  } 
+  if (now == begin || now == end) {
+    return true;
+  }
+
+  return is_within_range(now, begin, end);
+  // bool within_24h = begin <= end;
+  // int min = within_24h ? begin : end;
+  // int max = !within_24h ? begin : end;
+  // bool between = (now >= min) && (now <= max);
+  // if (within_24h) {
+  //   return within_24h && between;
+  // } else {
+  //   bool not_equal_state = !(between || within_24h);
+  //   return now == begin || now == end ? !not_equal_state : not_equal_state;
+  // } 
 }
 
 bool aplite_quiet_time_is_active() {
@@ -28,9 +65,9 @@ bool aplite_quiet_time_is_active() {
   time_t temp = time(NULL);
   tick_time = localtime(&temp);
   
-  int current_min_of_a_day = prv_get_mins(tick_time->tm_hour, tick_time->tm_min);  
-  int qtmins_begin = prv_get_mins(settings_get_QTHourBegin(), settings_get_QTMinBegin());
-  int qtmins_end = prv_get_mins(settings_get_QTHourEnd(), settings_get_QTMinEnd());  
+  int current_min_of_a_day = get_mins(tick_time->tm_hour, tick_time->tm_min);  
+  int qtmins_begin = get_mins(settings_get_QTHourBegin(), settings_get_QTMinBegin());
+  int qtmins_end = get_mins(settings_get_QTHourEnd(), settings_get_QTMinEnd());  
   return prv_is_time_quiet(qtmins_begin, qtmins_end, current_min_of_a_day);
 }
 #endif
@@ -108,7 +145,7 @@ int period_to_mins(PERIOD per) {
     case P_3H:
       mins = 180;
       break;
-     case P_6H:
+    case P_6H:
       mins = 360;
       break;
   }
