@@ -9,10 +9,8 @@ static CLOCK_SECONDS seconds_settings;
 void save_settings_seconds();
 
 typedef struct ClaySettings {
-
   PERIOD WeatherUpdatePeriod;
   char ClockFormat[8];
-
   char DateFormat[12];
   uint8_t VibrateDuringQuietTime;
 #if defined (PBL_PLATFORM_APLITE)
@@ -48,6 +46,14 @@ typedef struct ClaySettings {
   uint8_t SwitchBackTimeoutSeconds;
   PEBBLE_SHAKE_ACTION PebbleShakeAction;
   uint8_t ShakeTwice;
+  uint8_t ColorShiftTime;
+  uint8_t ColorShiftHourBegin;
+  uint8_t ColorShiftHourEnd;
+  uint8_t ColorShiftMinBegin;
+  uint8_t ColorShiftMinEnd;
+  int ShiftFontColorHex;
+  int ShiftBackgroundColorHex;
+
 } __attribute__((__packed__)) ClaySettings;
 
 static ClaySettings settings;
@@ -347,6 +353,34 @@ uint8_t settings_get_SwitchBackTimeoutSeconds() {
   return settings.SwitchBackTimeoutSeconds;
 }
 
+bool settings_get_ColorTimeShift() {
+  return get_bool(settings.ColorShiftTime);
+}
+
+uint8_t settings_get_ColorShiftHourBegin() {
+  return settings.ColorShiftHourBegin;
+}
+
+uint8_t settings_get_ColorShiftMinuteBegin() {
+  return settings.ColorShiftMinBegin;
+}
+
+uint8_t settings_get_ColorShiftHourEnd() {
+  return settings.ColorShiftHourEnd;  
+}
+
+uint8_t settings_get_ColorShiftMinuteEnd() {
+  return settings.ColorShiftMinEnd;
+}
+
+int settings_get_ShiftBackgroundColor() {
+  return settings.ShiftBackgroundColorHex;
+}
+
+int settings_get_ShiftFontColor() {
+  return settings.ShiftFontColorHex;
+}
+
 void helper_str_filler(char *item, char* filler) {
   if (strlen(item) == 0) {
     strcpy(item, filler);
@@ -378,13 +412,31 @@ void save_settings_seconds() {
   persist_write_int(SETTINGS_SECONDS, (int)seconds_settings);
 }
 
-
-void settings_get_theme(GContext *ctx) {
-    graphics_context_set_fill_color(ctx, GColorFromHEX(settings.BackgroundColorHex));
-    graphics_context_set_text_color(ctx, GColorFromHEX(settings.FontColorHex));  
+static void get_normal_theme(GContext *ctx) {
+  graphics_context_set_fill_color(ctx, GColorFromHEX(settings.BackgroundColorHex));
+  graphics_context_set_text_color(ctx, GColorFromHEX(settings.FontColorHex));  
 }
 
+static void get_shifted_theme(GContext *ctx) {
+  graphics_context_set_fill_color(ctx, GColorFromHEX(settings.ShiftBackgroundColorHex));
+  graphics_context_set_text_color(ctx, GColorFromHEX(settings.ShiftFontColorHex));
+}
 
+bool is_time_to_shift() {
+  if (settings.ColorShiftTime) {
+    struct tm *tick_time;
+    tick_time = get_Time();
+    int now = get_mins(tick_time->tm_hour, tick_time->tm_min);
+    int begin = get_mins(settings.ColorShiftHourBegin, settings.ColorShiftMinBegin);
+    int end = get_mins(settings.ColorShiftHourEnd, settings.ColorShiftMinEnd);
+    return is_within_range(now, begin, end);
+  }
+  return false;
+}
+
+void settings_get_theme(GContext *ctx) {
+  return is_time_to_shift() ? get_shifted_theme(ctx) : get_normal_theme(ctx);
+}
 
 void populate_settings(DictionaryIterator *iter, void *context) {
 
@@ -570,13 +622,6 @@ void populate_settings(DictionaryIterator *iter, void *context) {
      settings.SwitchBackTimeout = swtime->value->uint8;
   }
 
-  // Tuple *clock_sec = dict_find(iter, MESSAGE_KEY_ClockShowSeconds);
-  // if (clock_sec) {
-  //   seconds_settings = clock_sec->value->uint8;
-  //   if (seconds_settings != SEC_DISABLED) {
-  //     settings.WeatherStatus = WEATHER_DISABLED;
-  //   }
-  // }
   Tuple *psa = dict_find(iter, MESSAGE_KEY_PebbleShakeAction);
   if (psa) {
     #if defined (DEBUG)
@@ -614,6 +659,41 @@ void populate_settings(DictionaryIterator *iter, void *context) {
   Tuple *sh_twice = dict_find(iter, MESSAGE_KEY_ShakeTwice);
   if (sh_twice) {
     settings.ShakeTwice = sh_twice->value->uint8;
+  }
+
+  Tuple *shift_color = dict_find(iter, MESSAGE_KEY_ColorTimeShift);
+  if (shift_color) {
+    settings.ColorShiftTime = shift_color->value->uint8;
+  }
+
+  Tuple *shift_time_begin_hour = dict_find(iter, MESSAGE_KEY_ColorShiftTimeBegin);
+  if (shift_time_begin_hour) {
+    settings.ColorShiftHourBegin = shift_time_begin_hour->value->uint8;
+  }
+
+  Tuple *shift_time_begin_minutes = dict_find(iter, MESSAGE_KEY_ColorShiftTimeBegin + 1);
+  if (shift_time_begin_minutes) {
+    settings.ColorShiftMinBegin = shift_time_begin_minutes->value->uint8;
+  }
+
+  Tuple *shift_time_end_hour = dict_find(iter, MESSAGE_KEY_ColorShiftTimeEnd);
+  if (shift_time_end_hour) {
+    settings.ColorShiftHourEnd = shift_time_end_hour->value->uint8;
+  }
+
+  Tuple *shift_time_end_minutes = dict_find(iter, MESSAGE_KEY_ColorShiftTimeEnd + 1);
+  if (shift_time_end_minutes) {
+    settings.ColorShiftMinEnd = shift_time_end_minutes->value->uint8;
+  }
+
+  Tuple *shift_font_c = dict_find(iter, MESSAGE_KEY_ShiftFontColor);
+  if (shift_font_c) {
+    settings.ShiftFontColorHex = shift_font_c->value->int32;
+  }
+
+  Tuple *shift_bkgrnd_c = dict_find(iter, MESSAGE_KEY_ShiftBackgroundColor);
+  if (shift_bkgrnd_c) {
+    settings.ShiftBackgroundColorHex = shift_bkgrnd_c->value->int32;
   }
 
   save_settings();

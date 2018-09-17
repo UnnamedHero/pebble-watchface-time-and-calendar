@@ -97,6 +97,10 @@ export default function () {
       ['QuietTime', 'QuietTimeEnd'],
       ['ForecastType', 'SwitchBackTimeout'],
       ['PebbleShakeAction', 'SwitchBackTimeoutSeconds'],
+      ['ColorTimeShift', 'ColorShiftTimeBegin'],
+      ['ColorTimeShift', 'ColorShiftTimeEnd'],
+      ['ColorTimeShift', 'ShiftFontColor'],
+      ['ColorTimeShift', 'ShiftBackgroundColor'],
     ]);
     registerSelectToggles();
   });
