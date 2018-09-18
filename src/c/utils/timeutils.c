@@ -42,33 +42,11 @@ void init_time_utils() {
 
 #if defined (PBL_PLATFORM_APLITE)
 
-static bool prv_is_time_quiet(int begin, int end, int now) {
-  if (now == begin || now == end) {
-    return true;
-  }
-
-  return is_within_range(now, begin, end);
-  // bool within_24h = begin <= end;
-  // int min = within_24h ? begin : end;
-  // int max = !within_24h ? begin : end;
-  // bool between = (now >= min) && (now <= max);
-  // if (within_24h) {
-  //   return within_24h && between;
-  // } else {
-  //   bool not_equal_state = !(between || within_24h);
-  //   return now == begin || now == end ? !not_equal_state : not_equal_state;
-  // } 
-}
-
-bool aplite_quiet_time_is_active() {
-  struct tm *tick_time;
-  time_t temp = time(NULL);
-  tick_time = localtime(&temp);
-  
-  int current_min_of_a_day = get_mins(tick_time->tm_hour, tick_time->tm_min);  
+bool aplite_quiet_time_is_active() { 
+  int current_min_of_a_day = get_mins(currentTime.tm_hour, currentTime.tm_min);  
   int qtmins_begin = get_mins(settings_get_QTHourBegin(), settings_get_QTMinBegin());
   int qtmins_end = get_mins(settings_get_QTHourEnd(), settings_get_QTMinEnd());  
-  return prv_is_time_quiet(qtmins_begin, qtmins_end, current_min_of_a_day);
+  return is_within_range(current_min_of_a_day, qtmins_begin, qtmins_end);
 }
 #endif
 
@@ -82,9 +60,9 @@ bool is_quiet_time() {
 }
 
 void get_currect_time(DT_FORMAT dtf, char *buffer) {
-  struct tm *tick_time;
-  time_t temp = time(NULL);
-  tick_time = localtime(&temp);
+  // struct tm *tick_time;
+  // time_t temp = time(NULL);
+  // tick_time = localtime(&temp);
   char d_buffer[32];
   char format[12];
   switch (dtf) {
@@ -102,24 +80,24 @@ void get_currect_time(DT_FORMAT dtf, char *buffer) {
   #if defined (DEBUG)
     APP_LOG(APP_LOG_LEVEL_DEBUG, "time string %s", format);
   #endif
-  strftime(d_buffer, sizeof(d_buffer), format, tick_time);
+  strftime(d_buffer, sizeof(d_buffer), format, &currentTime);
   strcpy(buffer, d_buffer);
 }
 
 void get_current_date(char *format, char *out) {
   char* rus_months[] = { _("jan"), _("feb"), _("mar"), _("apr"), _("may"), _("jun"), _("jul"), _("aug"), _("sep"), _("oct"), _("nov"), _("dec") };
   const size_t out_size = 32;
-  struct tm *tick_time;
-  time_t temp = time(NULL);
-  tick_time = localtime(&temp);
+  // struct tm *tick_time;
+  // time_t temp = time(NULL);
+  // tick_time = localtime(&temp);
 
   const char* locale_str = i18n_get_system_locale();
   const bool locale_ru = strcmp(locale_str, "ru_RU") == 0;
   const bool is_special_format = strcmp(format, "%B %d, %Y") == 0;
   if (locale_ru && is_special_format) {
-    snprintf(out, out_size, "%d %s, %d", tick_time->tm_mday, rus_months[tick_time->tm_mon], tick_time->tm_year + 1900);
+    snprintf(out, out_size, "%d %s, %d", currentTime.tm_mday, rus_months[currentTime.tm_mon], currentTime.tm_year + 1900);
   } else {
-    strftime(out, out_size, format, tick_time);
+    strftime(out, out_size, format, &currentTime);
   } 
 }
 
