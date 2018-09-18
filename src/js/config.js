@@ -318,6 +318,22 @@ export default [
   },
   {
     type: 'section',
+    capabilities: ['HEALTH'],
+    items: [
+      {
+        type: 'heading',
+        defaultValue: 'Health configuration',
+      },
+      {
+        type: 'toggle',
+        messageKey: 'HealthSteps',
+        label: 'Show steps instead of current date',
+        defaultValue: false,
+      },
+    ],
+  },
+  {
+    type: 'section',
     items: [
       {
         type: 'heading',
