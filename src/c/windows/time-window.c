@@ -6,6 +6,7 @@
 #include "../modules/include/date_m.h"
 //#include "../modules/include/time_m.h"
 #include "../modules/include/weather_m.h"
+#include "../modules/include/health.h"
 #include "../settings.h"
 
 static Window *s_time_window;
@@ -41,15 +42,21 @@ static void prv_window_load(Window *window) {
 
   init_bluetooh_layer(bluetooth_bounds);
   init_battery_layer(battery_bounds);
-  init_date_layer(date_bounds);
+  
  // init_time_layer(time_bounds);
 
   init_calendar_layer(calendar_bounds);
   init_weather_layer(weather_bounds);
-
+  if (settings_get_HealthSteps()) {
+    init_health_layer(date_bounds);
+    layer_add_child(window_layer, get_layer_health());
+  } else {
+    init_date_layer(date_bounds);
+    layer_add_child(window_layer, get_layer_date());
+  }
   layer_add_child(window_layer, get_layer_bluetooth());
   layer_add_child(window_layer, get_layer_battery());
-  layer_add_child(window_layer, get_layer_date());
+  
  // layer_add_child(window_layer, get_layer_time());
   layer_add_child(window_layer, get_layer_calendar());
   layer_add_child(window_layer, get_layer_weather());
@@ -58,8 +65,11 @@ static void prv_window_load(Window *window) {
 static void prv_window_unload(Window *window) {
   deinit_bluetooth_layer();
   deinit_battery_layer();
-  deinit_date_layer();
- // deinit_time_layer();
+  if (settings_get_HealthSteps()) {
+    deinit_health_layer();
+  } else {
+    deinit_date_layer();
+  }  
   deinit_calendar_layer();
   deinit_weather_layer();
 }
@@ -104,8 +114,11 @@ void simple_weather_update(DictionaryIterator *iter, void *context) {
 void time_window_force_redraw() {
   layer_mark_dirty(get_layer_bluetooth());
   layer_mark_dirty(get_layer_battery());
-  layer_mark_dirty(get_layer_date());
-//  layer_mark_dirty(get_layer_time());
+  if (settings_get_HealthSteps()) {
+    layer_mark_dirty(get_layer_health());
+  } else {
+    layer_mark_dirty(get_layer_date());
+  }
   layer_mark_dirty(get_layer_calendar());
   layer_mark_dirty(get_layer_weather());
 }
