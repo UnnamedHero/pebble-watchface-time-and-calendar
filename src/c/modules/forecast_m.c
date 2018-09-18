@@ -199,7 +199,7 @@ void update_forecast(bool force) {
   Tuplet data_to_send[] = {
     TupletInteger(MESSAGE_KEY_WeatherMarkerForecast, 1),
   };
-  send_message(data_to_send, 1, prv_send_data_failed);
+  send_message(data_to_send, prv_send_data_failed);
 }
 
 static void prv_send_data_failed() {

@@ -91,6 +91,9 @@ static void prv_ticktimer_clock(struct tm* unneeded) {
 }
 
 void update_weather(bool force) {
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Update weather, force: %s, status: %i", force ? "true" : "false", settings_get_WeatherStatus());
+  #endif
   if (settings_get_WeatherStatus() == WEATHER_API_INVALID || \
       settings_get_WeatherStatus() == WEATHER_API_NOT_SET) {
     if (!force) {
@@ -110,9 +113,9 @@ void update_weather(bool force) {
   }
   if (!force) {
    if (!is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
-   #if defined (DEBUG) 
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
-   #endif
+      #if defined (DEBUG) 
+          APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
+      #endif
     return;
     } 
   }
@@ -122,7 +125,7 @@ void update_weather(bool force) {
   #if defined (DEBUG) 
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Request weather");
   #endif  
-  send_message(data_to_send, 1, prv_send_data_failed);
+  send_message(data_to_send, prv_send_data_failed);
 }
 
 void prv_populate_this_layer(Layer *me, GContext *ctx) {
