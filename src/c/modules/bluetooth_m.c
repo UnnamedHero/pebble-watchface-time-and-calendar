@@ -87,7 +87,7 @@ static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
     char weather_err_symbol[2] = {"B"};
     prv_get_weather_error_symbol(weather_err_symbol);
     #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "%d, BAD status:%s", settings_get_WeatherStatus(), weather_err_symbol);
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "weather status %d, BAD status:%s", settings_get_WeatherStatus(), weather_err_symbol);
     #endif
     graphics_draw_text(ctx, weather_err_symbol , \
     statuses_font, \
@@ -117,19 +117,11 @@ static void prv_populate_bt_layer(Layer *me, GContext *ctx) {
     GTextAlignmentCenter, \
     NULL);    
   }
-  
-  //graphics_draw_bitmap_in_rect(ctx, s_bt_icon, GRect(0,0, 20, 20));
-
-//  APP_LOG(APP_LOG_LEVEL_DEBUG, "REDRAW: BT-layer");
 }
-
 
 void deinit_bluetooth_layer() {
   connection_service_unsubscribe();
   fonts_unload_custom_font(statuses_font);
-  // if (s_bt_icon) {
-  //   gbitmap_destroy(s_bt_icon);
-  // }
   if (this_layer) {
     layer_destroy(this_layer);
   }
