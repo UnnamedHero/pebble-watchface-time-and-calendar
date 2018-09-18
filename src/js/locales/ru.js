@@ -77,4 +77,6 @@ export default {
   'Use different colors on specified time': 'Использовать другие настройки цвета в определённое время',
   'Shift background color': 'Альтернативный цвет фона',
   'Shift font color': 'Альтернативный цвет шрифта',
+  'Health configuration': 'Настройка показателей активного образа жизни',
+  'Show steps instead of current date': 'Показывать количество пройденных шагов вместо текущей даты',
 };
