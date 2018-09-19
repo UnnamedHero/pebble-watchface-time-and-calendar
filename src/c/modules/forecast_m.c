@@ -31,8 +31,10 @@ static const int f_date_height = 32;
 static const int f_cond_height = 32;
 static const int f_item_temp_height = 15;
 
+static bool is_force_update;
 
 void init_forecast_layer(GRect rect) {
+  is_force_update = false;
   s_forecast_layer = layer_create(rect);
   s_wfont_sm = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
   prv_load_forecast();
@@ -56,10 +58,11 @@ Layer* get_layer_forecast() {
 	return s_forecast_layer;
 }
 
-
 static void prv_populate_forecast_layer(Layer *me, GContext *ctx) {	
-
   if (forecast.ForecastReady != 1 || forecast.ForecastQty == 0) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "ready? %d ; qty: %d", forecast.ForecastReady, forecast.ForecastQty);
+    #endif
     return;
   }
 
@@ -77,7 +80,6 @@ static void prv_populate_forecast_layer(Layer *me, GContext *ctx) {
     const GRect cond = GRect (module_x, cond_y, item_width, f_cond_height);
     const int f_temp_y = cond_y + f_cond_height;
     const GRect f_temp = GRect (module_x, f_temp_y, item_width, f_item_temp_height);
-  //  graphics_draw_rect(ctx, module_bounds);
     char forec_item_date[32];
     char forec_item_temp[8];
 
@@ -85,130 +87,152 @@ static void prv_populate_forecast_layer(Layer *me, GContext *ctx) {
     snprintf(forec_item_temp, sizeof(forec_item_temp), "%d°", forecast.ForecastTemperature[i]);
 
     graphics_draw_text(ctx, forec_item_date, \
-    fonts_get_system_font(FONT_KEY_GOTHIC_18), \
-    dt, \
-    GTextOverflowModeWordWrap, \
-    GTextAlignmentCenter, \
-    NULL);   
+      fonts_get_system_font(FONT_KEY_GOTHIC_18), \
+      dt, \
+      GTextOverflowModeWordWrap, \
+      GTextAlignmentCenter, \
+      NULL);   
 
     graphics_draw_text(ctx, forecast.ForecastCondition[i], \
-    s_wfont_sm, \
-    cond, \
-    GTextOverflowModeWordWrap, \
-    GTextAlignmentCenter, \
-    NULL);   
+      s_wfont_sm, \
+      cond, \
+      GTextOverflowModeWordWrap, \
+      GTextAlignmentCenter, \
+      NULL);   
 
     graphics_draw_text(ctx, forec_item_temp, \
-    fonts_get_system_font(FONT_KEY_GOTHIC_18), \
-    f_temp, \
-    GTextOverflowModeWordWrap, \
-    GTextAlignmentCenter, \
-    NULL);
+      fonts_get_system_font(FONT_KEY_GOTHIC_18), \
+      f_temp, \
+      GTextOverflowModeWordWrap, \
+      GTextAlignmentCenter, \
+      NULL);
   }
-
 }
 
 void forecast_update(DictionaryIterator *iter, void *context) {
-  // bool forecast_ready = false;
-  // int forecast_qty = 0;
-
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "forecast update");
+  #endif
   Tuple *f_mark = dict_find(iter, MESSAGE_KEY_WeatherMarkerForecast);
-   if (f_mark) {
-      forecast.ForecastReady = f_mark->value->uint8;
-   }
-
-   Tuple *w_err = dict_find(iter, MESSAGE_KEY_WeatherError);
-   const int location_timeout = 60;
-   forecast.ForecastTime = w_err ? forecast.ForecastTime + location_timeout : forecast.ForecastTime;
+  if (f_mark) {
+    forecast.ForecastReady = f_mark->value->uint8;
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "is forecast ready %d", forecast.ForecastReady);
+    #endif
+  }
 
   Tuple *f_qty = dict_find(iter, MESSAGE_KEY_ForecastQty);
-   if (f_qty) {
+    if (f_qty) {
+    forecast.ForecastQty = f_qty->value->uint8;
+  }
 
-      forecast.ForecastQty = f_qty->value->uint8;
-   }
+  Tuple *f_time = dict_find(iter, MESSAGE_KEY_ForecastTime);
+  if (f_time) {
+    forecast.ForecastTime = f_time->value->int32;
+  }       
 
-   if (forecast.ForecastReady != 1 || forecast.ForecastQty == 0) {
-      return;
-   }
+  if (forecast.ForecastReady != 1 || forecast.ForecastQty == 0) {
+    return;
+  }
+  
 
-   Tuple *f_time = dict_find(iter, MESSAGE_KEY_ForecastTime);
-   if (f_time) {
-      forecast.ForecastTime = f_time->value->int32;
-   }       
-
-   for (int i = 0; i < forecast.ForecastQty; i++) {    
-      Tuple *f_temp = dict_find(iter, MESSAGE_KEY_ForecastTemperature + i);
-      if (f_temp) {
-        forecast.ForecastTemperature[i] = f_temp->value->int32;
-       }
-
-      Tuple *f_cond = dict_find(iter, MESSAGE_KEY_ForecastCondition + i);
-      if (f_cond) {
-        snprintf(forecast.ForecastCondition[i], sizeof(forecast.ForecastCondition[i]), f_cond->value->cstring);
-      }
-
-      Tuple *f_ts = dict_find(iter, MESSAGE_KEY_ForecastTimeStamp + i);
-      if (f_ts) {
-        snprintf(forecast.ForecastTimeStamp[i], sizeof(forecast.ForecastTimeStamp[i]), f_ts->value->cstring);
-      }      
-   }   
-   prv_save_forecast();
-   if (s_forecast_layer) {
-     layer_mark_dirty(s_forecast_layer);
+  for (int i = 0; i < forecast.ForecastQty; i++) {    
+    Tuple *f_temp = dict_find(iter, MESSAGE_KEY_ForecastTemperature + i);
+    if (f_temp) {
+      forecast.ForecastTemperature[i] = f_temp->value->int32;
     }
+    Tuple *f_cond = dict_find(iter, MESSAGE_KEY_ForecastCondition + i);
+    if (f_cond) {
+      snprintf(forecast.ForecastCondition[i], sizeof(forecast.ForecastCondition[i]), f_cond->value->cstring);
+    }
+
+    Tuple *f_ts = dict_find(iter, MESSAGE_KEY_ForecastTimeStamp + i);
+    if (f_ts) {
+      snprintf(forecast.ForecastTimeStamp[i], sizeof(forecast.ForecastTimeStamp[i]), f_ts->value->cstring);
+    }      
+  }   
+  prv_save_forecast();
+  if (s_forecast_layer) {
+    layer_mark_dirty(s_forecast_layer);
+  }
 }
 
 void update_forecast(bool force) {
-  if (settings_get_WeatherStatus() == WEATHER_API_NOT_SET || \
-      
-  settings_get_WeatherStatus() == WEATHER_API_INVALID) {
-    #if defined (DEBUG) 
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather error, disable forecast request");
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Forecast update requested %s", force ? "true" : "false");
+  #endif
+  is_force_update = force;
+  if (!force) {
+    if (settings_get_PebbleShakeAction() != PSA_FORECAST) {
+      #if defined (DEBUG)
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Shake action is not about show forecast, skipping");
+      #endif
+      return;    
+    }
+
+    WEATHER_STATUS status = settings_get_WeatherStatus();
+
+    if (status == WEATHER_API_NOT_SET || \
+        status == WEATHER_API_INVALID) {
+      #if defined (DEBUG) 
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather error, disable forecast request");
+      #endif
+      return;
+    }
+
+    if (status == WEATHER_LOCATION_ID_INVALID) {
+      #if defined (DEBUG)
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "City ID invalid, disable weather request");
+      #endif
+      return;
+    }
+
+    if (status == WEATHER_LOCATION_ERROR) {
+      #if defined (DEBUG)
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "GPS location error, disable forecast");
+      #endif
+      return;
+    }
+
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "%ld < %ld", (uint32_t)time(NULL), forecast.ForecastTime);  
     #endif
-    return;
+    if ((uint32_t)time(NULL) < forecast.ForecastTime) {
+      #if defined (DEBUG)
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "No forecast update needed");
+      #endif          
+      return;
+    } 
   }
 
-  if (settings_get_WeatherStatus() == WEATHER_LOCATION_ID_INVALID) {
-    #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "City ID invalid, disable weather request");
-    #endif
-    return;
-  }
-  
-  if (settings_get_PebbleShakeAction() != PSA_FORECAST) {
-    #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Shake action is not about show forecast, skipping");
-    #endif
-    return;    
-  }
-  
   if (!s_forecast_layer) {
     prv_load_forecast();
   }
 
-  if (!force) {
-    if ((uint32_t)time(NULL) < forecast.ForecastTime) {
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "%ld < %ld", (uint32_t)time(NULL), forecast.ForecastTime);  
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "No forecast update needed");
-      return;
-    }
-
-  }
-
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Let's get forecast!");
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Let's get forecast!");
+  #endif
+  
   Tuplet data_to_send[] = {
     TupletInteger(MESSAGE_KEY_WeatherMarkerForecast, 1),
-  };
-  send_message(data_to_send, prv_send_data_failed);
+  };  
+  send_message(data_to_send, ARRAY_LENGTH(data_to_send), prv_send_data_failed);
 }
 
 static void prv_send_data_failed() {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Forecast send message failed, timeput 5 secs");
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Forecast send message failed, timeput 5 secs");
+  #endif
+  
   s_timeout_timer = app_timer_register(timeout, prv_timer_timeout_handler, NULL);
 }
 
 static void prv_timer_timeout_handler (void *context) {
-  update_forecast(true);
+  bool state = is_force_update;
+  if (state) {
+    is_force_update = false;
+  }
+  update_forecast(state);
 }
 
 static void prv_save_forecast() {

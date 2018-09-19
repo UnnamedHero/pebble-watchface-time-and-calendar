@@ -56,6 +56,8 @@ export default (pebbleObject, type) => {
   // console.log(`error: ${error}`);
 
   const currentAttempt = error.attempts ? error.attempts + 1 : 1;
+  // console.log(`error ${JSON.stringify(error)},
+  // attempt ${currentAttempt}, old: ${error.attempts}, ${maxAttempts[WeatherError]}`);
   const currentType = typeTable[type];
   if (currentAttempt >= maxAttempts[WeatherError]) {
     const newTime = dateFns.addMinutes(new Date(), currentType.offsetInMinutes);

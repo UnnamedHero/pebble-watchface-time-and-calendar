@@ -17,7 +17,7 @@ const sender = (data, attempt) => {
       sender(data, nextAttempt);
     }, timeout);
   };
-
+  // console.log(`data to send: ${JSON.stringify(data)}`);
   Pebble.sendAppMessage(data, onSuccess, onError.bind(undefined, attempt + 1)); //eslint-disable-line
 };
 

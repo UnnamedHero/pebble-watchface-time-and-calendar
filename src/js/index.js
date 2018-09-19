@@ -70,13 +70,29 @@ Pebble.addEventListener('ready', () => { //eslint-disable-line
   sendToPebble({ JSReady: 1 });
 });
 
+const getRequestType = (message) => {
+  if (message.WeatherMarkerForecast === 1) {
+    return 'forecast';
+  }
+  if (message.WeatherMarker === 1) {
+    return 'weather';
+  }
+  return 'unknown';
+};
+
 Pebble.addEventListener('appmessage', async (e) => { //eslint-disable-line
   const message = e.payload;
-  const isForecastRequest = message.WeatherMarkerForecast === 1;
+
+  const requestType = getRequestType(message);
+  // console.log(`request: ${requestType}, ${JSON.stringify(message)}`);
+  if (requestType === 'unknown') {
+    return;
+  }
+
   const data = JSON.parse(localStorage.getItem('clay-helper') || '{}');
   const options = {
     ...data,
-    type: isForecastRequest ? 'forecast' : 'weather',
+    type: requestType,
   };
   const pebbleWeather = await getWeather(options);
   sendToPebble(pebbleWeather);
