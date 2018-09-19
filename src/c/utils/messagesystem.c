@@ -67,7 +67,7 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
 }
 
 
-void send_message(Tuplet *data, message_failed_callback_ptr message_failed_callback) {
+void send_message(Tuplet *data, int data_size, message_failed_callback_ptr message_failed_callback) {
   if (busy) {
     #if defined (DEBUG) 
       APP_LOG(APP_LOG_LEVEL_DEBUG, "Message system busy");
@@ -95,10 +95,14 @@ void send_message(Tuplet *data, message_failed_callback_ptr message_failed_callb
   AppMessageResult prepare_result = app_message_outbox_begin(&iter);
   if (prepare_result != APP_MSG_OK) {
     busy = false;
-    message_failed_callback();    
+    message_failed_callback();
+    return;   
   }
-  int data_size = (int)ARRAY_LENGTH(data);
+  
   for (int i = 0; i < data_size; i++ ) {
+    // #if defined (DEBUG)
+    //   APP_LOG(APP_LOG_LEVEL_DEBUG, "data size %d, %lu: %lu", i, data[i].key, data[i].integer.storage);
+    // #endif
     const Tuplet item = data[i];
     DictionaryResult dict_write_result = dict_write_tuplet(iter, &item);
     if (dict_write_result != DICT_OK) {
@@ -113,7 +117,8 @@ void send_message(Tuplet *data, message_failed_callback_ptr message_failed_callb
   AppMessageResult send_result = app_message_outbox_send();
   if (send_result != APP_MSG_OK) {
     busy = false;
-    message_failed_callback();    
+    message_failed_callback(); 
+    return;   
   }
   #if defined (DEBUG) 
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Data sended!");
