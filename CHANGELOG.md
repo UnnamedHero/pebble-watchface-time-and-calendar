@@ -1,5 +1,10 @@
 # Changelog
 
+#### 0.46.0 (beta)
+ - add add icon to show if invalid city id was specified
+ - add ability to show steps count instead of current date.
+ - bugfixes!
+ 
 #### 0.45.0 (beta)
  - increame GPS cache time to 30 mins (issue #18)
  - show basic time instead of deprecated weather description on forecast screen feature (issue #17)
