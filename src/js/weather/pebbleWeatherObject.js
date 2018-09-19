@@ -12,7 +12,6 @@ const getConditionSymbol = (conditionCode, sunrise, sunset, time = new Date()) =
   const symbol = conditions[conditionCode].symbol || 'h';
   if (conditionCode >= 800 && conditionCode <= 803) {
     const [day, night] = symbol;
-    console.log(`up ${sunrise} down ${sunset} time ${time}`);
     return isDayAt(sunrise, sunset, time) ? day : night;
   }
   return symbol;
