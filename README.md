@@ -27,6 +27,7 @@ The code is licenced under GPLv3 license.
 Main features:
 - bluetooth connection status
 - smartwatch battery status
+- steps count
 - shows date and time
 - shows a three-week calendar grid
 - shows current weather status (OpenWeatherMap API key required)
