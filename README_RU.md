@@ -1,6 +1,5 @@
-# Time-and-Calendar watchface
+# Циферблат Time-and-Calendar
 
-Welcome to a "Time-and-Calendar" watchface for Pebble smartwatch. Watch was was created as a trubute to such watchfaces as TCW (https://github.com/alexsum/TCW) and Timely (https://github.com/cynorg/PebbleTimely). 
 Добро пожаловать на страницу циферблата под названием "Time-and-Calendar" для смарт-часов Pebble. Циферблат основан на идеях TCW (https://github.com/alexsum/TCW) и Timely (https://github.com/cynorg/PebbleTimely). За что им огромное спасибо. 
 
 ![][screen1]
@@ -27,6 +26,7 @@ Watchwace mainly designed for Pebble classic watches (I have Pebble classic). Wr
 
 Основные возможности:
 - статус соединения bluetooth
+- количество пройденных шагов
 - отображения индикатора заряда
 - показ даты и времени
 - показ календарной сетки на три недели
