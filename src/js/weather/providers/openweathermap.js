@@ -41,7 +41,7 @@ export const makeUrl = async (options) => {
   const addr = 'http://api.openweathermap.org/data/2.5/';
   const requestType = options.type;
   const { errors, location } = await getLocation(options);
-  console.log(`location errer: ${errors.message}`);
+  // console.log(`location errer: ${errors.message}`);
   const temperatureUnits = getTemperatureUnits(options.units);
   const key = `&appid=${options.apiKey}`;
 
