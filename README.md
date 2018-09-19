@@ -1,4 +1,5 @@
 # Time-and-Calendar watchface
+[Читать на русском](https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/blob/master/README_RU.md)
 
 Welcome to a "Time-and-Calendar" watchface for Pebble smartwatch. Watch was was created as a trubute to such watchfaces as TCW (https://github.com/alexsum/TCW) and Timely (https://github.com/cynorg/PebbleTimely). 
 
@@ -37,13 +38,15 @@ Main features:
 
 Configurable with Clay for Pebble framework. It means - no external website is needed to load configurartion page, all is done on your smartphone.
 
+Please, read [wiki](https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki) for any help.
+
 Feel free to post any comments on GitHub page, report bugs, ask for features.
 
 Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
-Lastest beta version is [0.45.0](https://drive.google.com/open?id=1Ab9uDkCqdEFArnhbrhcXOgH-JS_TubL9) 17/09/2018 (Drive application automatically open pbw file and show its content. To download pbw press down arrow on the top right corner.)
+Lastest beta version is [0.46.0](https://drive.google.com/open?id=1p0Y_BbVcsSCHyTZ2DFGzp7AqwSAY4MOP) 19/09/2018 (Drive application automatically open pbw file and show its content. To download pbw press down arrow on the top right corner.)
 
-You can support me -> donate to [Paypal](https://www.paypal.me/eugenemikhaylov)
+You can help me with my mortgage -> donate to [Paypal](https://www.paypal.me/eugenemikhaylov)
 
 See [CHANGELOG](https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/blob/master/CHANGELOG.md) for more details.
 

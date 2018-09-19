@@ -53,7 +53,7 @@ typedef struct ClaySettings {
   uint8_t ColorShiftMinEnd;
   int ShiftFontColorHex;
   int ShiftBackgroundColorHex;
-
+  uint8_t HealthSteps;
 } __attribute__((__packed__)) ClaySettings;
 
 static ClaySettings settings;
@@ -387,6 +387,10 @@ void helper_str_filler(char *item, char* filler) {
   }
 }
 
+bool settings_get_HealthSteps() {
+  return get_bool(settings.HealthSteps);
+}
+
 static void prv_load_settings() {
   // Load the default settings
   prv_default_settings();
@@ -694,6 +698,11 @@ void populate_settings(DictionaryIterator *iter, void *context) {
   Tuple *shift_bkgrnd_c = dict_find(iter, MESSAGE_KEY_ShiftBackgroundColor);
   if (shift_bkgrnd_c) {
     settings.ShiftBackgroundColorHex = shift_bkgrnd_c->value->int32;
+  }
+
+  Tuple *health_steps = dict_find(iter, MESSAGE_KEY_HealthSteps);
+  if (health_steps) {
+    settings.HealthSteps = health_steps->value->uint8;
   }
 
   save_settings();

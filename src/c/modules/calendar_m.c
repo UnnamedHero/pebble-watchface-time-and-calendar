@@ -26,8 +26,8 @@ void deinit_calendar_layer() {
 }
 
 static void prv_update_time() {
-  time_t temp = time(NULL);
-  ct = localtime(&temp);
+  // time_t temp = time(NULL);
+  ct = get_Time();//localtime(&temp);
 }
 
 Layer* get_layer_calendar() {

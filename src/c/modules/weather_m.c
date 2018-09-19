@@ -21,7 +21,7 @@ static void prv_ticktimer(struct tm*);
 static void prv_ticktimer_clock(struct tm*);
 static AppTimer *s_timeout_timer;
 static const int timeout = 5000;
-
+static bool is_force_update;
 typedef struct WeatherData {
   uint8_t WeatherReady;
   int WeatherTemperature;
@@ -47,13 +47,10 @@ void prv_default_weather_data() {
   }
 
   helper_str_filler(weather.WeatherCondition, "h");
-  // if (strlen(weather.WeatherCondition == 0)) {
-  //   strcpy(weather.WeatherCondition, 'h');
-  // }
-
 }
 
 void init_weather_layer(GRect bounds) {  
+  is_force_update = false;
   s_this_layer = layer_create(bounds);
   s_wfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
   s_tfont = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_TIME_BOLD_58));
@@ -91,6 +88,10 @@ static void prv_ticktimer_clock(struct tm* unneeded) {
 }
 
 void update_weather(bool force) {
+  is_force_update = force;
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Update weather, force: %s, status: %i", force ? "true" : "false", settings_get_WeatherStatus());
+  #endif
   if (settings_get_WeatherStatus() == WEATHER_API_INVALID || \
       settings_get_WeatherStatus() == WEATHER_API_NOT_SET) {
     if (!force) {
@@ -110,9 +111,9 @@ void update_weather(bool force) {
   }
   if (!force) {
    if (!is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
-   #if defined (DEBUG) 
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
-   #endif
+      #if defined (DEBUG) 
+          APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
+      #endif
     return;
     } 
   }
@@ -120,9 +121,9 @@ void update_weather(bool force) {
     TupletInteger(MESSAGE_KEY_WeatherMarker, 1),
   };
   #if defined (DEBUG) 
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Request weather");
-  #endif  
-  send_message(data_to_send, 1, prv_send_data_failed);
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Request weather %d", ARRAY_LENGTH(data_to_send));
+  #endif
+  send_message(data_to_send, ARRAY_LENGTH(data_to_send), prv_send_data_failed);
 }
 
 void prv_populate_this_layer(Layer *me, GContext *ctx) {
@@ -315,5 +316,9 @@ static void prv_send_data_failed() {
 }
 
 static void prv_timer_timeout_handler (void *context) {
-  update_weather(true);
+  bool state = is_force_update;
+  if (state) {
+    is_force_update = false;
+  }
+  update_weather(state);
 }

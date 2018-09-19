@@ -136,6 +136,7 @@ uint8_t settings_get_ColorShiftMinuteEnd();
 int settings_get_ShiftBackgroundColor();
 int settings_get_ShiftFontColor();
 bool is_time_to_shift();
+bool settings_get_HealthSteps();
 
 #if defined (PBL_PLATFORM_APLITE)
 bool settings_get_QT();
