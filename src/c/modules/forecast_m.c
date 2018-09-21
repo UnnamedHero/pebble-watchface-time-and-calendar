@@ -1,6 +1,7 @@
 #include <pebble.h>
 #include "include/forecast_m.h"
 #include "../settings.h"
+#include "../utils/include/timeutils.h"
 #include "../utils/include/messagesystem.h"
 #include "../utils/include/ticktimerhelper.h"
 
@@ -31,6 +32,7 @@ static const int f_date_height = 32;
 static const int f_cond_height = 32;
 static const int f_item_temp_height = 15;
 
+static void prv_send_forecast_update_request();
 static bool is_force_update;
 
 void init_forecast_layer(GRect rect) {
@@ -128,13 +130,15 @@ void forecast_update(DictionaryIterator *iter, void *context) {
 
   Tuple *f_time = dict_find(iter, MESSAGE_KEY_ForecastTime);
   if (f_time) {
-    forecast.ForecastTime = f_time->value->int32;
+    forecast.ForecastTime = f_time->value->uint32;
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "forecast time set to %lu", forecast.ForecastTime);
+    #endif
   }       
 
   if (forecast.ForecastReady != 1 || forecast.ForecastQty == 0) {
     return;
   }
-  
 
   for (int i = 0; i < forecast.ForecastQty; i++) {    
     Tuple *f_temp = dict_find(iter, MESSAGE_KEY_ForecastTemperature + i);
@@ -158,53 +162,59 @@ void forecast_update(DictionaryIterator *iter, void *context) {
 }
 
 void update_forecast(bool force) {
+  is_force_update = force;
+
   #if defined (DEBUG)
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Forecast update requested %s", force ? "true" : "false");
   #endif
-  is_force_update = force;
-  if (!force) {
-    if (settings_get_PebbleShakeAction() != PSA_FORECAST) {
-      #if defined (DEBUG)
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "Shake action is not about show forecast, skipping");
-      #endif
-      return;    
-    }
 
-    WEATHER_STATUS status = settings_get_WeatherStatus();
-
-    if (status == WEATHER_API_NOT_SET || \
-        status == WEATHER_API_INVALID) {
-      #if defined (DEBUG) 
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather error, disable forecast request");
-      #endif
-      return;
-    }
-
-    if (status == WEATHER_LOCATION_ID_INVALID) {
-      #if defined (DEBUG)
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "City ID invalid, disable weather request");
-      #endif
-      return;
-    }
-
-    if (status == WEATHER_LOCATION_ERROR) {
-      #if defined (DEBUG)
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "GPS location error, disable forecast");
-      #endif
-      return;
-    }
-
+  if (force) {
+    prv_send_forecast_update_request();
+    return;
+  }
+  
+  if (settings_get_PebbleShakeAction() != PSA_FORECAST) {
     #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "%ld < %ld", (uint32_t)time(NULL), forecast.ForecastTime);  
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Shake action is not about show forecast, skipping");
     #endif
-    if ((uint32_t)time(NULL) < forecast.ForecastTime) {
-      #if defined (DEBUG)
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "No forecast update needed");
-      #endif          
-      return;
-    } 
+    return;    
   }
 
+  WEATHER_STATUS status = settings_get_WeatherStatus();
+
+  if (status == WEATHER_DISABLED) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather is disabled. Forecast too.");      
+    #endif
+    return;
+  }
+
+  if (status == WEATHER_API_NOT_SET || \
+      status == WEATHER_API_INVALID) {
+    #if defined (DEBUG) 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather error, disable forecast request");
+    #endif
+    return;
+  }
+
+  if (status == WEATHER_LOCATION_ID_INVALID) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "City ID invalid, disable forecast request");
+    #endif
+    return;
+  }
+
+  if (is_time_to(forecast.ForecastTime, P_3H)) {
+    prv_send_forecast_update_request();
+    return;
+  }
+  
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "No forecast update needed");
+  #endif
+}
+
+void prv_send_forecast_update_request() {
   if (!s_forecast_layer) {
     prv_load_forecast();
   }
@@ -221,7 +231,7 @@ void update_forecast(bool force) {
 
 static void prv_send_data_failed() {
   #if defined (DEBUG)
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Forecast send message failed, timeput 5 secs");
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Forecast send message failed, timeout 5 secs");
   #endif
   
   s_timeout_timer = app_timer_register(timeout, prv_timer_timeout_handler, NULL);

@@ -9,12 +9,11 @@ static void prv_populate_this_layer(Layer *, GContext *);
 
 static int days[21];
 static char calendar_values[28][5];
-static struct tm *ct;
-static void prv_update_time();
+// static void prv_update_time();
 
 void init_calendar_layer(GRect rect) {
   s_this_layer = layer_create(rect);
-  prv_update_time();
+  // prv_update_time();
   layer_set_update_proc(s_this_layer, prv_populate_this_layer);
 
 }
@@ -25,10 +24,10 @@ void deinit_calendar_layer() {
   }
 }
 
-static void prv_update_time() {
-  // time_t temp = time(NULL);
-  ct = get_Time();//localtime(&temp);
-}
+// static void prv_update_time() {
+//   // time_t temp = time(NULL);
+//   ct = get_Time();//localtime(&temp);
+// }
 
 Layer* get_layer_calendar() {
   return s_this_layer;
@@ -50,8 +49,8 @@ static void fill_dates() {
 
   time_t now, previous_week_start, filler;
   now = time(NULL);
-  prv_update_time();
-  int current_week_day = ct->tm_wday;
+  // prv_update_time();
+  int current_week_day = get_Time()->tm_wday;
   struct tm *filler_t;//;, *now_test;
   
   previous_week_start = now - (s_get_calendar_begin() + current_week_day) * SECONDS_PER_DAY;
@@ -111,12 +110,13 @@ static void prv_populate_this_layer(Layer *me, GContext *ctx) {
   GRect bounds = layer_get_bounds(s_this_layer);
 
   int width = (bounds.size.w) / 7;
-  prv_update_time();
+  // prv_update_time();
   int current_week_day_abbr_index;
+  int day_index = get_Time()->tm_wday;
   if (settings_get_SundayFirst()) {
-   current_week_day_abbr_index = ct->tm_wday;
+   current_week_day_abbr_index = day_index;
   } else {
-   current_week_day_abbr_index = ct->tm_wday == 0 ? 6 : ct->tm_wday - 1;
+   current_week_day_abbr_index = day_index == 0 ? 6 : day_index - 1;
  }
   int current_date_index =current_week_day_abbr_index + s_get_calendar_begin() + 7;
   GRect backgrnd = GRect(bounds.origin.x + 1, bounds.origin.y, bounds.size.w - 6, bounds.size.h - 1);  

@@ -6,13 +6,13 @@
 
 int period_to_mins(PERIOD per);
 
-static tm currentTime;
+static struct tm currentTime = {0};
 
-tm* get_Time() {
+struct tm* get_Time() {
   return &currentTime;
 }
 
-static void prv_utils_handler(tm* tick_time) {
+static void prv_utils_handler(struct tm* tick_time) {
   currentTime = *tick_time;
 }
 
@@ -42,9 +42,6 @@ bool is_quiet_time() {
 }
 
 void get_currect_time(DT_FORMAT dtf, char *buffer) {
-  // struct tm *tick_time;
-  // time_t temp = time(NULL);
-  // tick_time = localtime(&temp);
   char d_buffer[32];
   char format[12];
   switch (dtf) {
@@ -59,9 +56,6 @@ void get_currect_time(DT_FORMAT dtf, char *buffer) {
       strcat(format, ":%S");
       break;
     }
-  #if defined (DEBUG)
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "time string %s", format);
-  #endif
   strftime(d_buffer, sizeof(d_buffer), format, &currentTime);
   strcpy(buffer, d_buffer);
 }
@@ -69,9 +63,6 @@ void get_currect_time(DT_FORMAT dtf, char *buffer) {
 void get_current_date(char *format, char *out) {
   char* rus_months[] = { _("jan"), _("feb"), _("mar"), _("apr"), _("may"), _("jun"), _("jul"), _("aug"), _("sep"), _("oct"), _("nov"), _("dec") };
   const size_t out_size = 32;
-  // struct tm *tick_time;
-  // time_t temp = time(NULL);
-  // tick_time = localtime(&temp);
 
   const char* locale_str = i18n_get_system_locale();
   const bool locale_ru = strcmp(locale_str, "ru_RU") == 0;
@@ -86,8 +77,12 @@ void get_current_date(char *format, char *out) {
 bool is_time_to(uint32_t timestamp, PERIOD period) {
   int secs_to_wait = period_to_mins(period) * SECONDS_PER_MINUTE;
   uint32_t elapsed = timestamp + secs_to_wait;
-//  APP_LOG(APP_LOG_LEVEL_DEBUG, "elapsed %li <=> current %li", elapsed, (uint32_t)time(NULL));
-  return elapsed < (uint32_t)time(NULL);
+  struct tm _time = *get_Time();
+  uint32_t current = (uint32_t)mktime(&_time);
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "elapsed %li <=> current %li, delta: %li", elapsed, current, current - elapsed);
+  #endif
+  return elapsed < current;
 }
 
 int period_to_mins(PERIOD per) {

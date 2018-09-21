@@ -143,10 +143,6 @@ static void prv_post_load_settings() {
   }
 }
 
-// char* settings_get_clockformat() {
-//   return settings.ClockFormat;
-// }
-
 char* settings_get_ClockFormat() {
   return settings.ClockFormat;
 }
@@ -322,6 +318,10 @@ TIME_FONT settings_get_TimeFont() {
   return settings.TimeFont;
 }
 
+void settings_set_WeatherStatus(WEATHER_STATUS status) {
+  settings.WeatherStatus = status;
+}
+
 WEATHER_STATUS settings_get_WeatherStatus() {
   return settings.WeatherStatus;
 }
@@ -457,35 +457,7 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     }
   }
 
-  Tuple *w_error = dict_find(iter, MESSAGE_KEY_WeatherError);
-  if (w_error) {
-    #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather Error %d", w_error->value->uint8);
-    #endif
-    switch (w_error->value->uint8) {
-      case 0:
-        settings.WeatherStatus = WEATHER_OK;
-        break;
-      case 1:
-        settings.WeatherStatus = WEATHER_DISABLED;
-        break;
-      case 2:
-        settings.WeatherStatus = WEATHER_LOCATION_ERROR;
-        break;
-      case 3:
-        settings.WeatherStatus = WEATHER_API_NOT_SET;
-        break;
-      case 4:
-        settings.WeatherStatus = WEATHER_API_INVALID;
-        break;
-      case 5:
-        settings.WeatherStatus = WEATHER_LOCATION_ID_INVALID;
-        break;
-      case 6:
-        settings.WeatherStatus = WEATHER_UNKNOWN_ERROR;
-        break;
-    }
-  }
+
   
   Tuple *date_fmt = dict_find(iter, MESSAGE_KEY_DateFormat);
   if (date_fmt) {
