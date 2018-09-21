@@ -55,7 +55,8 @@ typedef enum WeatherStatus {
   WEATHER_API_NOT_SET,
   WEATHER_API_INVALID,
   WEATHER_LOCATION_ID_INVALID,
-  WEATHER_UNKNOWN_ERROR
+  WEATHER_UNKNOWN_ERROR,
+  WEATHER_API_BANNED
 } WEATHER_STATUS;
 
 typedef enum ClockFormatSettings {
@@ -138,7 +139,7 @@ int settings_get_ShiftBackgroundColor();
 int settings_get_ShiftFontColor();
 bool is_time_to_shift();
 bool settings_get_HealthSteps();
-
+bool can_update_weather();
 #if defined (PBL_PLATFORM_APLITE)
 bool settings_get_QT();
 uint8_t settings_get_QTHourBegin();
