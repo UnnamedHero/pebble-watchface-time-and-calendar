@@ -4,7 +4,7 @@
 #include "timelib.h"
 
 void init_time_utils();
-tm* get_Time();
+struct tm* get_Time();
 
 
 bool is_quiet_time();
