@@ -4,6 +4,7 @@ import { conditions, getWindDirectionSymbol, messages } from './weatherAttribute
 import errorHandler from './errorHandler';
 
 const sunStorageKey = 'SunTimes';
+const secondsPerMinute = 60;
 
 const isDayAt = (sunrise, sunset, time) => dateFns
   .isWithinRange(time, sunrise, sunset);
@@ -17,10 +18,11 @@ const getConditionSymbol = (conditionCode, sunrise, sunset, time = new Date()) =
   return symbol;
 };
 
-const getLocalTimeFromUtc = (utc) => {
-  const offset = new Date().getTimezoneOffset();
-  return new Date(utc * 1000 + offset * 60);
-};
+const getTZOffest = () => new Date().getTimezoneOffset();
+
+const getLocalTimeFromUtc = utc => new Date(utc * 1000 + getTZOffest() * secondsPerMinute);
+
+const getLocalTimeStamp = () => Math.round(new Date().getTime() / 1000);
 
 const formatTime = (time, formatString) => {
   const localTime = getLocalTimeFromUtc(time);
@@ -43,8 +45,8 @@ const makeWeather = (weather) => {
     WeatherMarker: true,
     WeatherTemperature: weather.temperature,
     WeatherCondition: getConditionSymbol(weather.condition, sunriseUT, sunsetUT),
-    // WeatherDesc: json.weather[0].description,
-    WeatherTimeStamp: weather.timeStamp,
+    // timestamp from OWM is toooooo old
+    WeatherTimeStamp: getLocalTimeStamp(),
     WeatherPressure: weather.pressure,
     WeatherWindSpeed: weather.windSpeed,
     WeatherWindDirection: getWindDirectionSymbol(weather.windDirection),
@@ -73,7 +75,7 @@ const makeForecast = (forecast) => {
   return {
     WeatherMarkerForecast: true,
     ForecastQty: forecast.length,
-    ForecastTime: forecast[0].timeStamp,
+    ForecastTime: getLocalTimeStamp(forecast[0].timeStamp),
     ...forecastData,
     WeatherError: messages.weather_ok,
   };
