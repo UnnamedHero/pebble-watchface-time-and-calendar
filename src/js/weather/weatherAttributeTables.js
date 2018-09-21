@@ -6,6 +6,7 @@ export const messages = {
   api_key_not_set: 4,
   invalid_location_id: 5,
   unknown_error: 6,
+  banned: 7,
 };
 
 export const getWindDirectionSymbol = (direction) => {
