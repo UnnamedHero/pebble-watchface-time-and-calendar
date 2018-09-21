@@ -180,27 +180,7 @@ void update_forecast(bool force) {
     return;    
   }
 
-  WEATHER_STATUS status = settings_get_WeatherStatus();
-
-  if (status == WEATHER_DISABLED) {
-    #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather is disabled. Forecast too.");      
-    #endif
-    return;
-  }
-
-  if (status == WEATHER_API_NOT_SET || \
-      status == WEATHER_API_INVALID) {
-    #if defined (DEBUG) 
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather error, disable forecast request");
-    #endif
-    return;
-  }
-
-  if (status == WEATHER_LOCATION_ID_INVALID) {
-    #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "City ID invalid, disable forecast request");
-    #endif
+  if (!can_update_weather()) {
     return;
   }
 

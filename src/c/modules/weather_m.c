@@ -101,27 +101,7 @@ void update_weather(bool force) {
     return;
   }
 
-  WEATHER_STATUS weather_status = settings_get_WeatherStatus();
-
-  if (weather_status == WEATHER_DISABLED) {
-    #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather is disabled.");      
-    #endif
-    return;
-  }
-
-  if (weather_status == WEATHER_API_INVALID || \
-      weather_status == WEATHER_API_NOT_SET) {
-      #if defined (DEBUG) 
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "API key is bad, disable weather request");
-      #endif
-      return;
-  }
-  
-  if (weather_status == WEATHER_LOCATION_ID_INVALID) {
-    #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "City ID invalid, disable weather request");
-    #endif      
+  if (!can_update_weather()) {
     return;
   }
 
