@@ -18,7 +18,6 @@ static void prv_load_weather();
 static void prv_send_data_failed();
 static void prv_timer_timeout_handler(void*);
 static void prv_ticktimer(struct tm*);
-static void prv_ticktimer_clock(struct tm*);
 static void prv_send_weather_update_request();
 
 static AppTimer *s_timeout_timer;
