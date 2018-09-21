@@ -105,7 +105,7 @@ export default function (minified) {
       if (v1 < v2) {
         return 1;
       }
-      return (index + 1);
+      return iter(index + 1);
     };
     return iter(0);
   };
@@ -117,12 +117,12 @@ export default function (minified) {
       minified.$.request('get', 'https://raw.githubusercontent.com/UnnamedHero/pebble-watchface-time-and-calendar/master/package.json')
         .then((resp) => {
           const { version } = JSON.parse(resp);
-          const versionCompareRes = compareVersions(version, clayConfig.meta.userData.version);
-          if (versionCompareRes <= 0) {
-            updateElem.set('You have actual version');
+          const versionCompareRes = compareVersions(clayConfig.meta.userData.version, version);
+          if (versionCompareRes > 0) {
+            updateElem.set(`New version ${version} is available. Get it at <a href='https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs'>Google Drive</a> `);
             return;
           }
-          updateElem.set(`New version ${version} is available. Get it at <a href='https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs'>Google Drive</a> `);
+          updateElem.set('You have actual version');
         })
         .error(() => {
           updateElem.set('Sorry, can\'t tell anything about new version availability');

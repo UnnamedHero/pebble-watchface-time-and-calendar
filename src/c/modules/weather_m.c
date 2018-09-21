@@ -18,7 +18,6 @@ static void prv_load_weather();
 static void prv_send_data_failed();
 static void prv_timer_timeout_handler(void*);
 static void prv_ticktimer(struct tm*);
-static void prv_ticktimer_clock(struct tm*);
 static void prv_send_weather_update_request();
 
 static AppTimer *s_timeout_timer;
@@ -40,9 +39,6 @@ typedef struct WeatherData {
 
 static WeatherData weather;
 
-
-
-
 void prv_default_weather_data() {  
   if (weather.WeatherReady != 1) {
     weather.WeatherReady = 0;
@@ -62,7 +58,6 @@ void init_weather_layer(GRect bounds) {
   prv_load_weather();
   layer_set_update_proc(s_this_layer, prv_populate_this_layer);
   ticktimerhelper_register(prv_ticktimer);
-  ticktimerhelper_register_clock(prv_ticktimer_clock);
 }
 
 void deinit_weather_layer() {
@@ -82,11 +77,6 @@ Layer* get_layer_weather() {
 
 static void prv_ticktimer(struct tm* unneeded) {
   update_weather(false);
-  // layer_mark_dirty(s_this_layer);
-}
-
-static void prv_ticktimer_clock(struct tm* unneeded) {  
-  layer_mark_dirty(s_this_layer);
 }
 
 void update_weather(bool force) {
