@@ -391,6 +391,41 @@ bool settings_get_HealthSteps() {
   return get_bool(settings.HealthSteps);
 }
 
+bool can_update_weather() {
+   WEATHER_STATUS weather_status = settings_get_WeatherStatus();
+
+  if (weather_status == WEATHER_DISABLED) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather is disabled.");      
+    #endif
+    return false;
+  }
+
+  if (weather_status == WEATHER_API_BANNED) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "API KEY BANNED");
+    #endif
+    return false;
+  }
+
+  if (weather_status == WEATHER_API_INVALID || \
+      weather_status == WEATHER_API_NOT_SET) {
+      #if defined (DEBUG) 
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "API key is bad, disable weather request");
+      #endif
+      return false;
+  }
+  
+  if (weather_status == WEATHER_LOCATION_ID_INVALID) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "City ID invalid, disable weather request");
+    #endif      
+    return false;
+  }
+
+  return true;
+}
+
 static void prv_load_settings() {
   // Load the default settings
   prv_default_settings();

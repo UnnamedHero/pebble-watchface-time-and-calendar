@@ -66,6 +66,9 @@ static void prv_get_weather_error_symbol(char *err_symbol) {
     case WEATHER_LOCATION_ERROR:
       snprintf(err_symbol, 2, "%s", "E\0");
       break;
+    case WEATHER_API_BANNED:
+      snprintf(err_symbol, 2, "%s", "X\0");
+      break;
     default:
       snprintf(err_symbol, 2, "%s", " \0");
       break;

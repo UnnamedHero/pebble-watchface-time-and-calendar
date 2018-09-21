@@ -46,9 +46,14 @@ export default async (options) => {
   if (code === '400') {
     return makePebbleWeatherObject({ WeatherError: messages.invalid_location_id });
   }
+  if (code === '429') {
+    return makePebbleWeatherObject({ WeatherError: messages.banned });
+  }
+
   if (code !== '200') {
     return makePebbleWeatherObject({ WeatherError: messages.unknown_error }, options.type);
   }
+
   const weatherObj = provider.makeWeatherObj(options, weatherPOJO);
   return makePebbleWeatherObject(weatherObj, options.type);
 };
