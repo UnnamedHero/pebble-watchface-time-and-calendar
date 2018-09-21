@@ -118,7 +118,6 @@ export default function (minified) {
         .then((resp) => {
           const { version } = JSON.parse(resp);
           const versionCompareRes = compareVersions(clayConfig.meta.userData.version, version);
-          console.log(versionCompareRes);
           if (versionCompareRes > 0) {
             updateElem.set(`New version ${version} is available. Get it at <a href='https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs'>Google Drive</a> `);
             return;
