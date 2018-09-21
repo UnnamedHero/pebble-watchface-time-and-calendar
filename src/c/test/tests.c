@@ -1,14 +1,16 @@
-#include <BCUnit/BCUnit.h>
-#include <BCUnit/Basic.h>
+#include <CUnit/CUnit.h>
+#include <CUnit/Basic.h>
 #include <stdbool.h>
+
+#include "../utils/include/timelib.h"
 #include "../utils/include/linkedlist.h"
-#include "../utils/include/ticktimerhelper.h"
+// #include "../utils/include/ticktimerhelper.h"
 
 typedef struct {
 	int (*f_ptr)(void);
 } test_callback_ptr;
 
-static int count = 0;
+// static int count = 0;
 
 typedef void(*tt_ptr)(int);
 
@@ -27,34 +29,20 @@ int ll_test_helper(void) {
 	return 42;
 }
 
-
-bool is_time_quiet(int begin, int end, int now) {
-  bool within_24h = begin <= end;
-  int min = within_24h ? begin : end;
-  int max = !within_24h ? begin : end;
-  bool between = (now >= min) && (now <= max);
-  if (within_24h) {
-  	return within_24h && between;
-  } else {
-  	bool not_equal_state = !(between || within_24h);
-  	return now == begin || now == end ? !not_equal_state : not_equal_state;
-  } 
-}
-
 void test_is_between_numbers(void) {
-	CU_ASSERT_TRUE(is_time_quiet(100, 200, 150));
-	CU_ASSERT_FALSE(is_time_quiet(100, 200, 300));
-	CU_ASSERT_FALSE(is_time_quiet(100, 200, 50));
+	CU_ASSERT_TRUE(is_within_range(100, 200, 150));
+	CU_ASSERT_FALSE(is_within_range(100, 200, 300));
+	CU_ASSERT_FALSE(is_within_range(100, 200, 50));
 
-	CU_ASSERT_TRUE(is_time_quiet(200, 100, 50));
-	CU_ASSERT_TRUE(is_time_quiet(200, 100, 250));
-	CU_ASSERT_FALSE(is_time_quiet(200, 100, 150));
+	CU_ASSERT_TRUE(is_within_range(200, 100, 50));
+	CU_ASSERT_TRUE(is_within_range(200, 100, 250));
+	CU_ASSERT_FALSE(is_within_range(200, 100, 150));
 
-	CU_ASSERT_TRUE(is_time_quiet(100, 200, 100));
-	CU_ASSERT_TRUE(is_time_quiet(100, 200, 200));
-	CU_ASSERT_TRUE(is_time_quiet(100, 100, 100));
-	CU_ASSERT_TRUE(is_time_quiet(200, 100, 200));
-	CU_ASSERT_TRUE(is_time_quiet(200, 100, 100));
+	CU_ASSERT_TRUE(is_within_range(100, 200, 100));
+	CU_ASSERT_FALSE(is_within_range(100, 200, 200));
+	CU_ASSERT_TRUE(is_within_range(100, 100, 100));
+	CU_ASSERT_TRUE(is_within_range(200, 100, 200));
+	CU_ASSERT_FALSE(is_within_range(200, 100, 100));
 }
 
 void test_linked_list(void)
@@ -89,33 +77,33 @@ void test_linked_list(void)
 	deinit_linkedlist(ll);
 }
 
-void tt_test_helper(int data) {
-	CU_ASSERT_EQUAL(data, 42);	
-}
+// void tt_test_helper(int data) {
+// 	CU_ASSERT_EQUAL(data, 42);	
+// }
 
-void tt_test_deephelper(int data) {
-	count = count + 1;	
-}
+// void tt_test_deephelper(int data) {
+// 	count = count + 1;	
+// }
 
 
-void test_ticktimerhelper(void) {
-	start_ticktimerhelper();
-	ticktimerhandler p = tt_test_helper;
-	ticktimerhelper_register(p);
-	ticktimerhelper_emulate(42);	
-	stop_ticktimerhelper();
-}
+// void test_ticktimerhelper(void) {
+// 	start_ticktimerhelper();
+// 	ticktimerhandler p = tt_test_helper;
+// 	ticktimerhelper_register(p);
+// 	ticktimerhelper_emulate(42);	
+// 	stop_ticktimerhelper();
+// }
 
-void test_ticktimerhelper_deep(void) {
-	start_ticktimerhelper();
-	ticktimerhandler p = tt_test_deephelper;
-	ticktimerhelper_register(p);
-	ticktimerhelper_register(p);
-	ticktimerhelper_register(p);
-	ticktimerhelper_emulate(1);		
-	CU_ASSERT_EQUAL(count, 3);
-	stop_ticktimerhelper();
-}
+// void test_ticktimerhelper_deep(void) {
+// 	start_ticktimerhelper();
+// 	ticktimerhandler p = tt_test_deephelper;
+// 	ticktimerhelper_register(p);
+// 	ticktimerhelper_register(p);
+// 	ticktimerhelper_register(p);
+// 	ticktimerhelper_emulate(1);		
+// 	CU_ASSERT_EQUAL(count, 3);
+// 	stop_ticktimerhelper();
+// }
 
 static int suite_success_init(void) { return 0; }
 static int suite_success_clean(void) { return 0; }
@@ -123,8 +111,8 @@ static int suite_success_clean(void) { return 0; }
 static CU_TestInfo tests_success[] = {
   { "test_is_between_numbers", test_is_between_numbers },
   { "test_linked_list", test_linked_list },
-  { "test_ticktimerhelper", test_ticktimerhelper },
-  { "test_ticktimerhelper_deep", test_ticktimerhelper_deep },
+  // { "test_ticktimerhelper", test_ticktimerhelper },
+  // { "test_ticktimerhelper_deep", test_ticktimerhelper_deep },
 	CU_TEST_INFO_NULL
 };
 
