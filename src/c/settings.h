@@ -120,6 +120,7 @@ uint8_t settings_get_SwitchBackTimeout();
 bool settings_get_ForecastEnabled();
 CLOCK_FORMAT_SETTINGS settings_get_ClockFormatSettings();
 WEATHER_STATUS settings_get_WeatherStatus();
+void settings_set_WeatherStatus(WEATHER_STATUS);
 TIME_FONT settings_get_TimeFont();
 CLOCK_SECONDS settings_get_ClockShowSeconds();
 PEBBLE_SHAKE_ACTION settings_get_PebbleShakeAction();
