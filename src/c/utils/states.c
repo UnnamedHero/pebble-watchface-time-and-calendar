@@ -143,12 +143,8 @@ static void prv_set_init_state() {
         current_state = &no_forecast;
         break;
     case PSA_FORECAST:
-        settings_set_ClockShowSeconds_disabled();
-        if (settings_get_WeatherStatus() == WEATHER_OK) {
-            current_state = settings_get_ForecastEnabled() ? &clock_and_weather : &no_forecast;            
-        } else {
-            current_state = &no_forecast;
-        }
+        settings_set_ClockShowSeconds_disabled();        
+        current_state = can_update_weather() ? &clock_and_weather : &no_forecast;
         break;
     case PSA_SECONDS:
         settings_set_ClockShowSeconds_enabled();
