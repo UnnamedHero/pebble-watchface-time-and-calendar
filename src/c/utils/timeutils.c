@@ -2,7 +2,6 @@
 #include "include/timeutils.h"
 #include "../settings.h"
 #include "include/ticktimerhelper.h"
-#include "include/timelib.h"
 #include "../3rdparty/locale_framework/localize.h"
 
 int period_to_mins(PERIOD per);
