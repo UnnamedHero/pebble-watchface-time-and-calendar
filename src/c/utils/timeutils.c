@@ -2,6 +2,7 @@
 #include "include/timeutils.h"
 #include "../settings.h"
 #include "include/ticktimerhelper.h"
+#include "../modules/include/weather_m.h"
 #include "../3rdparty/locale_framework/localize.h"
 
 int period_to_mins(PERIOD per);
@@ -12,15 +13,16 @@ struct tm* get_Time() {
   return &currentTime;
 }
 
-static void prv_utils_handler(struct tm* tick_time) {
+static void prv_utils_handler(struct tm* tick_time) {  
   currentTime = *tick_time;
+  layer_mark_dirty(get_layer_weather());
 }
 
 void init_time_utils() {  
   time_t temp = time(NULL);
   currentTime = *(localtime(&temp));
-  ticktimerhelper_register(prv_utils_handler);
-}
+  ticktimerhelper_register_clock(prv_utils_handler);
+  }
 
 #if defined (PBL_PLATFORM_APLITE)
 
