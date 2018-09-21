@@ -45,7 +45,7 @@ Feel free to post any comments on GitHub page, report bugs, ask for features.
 
 Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
-Lastest beta version is [0.46.0](https://drive.google.com/open?id=1p0Y_BbVcsSCHyTZ2DFGzp7AqwSAY4MOP) 19/09/2018 (Drive application automatically open pbw file and show its content. To download pbw press down arrow on the top right corner.)
+Lastest beta version is [0.47.0](https://drive.google.com/open?id=1vrsj_jHCN_QYEvLaXZNSDW5gvTABpkH9) 21/09/2018 (Drive application automatically open pbw file and show its content. To download pbw press down arrow on the top right corner.)
 
 You can help me with my mortgage -> donate to [Paypal](https://www.paypal.me/eugenemikhaylov)
 
