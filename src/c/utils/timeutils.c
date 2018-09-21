@@ -2,43 +2,27 @@
 #include "include/timeutils.h"
 #include "../settings.h"
 #include "include/ticktimerhelper.h"
+#include "../modules/include/weather_m.h"
 #include "../3rdparty/locale_framework/localize.h"
 
 int period_to_mins(PERIOD per);
 
-static tm currentTime;
+static struct tm currentTime = {0};
 
-bool is_within_range(int current, int begin, int end) {
-  if (current == begin || current == end) {
-    return true;
-  }
-  bool is_ragged_interval = begin > end;
-  int max = begin >= end ? begin : end;
-  int min = begin >= end ? end : begin;  
-  bool is_between = current >= min && current <= max;
-  if (!is_ragged_interval) {
-    return is_between;
-  }
-  return current < begin ? false : !is_between;  
-}
-
-int get_mins(int hour, int min) {
-  return (hour * MINUTES_PER_HOUR) + min;
-}
-
-tm* get_Time() {
+struct tm* get_Time() {
   return &currentTime;
 }
 
-static void prv_utils_handler(tm* tick_time) {
+static void prv_utils_handler(struct tm* tick_time) {  
   currentTime = *tick_time;
+  layer_mark_dirty(get_layer_weather());
 }
 
 void init_time_utils() {  
   time_t temp = time(NULL);
   currentTime = *(localtime(&temp));
-  ticktimerhelper_register(prv_utils_handler);
-}
+  ticktimerhelper_register_clock(prv_utils_handler);
+  }
 
 #if defined (PBL_PLATFORM_APLITE)
 
@@ -60,9 +44,6 @@ bool is_quiet_time() {
 }
 
 void get_currect_time(DT_FORMAT dtf, char *buffer) {
-  // struct tm *tick_time;
-  // time_t temp = time(NULL);
-  // tick_time = localtime(&temp);
   char d_buffer[32];
   char format[12];
   switch (dtf) {
@@ -77,9 +58,6 @@ void get_currect_time(DT_FORMAT dtf, char *buffer) {
       strcat(format, ":%S");
       break;
     }
-  #if defined (DEBUG)
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "time string %s", format);
-  #endif
   strftime(d_buffer, sizeof(d_buffer), format, &currentTime);
   strcpy(buffer, d_buffer);
 }
@@ -87,9 +65,6 @@ void get_currect_time(DT_FORMAT dtf, char *buffer) {
 void get_current_date(char *format, char *out) {
   char* rus_months[] = { _("jan"), _("feb"), _("mar"), _("apr"), _("may"), _("jun"), _("jul"), _("aug"), _("sep"), _("oct"), _("nov"), _("dec") };
   const size_t out_size = 32;
-  // struct tm *tick_time;
-  // time_t temp = time(NULL);
-  // tick_time = localtime(&temp);
 
   const char* locale_str = i18n_get_system_locale();
   const bool locale_ru = strcmp(locale_str, "ru_RU") == 0;
@@ -104,8 +79,12 @@ void get_current_date(char *format, char *out) {
 bool is_time_to(uint32_t timestamp, PERIOD period) {
   int secs_to_wait = period_to_mins(period) * SECONDS_PER_MINUTE;
   uint32_t elapsed = timestamp + secs_to_wait;
-//  APP_LOG(APP_LOG_LEVEL_DEBUG, "elapsed %li <=> current %li", elapsed, (uint32_t)time(NULL));
-  return elapsed < (uint32_t)time(NULL);
+  struct tm _time = *get_Time();
+  uint32_t current = (uint32_t)mktime(&_time);
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "elapsed %li <=> current %li, delta: %li", elapsed, current, current - elapsed);
+  #endif
+  return elapsed < current;
 }
 
 int period_to_mins(PERIOD per) {

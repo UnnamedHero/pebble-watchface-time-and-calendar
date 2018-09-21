@@ -5,6 +5,21 @@ export default [
   },
   {
     type: 'text',
+    id: 'versionId',
+    defaultValue: '',
+  },
+  {
+    type: 'button',
+    id: 'updateCheckBtn',
+    defaultValue: 'Check for updates',
+  },
+  {
+    type: 'text',
+    id: 'updateId',
+    defaultValue: '',
+  },
+  {
+    type: 'text',
     defaultValue: "If you have any trouble with configuration, please read <a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki'>this article</a>",
   },
   {

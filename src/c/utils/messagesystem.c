@@ -42,18 +42,7 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
     ready_for_forecast(true);
   }
 
-  Tuple *w_error = dict_find(iter, MESSAGE_KEY_WeatherError);
-  if (w_error) {
-    #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather Error received.");      
-    #endif
-    populate_settings(iter, context);
-    uint8_t w_err = w_error->value->uint8;
-    if (w_err > 2) { 
-      return;
-    }
-  }
-
+  
   Tuple *weather_marker = dict_find(iter, MESSAGE_KEY_WeatherMarker);
   if (weather_marker) 
     {

@@ -18,7 +18,8 @@ static void prv_load_weather();
 static void prv_send_data_failed();
 static void prv_timer_timeout_handler(void*);
 static void prv_ticktimer(struct tm*);
-static void prv_ticktimer_clock(struct tm*);
+static void prv_send_weather_update_request();
+
 static AppTimer *s_timeout_timer;
 static const int timeout = 5000;
 static bool is_force_update;
@@ -37,9 +38,6 @@ typedef struct WeatherData {
 } __attribute__((__packed__)) WeatherData;
 
 static WeatherData weather;
-
-
-
 
 void prv_default_weather_data() {  
   if (weather.WeatherReady != 1) {
@@ -60,7 +58,6 @@ void init_weather_layer(GRect bounds) {
   prv_load_weather();
   layer_set_update_proc(s_this_layer, prv_populate_this_layer);
   ticktimerhelper_register(prv_ticktimer);
-  ticktimerhelper_register_clock(prv_ticktimer_clock);
 }
 
 void deinit_weather_layer() {
@@ -80,49 +77,42 @@ Layer* get_layer_weather() {
 
 static void prv_ticktimer(struct tm* unneeded) {
   update_weather(false);
-  layer_mark_dirty(s_this_layer);
-}
-
-static void prv_ticktimer_clock(struct tm* unneeded) {  
-  layer_mark_dirty(s_this_layer);
 }
 
 void update_weather(bool force) {
   is_force_update = force;
+
   #if defined (DEBUG)
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Update weather, force: %s, status: %i", force ? "true" : "false", settings_get_WeatherStatus());
   #endif
-  if (settings_get_WeatherStatus() == WEATHER_API_INVALID || \
-      settings_get_WeatherStatus() == WEATHER_API_NOT_SET) {
-    if (!force) {
-      #if defined (DEBUG) 
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "API key is bad, disable weather request");
-      #endif
-      return;
-    }
-  }
-  if (settings_get_WeatherStatus() == WEATHER_LOCATION_ID_INVALID) {
-    if (!force) {
-    #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "City ID invalid, disable weather request");
-    #endif      
+  
+  if (force) {
+    prv_send_weather_update_request();
     return;
-    }
   }
-  if (!force) {
-   if (!is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
-      #if defined (DEBUG) 
-          APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
-      #endif
+
+  if (!can_update_weather()) {
     return;
-    } 
   }
+
+  if (is_time_to(weather.WeatherTimeStamp, settings_get_WeatherUpdatePeriod())) {
+    prv_send_weather_update_request();
+    return;
+  } 
+
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "No weather update needed");
+  #endif  
+}
+
+void prv_send_weather_update_request() {
+  #if defined (DEBUG) 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Request weather");
+  #endif
+
   Tuplet data_to_send[] = {
     TupletInteger(MESSAGE_KEY_WeatherMarker, 1),
   };
-  #if defined (DEBUG) 
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Request weather %d", ARRAY_LENGTH(data_to_send));
-  #endif
   send_message(data_to_send, ARRAY_LENGTH(data_to_send), prv_send_data_failed);
 }
 
@@ -187,8 +177,6 @@ static void prv_populate_time_layer(Layer *me, GContext *ctx, GRect rect) {
   settings_get_ClockShowSeconds() == SEC_SHOWING ? \
     get_currect_time(DT_CLOCK_SECS, time_txt) :\
     get_currect_time(CLOCK_FORMAT, time_txt);
-    
-
 
   int time_font_voffset = settings_get_ClockShowSeconds() == SEC_SHOWING ? 0 : 6; //crunch for vertical alignment
   graphics_draw_text(ctx, time_txt, \
@@ -200,6 +188,37 @@ static void prv_populate_time_layer(Layer *me, GContext *ctx, GRect rect) {
 }
 
 void get_weather(DictionaryIterator *iter, void *context) {
+
+  Tuple *w_error = dict_find(iter, MESSAGE_KEY_WeatherError);
+  if (w_error) {
+    uint8_t w_err = w_error->value->uint8;
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather Error %d", w_err);
+    #endif
+    switch (w_err) {
+      case 0:
+        settings_set_WeatherStatus(WEATHER_OK);
+        break;
+      case 1:
+        settings_set_WeatherStatus(WEATHER_DISABLED);
+        break;
+      case 2:
+        settings_set_WeatherStatus(WEATHER_LOCATION_ERROR);
+        break;
+      case 3:
+        settings_set_WeatherStatus(WEATHER_API_NOT_SET);
+        break;
+      case 4:
+        settings_set_WeatherStatus(WEATHER_API_INVALID);
+        break;
+      case 5:
+        settings_set_WeatherStatus(WEATHER_LOCATION_ID_INVALID);
+        break;
+      case 6:
+        settings_set_WeatherStatus(WEATHER_UNKNOWN_ERROR);
+        break;
+    } 
+  }
 
   Tuple *w_temp = dict_find(iter, MESSAGE_KEY_WeatherTemperature);
   if (w_temp) {
@@ -217,9 +236,10 @@ void get_weather(DictionaryIterator *iter, void *context) {
     snprintf(weather.WeatherCondition, sizeof(weather.WeatherCondition), w_cond->value->cstring);
   }
 
-  Tuple *w_err = dict_find(iter, MESSAGE_KEY_WeatherError);
-  const int location_timeout = 60;
-  weather.WeatherTimeStamp = w_err ? time(NULL) - location_timeout : time(NULL);
+  Tuple *w_time_stamp = dict_find(iter, MESSAGE_KEY_WeatherTimeStamp);
+  if (w_time_stamp) {
+    weather.WeatherTimeStamp = w_time_stamp->value->uint32;
+  }
 
   Tuple *w_press = dict_find(iter, MESSAGE_KEY_WeatherPressure);
   if (w_press) {

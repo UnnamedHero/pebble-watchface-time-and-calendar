@@ -1,4 +1,4 @@
-export default function () {
+export default function (minified) {
   const clayConfig = this;
 
   const registerToggle = items => items.forEach((item) => {
@@ -87,7 +87,48 @@ export default function () {
       item.trigger('change');
     });
 
+  const compareVersions = (ver1, ver2) => {
+    if (ver1 === ver2) {
+      return 0;
+    }
+    const va1 = ver1.split('.');
+    const va2 = ver2.split('.');
+    const iter = (index) => {
+      if (index > 2) {
+        return 0;
+      }
+      const v1 = Number(va1[index]);
+      const v2 = Number(va2[index]);
+      if (v1 > v2) {
+        return -1;
+      }
+      if (v1 < v2) {
+        return 1;
+      }
+      return iter(index + 1);
+    };
+    return iter(0);
+  };
+
   clayConfig.on(clayConfig.EVENTS.AFTER_BUILD, () => {
+    clayConfig.getItemById('versionId').set(`v. ${clayConfig.meta.userData.version}`);
+    const updateElem = clayConfig.getItemById('updateId');
+    clayConfig.getItemById('updateCheckBtn').on('click', () => {
+      minified.$.request('get', 'https://raw.githubusercontent.com/UnnamedHero/pebble-watchface-time-and-calendar/master/package.json')
+        .then((resp) => {
+          const { version } = JSON.parse(resp);
+          const versionCompareRes = compareVersions(clayConfig.meta.userData.version, version);
+          if (versionCompareRes > 0) {
+            updateElem.set(`New version ${version} is available. Get it at <a href='https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs'>Google Drive</a> `);
+            return;
+          }
+          updateElem.set('You have actual version');
+        })
+        .error(() => {
+          updateElem.set('Sorry, can\'t tell anything about new version availability');
+        });
+    });
+
     registerToggle([
       ['VibrateConnected', 'VibrateConnectedType'],
       ['VibrateDisconnected', 'VibrateDisconnectedType'],

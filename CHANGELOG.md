@@ -1,7 +1,11 @@
 # Changelog
 
+#### 0.47.0 (beta)
+ - add ability to check for updates from watchface config page
+ - bugfixes!!!
+
 #### 0.46.0 (beta)
- - add add icon to show if invalid city id was specified
+ - add icon to show if invalid city id was specified
  - add ability to show steps count instead of current date.
  - bugfixes!
  

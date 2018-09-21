@@ -6,8 +6,10 @@ import customFunctions from './functions';
 import localizator from './localizator';
 import sendToPebble from './sender';
 import getWeather from './weather';
+import { version } from '../../package.json';
 
-const clay = new Clay(localizator(clayConfig), customFunctions, { autoHandleEvents: false });
+const clayOpts = { autoHandleEvents: false, userData: { version } };
+const clay = new Clay(localizator(clayConfig), customFunctions, clayOpts);
 
 Pebble.addEventListener('showConfiguration', () => { //eslint-disable-line
   Pebble.openURL(clay.generateUrl()); //eslint-disable-line
