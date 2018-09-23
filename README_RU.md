@@ -44,7 +44,7 @@ Watchwace mainly designed for Pebble classic watches (I have Pebble classic). Wr
 
 Текущие версии могут быть скачаны на [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
-Крайняя версия для тестирования [0.47.0](https://drive.google.com/open?id=1vrsj_jHCN_QYEvLaXZNSDW5gvTABpkH9) 19/09/2018 (Google Drive автоматически показывает содержимое файла. Чтобы скачать циферблат, нажмите на "стрелку вниз" в правом верхнем углу экрана.)
+Крайняя версия для тестирования [0.48.0](https://drive.google.com/open?id=1EZn4cMF0GjqAa44P5Fc41M1gppPdRHTo) 23/09/2018 (Google Drive автоматически показывает содержимое файла. Чтобы скачать циферблат, нажмите на "стрелку вниз" в правом верхнем углу экрана.)
 
 Можете помочь мне погасит ипотеку пораньше -> [Paypal](https://www.paypal.me/eugenemikhaylov)
 
