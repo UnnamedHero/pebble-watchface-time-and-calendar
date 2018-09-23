@@ -54,5 +54,8 @@ shot:
 
 shot_dio:
 	PEBBLE_PHONE="" pebble screenshot --emulator diorite	
-	
+
+phone-release: build-release
+	pebble install --phone ${PEBBLE_PHONE}
+
 .PHONY: test build

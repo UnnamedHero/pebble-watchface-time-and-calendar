@@ -105,7 +105,9 @@ static void prv_set_inverted_theme(GContext *ctx) {
 }
 
 static void prv_populate_this_layer(Layer *me, GContext *ctx) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: CALENDAR");  
+  #if defined (DEBUG)
+     APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: CALENDAR");
+  #endif   
   populate_calendar_values();
   GRect bounds = layer_get_bounds(s_this_layer);
 

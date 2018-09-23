@@ -217,7 +217,13 @@ void get_weather(DictionaryIterator *iter, void *context) {
       case 6:
         settings_set_WeatherStatus(WEATHER_UNKNOWN_ERROR);
         break;
-    } 
+      case 7:
+        settings_set_WeatherStatus(WEATHER_API_BANNED);
+        break;
+      default:
+        settings_set_WeatherStatus(WEATHER_UNKNOWN_ERROR);
+        break;
+    }
   }
 
   Tuple *w_temp = dict_find(iter, MESSAGE_KEY_WeatherTemperature);

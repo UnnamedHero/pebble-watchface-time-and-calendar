@@ -184,6 +184,10 @@ void update_forecast(bool force) {
     return;
   }
 
+  if (forecast.ForecastTime <= 1) {
+    prv_load_forecast();
+  }
+
   if (is_time_to(forecast.ForecastTime, P_3H)) {
     prv_send_forecast_update_request();
     return;
@@ -227,11 +231,17 @@ static void prv_timer_timeout_handler (void *context) {
 
 static void prv_save_forecast() {
   persist_write_data(FORECAST_KEY, &forecast, sizeof(forecast));
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "write forecast stamp %lu", forecast.ForecastTime);
+  #endif
 }
 
 static void prv_load_forecast() {
   prv_default_forecast_data();
   persist_read_data(FORECAST_KEY, &forecast, sizeof(forecast));
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "forecast stamp %lu", forecast.ForecastTime);
+  #endif
 }
 
 static void prv_ticktimer_f(struct tm* unneeded) {  
