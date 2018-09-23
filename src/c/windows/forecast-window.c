@@ -23,7 +23,10 @@ void deinit_forecast_window() {
 }
 
 static void prv_window_load(Window *window) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "forecast Window loading");
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "forecast Window loading");
+  #endif
+  
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
