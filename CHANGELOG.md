@@ -1,5 +1,9 @@
 # Changelog
 
+#### 0.48.0 (beta)
+ - increase GPS cache timeout to 1 hour
+ - bugfixes.
+
 #### 0.47.0 (beta)
  - add ability to check for updates from watchface config page
  - bugfixes!!!
