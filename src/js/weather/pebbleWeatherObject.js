@@ -1,7 +1,7 @@
 import dateFns from 'date-fns';
 import messageKeys from 'message_keys'; //eslint-disable-line
 import { conditions, getWindDirectionSymbol, messages } from './weatherAttributeTables';
-import errorHandler from './errorHandler';
+import errorHandler, { resetErrors } from './errorHandler';
 
 const sunStorageKey = 'SunTimes';
 const secondsPerMinute = 60;
@@ -20,9 +20,9 @@ const getConditionSymbol = (conditionCode, sunrise, sunset, time = new Date()) =
 
 const getTZOffest = () => new Date().getTimezoneOffset();
 
-const getLocalTimeFromUtc = utc => new Date(utc * 1000 + getTZOffest() * secondsPerMinute);
+const getLocalTimeFromUtc = utc => new Date(utc + getTZOffest() * secondsPerMinute);
 
-const getLocalTimeStamp = () => Math.round(new Date().getTime() / 1000);
+const getLocalTimeStamp = () => getLocalTimeFromUtc(Math.round(new Date().getTime() / 1000));
 
 const formatTime = (time, formatString) => {
   const localTime = getLocalTimeFromUtc(time);
@@ -40,13 +40,12 @@ const makeWeather = (weather) => {
   const sunriseUT = weather.sunrise * 1000;
   const sunsetUT = weather.sunset * 1000;
   saveSunTimes(sunriseUT, sunsetUT);
-
   return {
     WeatherMarker: true,
     WeatherTemperature: weather.temperature,
     WeatherCondition: getConditionSymbol(weather.condition, sunriseUT, sunsetUT),
     // timestamp from OWM is toooooo old
-    WeatherTimeStamp: getLocalTimeStamp(),
+    WeatherTimeStamp: getLocalTimeStamp,
     WeatherPressure: weather.pressure,
     WeatherWindSpeed: weather.windSpeed,
     WeatherWindDirection: getWindDirectionSymbol(weather.windDirection),
@@ -66,16 +65,16 @@ const makeForecast = (forecast) => {
       [messageKeys.ForecastTemperature + index]: item.temperature,
       // item.timeStamp + 60 means add one minute to timeStamp.
       // OWM return 59 min in a timestamp and it looks ugly.
-      [messageKeys.ForecastTimeStamp + index]: formatTime(item.timeStamp + 60, 'DD.MM HH:mm'),
+      [messageKeys.ForecastTimeStamp + index]: formatTime(timeStamp + (60 * 1000), 'DD.MM HH:mm'),
       [messageKeys.ForecastCondition + index]: conditionSymbol,
     };
     return { ...acc, ...forecastItem };
   }, {});
-
+  const forecastTime = getLocalTimeFromUtc(forecast[0].timeStamp * 1000);
   return {
     WeatherMarkerForecast: true,
     ForecastQty: forecast.length,
-    ForecastTime: getLocalTimeStamp(forecast[0].timeStamp),
+    ForecastTime: Math.round(dateFns.getTime(forecastTime) / 1000),
     ...forecastData,
     WeatherError: messages.weather_ok,
   };
@@ -90,8 +89,10 @@ export default (data, type) => {
   }
   switch (type) {
     case 'weather':
+      resetErrors();
       return makeWeather(data);
     case 'forecast':
+      resetErrors();
       return makeForecast(data);
     default:
       return makeError(data, type);
