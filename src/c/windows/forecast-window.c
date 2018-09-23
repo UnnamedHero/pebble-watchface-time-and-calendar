@@ -8,7 +8,10 @@ static Window *s_forecast_window;
 static void prv_populate_fc_layer(Layer *, GContext *);
 
 Window* get_forecast_window() {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Request forecast window");
+  #if defined (DEBUG)
+     APP_LOG(APP_LOG_LEVEL_DEBUG, "Request forecast window");
+  #endif
+ 
   if (!s_forecast_window) {
     init_forecast_window();
   }
@@ -58,7 +61,10 @@ void init_forecast_window() {
 }
 
 void ready_for_forecast(bool force) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Ready for forecast");
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Ready for forecast");
+  #endif
+  
   update_forecast(force);
 }
 
