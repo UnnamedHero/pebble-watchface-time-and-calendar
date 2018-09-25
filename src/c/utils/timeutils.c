@@ -5,9 +5,9 @@
 #include "../modules/include/weather_m.h"
 #include "../3rdparty/locale_framework/localize.h"
 
-int period_to_mins(PERIOD per);
-
 static struct tm currentTime = {0};
+
+static int get_period_seconds(PERIOD per);
 
 struct tm* get_Time() {
   return &currentTime;
@@ -77,7 +77,10 @@ void get_current_date(char *format, char *out) {
 }
 
 bool is_time_to(uint32_t timestamp, PERIOD period) {
-  int secs_to_wait = period_to_mins(period) * SECONDS_PER_MINUTE;
+  int secs_to_wait = get_period_seconds(period);
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "requested period %d for %d secs", period, secs_to_wait);
+  #endif
   uint32_t elapsed = timestamp + secs_to_wait;
   struct tm _time = *get_Time();
   uint32_t current = (uint32_t)mktime(&_time);
@@ -87,24 +90,19 @@ bool is_time_to(uint32_t timestamp, PERIOD period) {
   return elapsed < current;
 }
 
-int period_to_mins(PERIOD per) {
-  int mins = 0;
+static int get_period_seconds(PERIOD per) {  
   switch (per) {
     case P_15MIN:
-      mins = 15;
-      break;
+      return 900;
     case P_30MIN:
-      mins = 30;
-      break;
+      return 1800;
     case P_1H:
-      mins = 60;
-      break;
+      return 3600;
     case P_3H:
-      mins = 180;
-      break;
+      return 10800;
     case P_6H:
-      mins = 360;
-      break;
+      return 21600;
+    default:
+      return 1800;
   }
-  return mins;
 }
