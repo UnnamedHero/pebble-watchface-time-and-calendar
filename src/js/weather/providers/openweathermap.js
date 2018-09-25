@@ -1,4 +1,4 @@
-import getGeoPosition from '../../lib/geoposition';
+import getGeoPosition from '../../lib/geoposition-cached';
 
 const getLocation = async (options) => {
   const errors = {};
