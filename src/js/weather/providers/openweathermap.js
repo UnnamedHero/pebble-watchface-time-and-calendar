@@ -1,4 +1,5 @@
 import getGeoPosition from '../../lib/geoposition-cached';
+import getTzOffsetInSeconds from '../../lib/tz-offset';
 
 const getLocation = async (options) => {
   const errors = {};
@@ -80,11 +81,15 @@ const makeForecast = (weather, forecastType) => {
   const forecastItems = new Set(getForecastItems(forecastType));
   const forecast = weather.list
     .filter((_, index) => forecastItems.has(index))
-    .map(item => ({
-      timeStamp: item.dt,
-      temperature: Math.round(item.main.temp),
-      condition: item.weather[0].id,
-    }));
+    // TODO: remove debug
+    .map((item) => {
+      console.log(`dt: ${item.dt}, offset: ${getTzOffsetInSeconds()},  }`);
+      return {
+        timeStamp: item.dt,
+        temperature: Math.round(item.main.temp),
+        condition: item.weather[0].id,
+      };
+    });
   return forecast;
 };
 
