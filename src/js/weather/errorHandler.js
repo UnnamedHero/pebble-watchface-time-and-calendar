@@ -15,6 +15,7 @@ const maxAttempts = {
   [messages.unknown_error]: 5,
   [messages.api_key_invalid]: 1,
   [messages.api_key_not_set]: 1,
+  [messages.banned]: 1,
 };
 
 const zeroErrors = {
@@ -26,7 +27,8 @@ const zeroErrors = {
   },
 };
 
-const resetErrors = () => {
+export const resetErrors = () => {
+  // console.log('reset all errors');
   saveErrors(zeroErrors);
 };
 
@@ -53,7 +55,7 @@ export default (pebbleObject, type) => {
 
   const allErrors = loadErrors();
   const error = allErrors[WeatherError];
-  // console.log(`error: ${error}`);
+  // console.log(`curr error: ${JSON.stringify(error)}`);
 
   const currentAttempt = error.attempts ? error.attempts + 1 : 1;
   // console.log(`error ${JSON.stringify(error)},
