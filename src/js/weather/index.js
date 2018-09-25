@@ -27,11 +27,13 @@ export default async (options) => {
 
   let weatherResponse;
   try {
+    console.log('fetch weather');
     weatherResponse = await request(url);
   } catch (e) {
+    console.log(`errr fetch weather ${JSON.stringify(e)}`);
     return makePebbleWeatherObject({ WeatherError: messages.unknown_error }, options.type);
   }
-
+  console.log('weather fetched!');
   let weatherPOJO;
   try {
     weatherPOJO = JSON.parse(weatherResponse);
