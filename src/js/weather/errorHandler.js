@@ -41,7 +41,7 @@ const typeTable = {
   forecast: {
     marker: 'WeatherMarkerForecast',
     stamp: 'ForecastTime',
-    offsetInMinutes: 30,
+    offsetInMinutes: 15,
   },
 };
 
