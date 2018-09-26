@@ -83,11 +83,12 @@ bool is_time_to(uint32_t timestamp, PERIOD period) {
   #endif
   uint32_t elapsed = timestamp + secs_to_wait;
   struct tm _time = *get_Time();
-  uint32_t current = (uint32_t)mktime(&_time);
+  uint32_t gmtoffset = _time.tm_gmtoff;
+  uint32_t current = (uint32_t)mktime(&_time) + gmtoffset;
   #if defined (DEBUG)
     APP_LOG(APP_LOG_LEVEL_DEBUG, "elapsed %li <=> current %li, delta: %li", elapsed, current, current - elapsed);
   #endif
-  return elapsed < current;
+  return elapsed <= current;
 }
 
 static int get_period_seconds(PERIOD per) {  
