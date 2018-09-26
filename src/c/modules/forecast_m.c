@@ -33,15 +33,24 @@ static const int f_cond_height = 32;
 static const int f_item_temp_height = 15;
 
 static void prv_send_forecast_update_request();
-static bool is_force_update;
+static bool is_ticktimer_register = false;
+
+static void register_ticktime() {
+  if (!is_ticktimer_register) {
+     ticktimerhelper_register(prv_ticktimer_f);
+    is_ticktimer_register = true;
+  }
+}
 
 void init_forecast_layer(GRect rect) {
-  is_force_update = false;
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Init Forecast");
+  #endif
   s_forecast_layer = layer_create(rect);
   s_wfont_sm = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CLIMACONS_36));
   prv_load_forecast();
-  layer_set_update_proc(s_forecast_layer, prv_populate_forecast_layer);  
-  ticktimerhelper_register(prv_ticktimer_f);
+  layer_set_update_proc(s_forecast_layer, prv_populate_forecast_layer);
+  register_ticktime();
 }
 
 void prv_default_forecast_data() {
@@ -162,7 +171,7 @@ void forecast_update(DictionaryIterator *iter, void *context) {
 }
 
 void update_forecast(bool force) {
-  is_force_update = force;
+  register_ticktime();
 
   #if defined (DEBUG)
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Forecast update requested %s", force ? "true" : "false");
@@ -209,7 +218,7 @@ void prv_send_forecast_update_request() {
   
   Tuplet data_to_send[] = {
     TupletInteger(MESSAGE_KEY_WeatherMarkerForecast, 1),
-  };  
+  };
   send_message(data_to_send, ARRAY_LENGTH(data_to_send), prv_send_data_failed);
 }
 
@@ -222,11 +231,7 @@ static void prv_send_data_failed() {
 }
 
 static void prv_timer_timeout_handler (void *context) {
-  bool state = is_force_update;
-  if (state) {
-    is_force_update = false;
-  }
-  update_forecast(state);
+  update_forecast(true);
 }
 
 static void prv_save_forecast() {
@@ -246,5 +251,4 @@ static void prv_load_forecast() {
 
 static void prv_ticktimer_f(struct tm* unneeded) {  
   update_forecast(false);
-
 }
