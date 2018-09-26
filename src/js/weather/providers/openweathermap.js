@@ -1,6 +1,8 @@
 import getGeoPosition from '../../lib/geoposition-cached';
 import getTzOffsetInSeconds from '../../lib/tz-offset';
 
+const getLocalTimeStamp = () => Math.round(new Date().getTime() / 1000) - getTzOffsetInSeconds();
+
 const getLocation = async (options) => {
   const errors = {};
   if (options.locationType === 'cid') {
@@ -54,7 +56,7 @@ const makeWeather = weather => ({
   temperature: Math.round(weather.main.temp),
   condition: weather.weather[0].id,
   // desc: weather.weather[0].description,
-  timeStamp: weather.dt,
+  timeStamp: getLocalTimeStamp(),
   pressure: Math.round(weather.main.pressure * 0.75) - 14,
   windSpeed: weather.wind.speed,
   windDirection: weather.wind.deg,
@@ -81,15 +83,11 @@ const makeForecast = (weather, forecastType) => {
   const forecastItems = new Set(getForecastItems(forecastType));
   const forecast = weather.list
     .filter((_, index) => forecastItems.has(index))
-    // TODO: remove debug
-    .map((item) => {
-      console.log(`dt: ${item.dt}, offset: ${getTzOffsetInSeconds()},  }`);
-      return {
-        timeStamp: item.dt,
-        temperature: Math.round(item.main.temp),
-        condition: item.weather[0].id,
-      };
-    });
+    .map(item => ({
+      timeStamp: item.dt,
+      temperature: Math.round(item.main.temp),
+      condition: item.weather[0].id,
+    }));
   return forecast;
 };
 

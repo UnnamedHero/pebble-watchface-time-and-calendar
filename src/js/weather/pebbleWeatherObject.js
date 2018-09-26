@@ -6,7 +6,6 @@ import getTZOffestInSeconds from '../lib/tz-offset';
 
 const sunStorageKey = 'SunTimes';
 
-
 const isDayAt = (sunrise, sunset, time) => dateFns
   .isWithinRange(time, sunrise, sunset);
 
@@ -20,8 +19,6 @@ const getConditionSymbol = (conditionCode, sunrise, sunset, time = new Date()) =
 };
 
 const getLocalTimeFromUtc = utc => new Date(utc + getTZOffestInSeconds());
-
-const getLocalTimeStamp = () => Math.round(new Date().getTime() / 1000);
 
 const formatTime = (time, formatString) => {
   const localTime = getLocalTimeFromUtc(time);
@@ -39,13 +36,13 @@ const makeWeather = (weather) => {
   const sunriseUT = weather.sunrise * 1000;
   const sunsetUT = weather.sunset * 1000;
   saveSunTimes(sunriseUT, sunsetUT);
-  console.log(`local timestamp ${getLocalTimeStamp()}`);
+  // console.log(`local timestamp ${getLocalTimeStamp()}`);
   return {
     WeatherMarker: true,
     WeatherTemperature: weather.temperature,
     WeatherCondition: getConditionSymbol(weather.condition, sunriseUT, sunsetUT),
     // timestamp from OWM is toooooo old
-    WeatherTimeStamp: getLocalTimeStamp(),
+    WeatherTimeStamp: weather.timeStamp,
     WeatherPressure: weather.pressure,
     WeatherWindSpeed: weather.windSpeed,
     WeatherWindDirection: getWindDirectionSymbol(weather.windDirection),
@@ -70,7 +67,7 @@ const makeForecast = (forecast) => {
     };
     return { ...acc, ...forecastItem };
   }, {});
-  console.log(`fore stamp ${forecast[0].timeStamp}`);
+  // console.log(`fore stamp ${forecast[0].timeStamp}`);
   return {
     WeatherMarkerForecast: true,
     ForecastQty: forecast.length,
