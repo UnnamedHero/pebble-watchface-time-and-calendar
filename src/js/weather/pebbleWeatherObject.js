@@ -18,8 +18,6 @@ const getConditionSymbol = (conditionCode, sunrise, sunset, time = new Date()) =
   return symbol;
 };
 
-// const getLocalTimeFromUtc = utc => new Date(utc - getTZOffestInSeconds());
-
 const formatTime = (time, formatString) => dateFns.format(time, formatString);
 
 const saveSunTimes = (sunrise, sunset) => {
