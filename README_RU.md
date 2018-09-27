@@ -19,6 +19,8 @@
 [screen5]: https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/blob/gh-pages/screenshots/screenshot_20170923-121938.png
 
 ## Где скачать
+ВНИМАНИЕ! Если Вы зашли на эту страницу из настроек циферблата, то у Вас не получится ничего скачать. Откройте браузер на Вашем смартфоне, перейдите на сайт https://github.com, вбейте в строку поиска "pebble-watchface-time-and-calendar" и снова откажетесь здесь.
+
 Текущие версии могут быть скачаны на [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
 Наличие свежей версии можно проверить в настройках циферблата!

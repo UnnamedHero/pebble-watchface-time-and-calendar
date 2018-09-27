@@ -20,6 +20,8 @@ Welcome to a "Time-and-Calendar" watchface for Pebble smartwatch. Watch was was 
 [screen5]: https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/blob/gh-pages/screenshots/screenshot_20170923-121938.png
 
 ## Download
+Warining! If you are seeing this from watchapp config page - you cannot download any files from there. Open your browser in your smartphone, go to https://github.com , search for "pebble-watchface-time-and-calendar" and you will see this page and will be able to download files.
+
 Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
 You can check for updates is watchface settings page!
