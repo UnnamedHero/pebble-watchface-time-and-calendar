@@ -18,7 +18,7 @@ const getConditionSymbol = (conditionCode, sunrise, sunset, time = new Date()) =
   return symbol;
 };
 
-const getLocalTimeFromUtc = utc => new Date(utc + getTZOffestInSeconds());
+const getLocalTimeFromUtc = utc => new Date(utc - getTZOffestInSeconds());
 
 const formatTime = (time, formatString) => {
   const localTime = getLocalTimeFromUtc(time);
@@ -37,6 +37,9 @@ const makeWeather = (weather) => {
   const sunsetUT = weather.sunset * 1000;
   saveSunTimes(sunriseUT, sunsetUT);
   // console.log(`local timestamp ${getLocalTimeStamp()}`);
+  console.log(`sunrise ${weather.sunrise} sunset ${weather.sunset}`);
+  console.log(`new rise ${getLocalTimeFromUtc(weather.sunrise)}`);
+  console.log(`letters: ${formatTime(weather.sunrise, 'HH:mm')}`);
   return {
     WeatherMarker: true,
     WeatherTemperature: weather.temperature,
