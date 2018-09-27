@@ -4,6 +4,7 @@
   "description": "Another inplementation of functional watchface with time, calendar and weather",
   "version": "0.49.0",
   "license": "GPLv3",
+  "homepage": "https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/blob/master/README.md",
   "keywords": [
     "pebble watchface",
     "Time",
