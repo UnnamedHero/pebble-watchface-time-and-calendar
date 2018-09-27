@@ -19,7 +19,14 @@ Welcome to a "Time-and-Calendar" watchface for Pebble smartwatch. Watch was was 
 
 [screen5]: https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/blob/gh-pages/screenshots/screenshot_20170923-121938.png
 
+## Download
+Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
+You can check for updates is watchface settings page!
+
+Lastest beta version is [0.49.0](https://drive.google.com/open?id=1k07BigaBjtDrWnrreJ1GnNnls3SOfFGp) 26/09/2018 (Drive application automatically open pbw file and show its content. To download pbw press down arrow on the top right corner.)
+
+## Description
 Watchwace mainly designed for Pebble classic watches (I have Pebble classic). Written in C, configuration part in js.
 
 The code is licenced under GPLv3 license. 
@@ -42,12 +49,6 @@ Configurable with Clay for Pebble framework. It means - no external website is n
 Please, read [wiki](https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/wiki) for any help.
 
 Feel free to post any comments on GitHub page, report bugs, ask for features.
-
-Development versions can be downloaded from [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
-
-You can check for updates is watchface settings page!
-
-Lastest beta version is [0.49.0](https://drive.google.com/open?id=1k07BigaBjtDrWnrreJ1GnNnls3SOfFGp) 26/09/2018 (Drive application automatically open pbw file and show its content. To download pbw press down arrow on the top right corner.)
 
 You can help me with my mortgage -> donate to [Paypal](https://www.paypal.me/eugenemikhaylov)
 
