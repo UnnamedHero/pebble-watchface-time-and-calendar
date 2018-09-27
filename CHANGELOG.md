@@ -1,5 +1,10 @@
 # Changelog
 
+#### 0.50.0 (beta)
+ - fix sunrise and sunset times
+ - fix "shale several times" feature
+ - change new version checking in watchface settings
+
 #### 0.49.0 (beta)
  - use cached position if GPS failed
  - fix forecast and weather updates

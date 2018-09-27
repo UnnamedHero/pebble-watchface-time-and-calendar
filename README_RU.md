@@ -18,8 +18,15 @@
 
 [screen5]: https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/blob/gh-pages/screenshots/screenshot_20170923-121938.png
 
+## Где скачать
+Текущие версии могут быть скачаны на [google drive](https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs)
 
-Watchwace mainly designed for Pebble classic watches (I have Pebble classic). Written in C, configuration part in js.
+Наличие свежей версии можно проверить в настройках циферблата!
+
+Крайняя версия для тестирования [0.49.0](https://drive.google.com/open?id=1k07BigaBjtDrWnrreJ1GnNnls3SOfFGp) 26/09/2018 (Google Drive автоматически показывает содержимое файла. Чтобы скачать циферблат, нажмите на "стрелку вниз" в правом верхнем углу экрана.)
+
+## Описание
+
 Циферблат предназначен для клсиической версии Pebble, но будет работать и на других моделях часов. Правда, на моделях с круглым экраном это выглядит страшно. Циферблат написан с использованием языка программирования C, конфигурационная часть написана с использованием JavaScript.
 
 Код распространяется по лицензии GPLv3.
@@ -46,7 +53,7 @@ Watchwace mainly designed for Pebble classic watches (I have Pebble classic). Wr
 
 Наличие свежей версии можно проверить в настройках циферблата!
 
-Крайняя версия для тестирования [0.49.0](https://drive.google.com/open?id=1k07BigaBjtDrWnrreJ1GnNnls3SOfFGp) 26/09/2018 (Google Drive автоматически показывает содержимое файла. Чтобы скачать циферблат, нажмите на "стрелку вниз" в правом верхнем углу экрана.)
+Крайняя версия для тестирования [0.50.0](https://drive.google.com/open?id=1B8SUbY-PAH3il1LC1pXQXV-padXtqWkf) 27/09/2018 (Google Drive автоматически показывает содержимое файла. Чтобы скачать циферблат, нажмите на "стрелку вниз" в правом верхнем углу экрана.)
 
 Можете помочь мне погасит ипотеку пораньше -> [Paypal](https://www.paypal.me/eugenemikhaylov)
 

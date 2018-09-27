@@ -111,15 +111,17 @@ export default function (minified) {
   };
 
   clayConfig.on(clayConfig.EVENTS.AFTER_BUILD, () => {
-    clayConfig.getItemById('versionId').set(`v. ${clayConfig.meta.userData.version}`);
+    const currentVersion = `v. ${clayConfig.meta.userData.version}`;
+    clayConfig.getItemById('versionId').set(currentVersion);
     const updateElem = clayConfig.getItemById('updateId');
     clayConfig.getItemById('updateCheckBtn').on('click', () => {
+      updateElem.set('Checking...');
       minified.$.request('get', 'https://raw.githubusercontent.com/UnnamedHero/pebble-watchface-time-and-calendar/master/package.json')
         .then((resp) => {
           const { version } = JSON.parse(resp);
           const versionCompareRes = compareVersions(clayConfig.meta.userData.version, version);
           if (versionCompareRes > 0) {
-            updateElem.set(`New version ${version} is available. Get it at <a href='https://drive.google.com/open?id=0B9g5sjcPqSJfRXpMUFE3Y2c1RGs'>Google Drive</a> `);
+            updateElem.set(`New version ${version} is available. Get it here at <a href='https://github.com/UnnamedHero/pebble-watchface-time-and-calendar/blob/master/README.md'>project homepage</a> `);
             return;
           }
           updateElem.set('You have actual version');

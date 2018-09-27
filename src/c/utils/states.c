@@ -16,6 +16,7 @@ struct state {
 static AppTimer *s_timeout_timer;
 static void prv_timer_timeout_handler(void*);
 static void prv_timer_shake_handler(void*);
+static void prv_timer_second_shake_timeout(void*);
 
 static state *current_state;
 static state clock_and_weather, clock_and_weather_forecast, no_forecast, \
@@ -45,7 +46,8 @@ static void manage_shakes() {
       #endif
       shakes = 1;
       app_timer_cancel(s_timeout_timer);
-      app_timer_register(2500, prv_timer_shake_handler, NULL);
+      accel_tap_service_unsubscribe();
+      app_timer_register(800, prv_timer_shake_handler, NULL);
       break;
     case 1:
       #if defined (DEBUG)
@@ -163,9 +165,17 @@ static void prv_timer_timeout_handler(void *context) {
   current_state->handler();
 }
 
-static void prv_timer_shake_handler(void *context) {
+static void prv_timer_second_shake_timeout(void *context) {
   #if defined (DEBUG)
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Double shake timeout");
   #endif
   shakes = 0;
+}
+
+static void prv_timer_shake_handler(void *context) {
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Ok, shake again, baby!");
+  #endif
+  accel_tap_service_subscribe(accel_tap_handler);
+  app_timer_register(1500, prv_timer_second_shake_timeout, NULL);
 }
