@@ -1,4 +1,7 @@
 import getGeoPosition from '../../lib/geoposition-cached';
+import { getTZOffestInSeconds, getLocalTimeStampFromUtc } from '../../lib/time';
+
+const getLocalTimeStamp = () => Math.round(new Date().getTime() / 1000) - getTZOffestInSeconds();
 
 const getLocation = async (options) => {
   const errors = {};
@@ -53,13 +56,13 @@ const makeWeather = weather => ({
   temperature: Math.round(weather.main.temp),
   condition: weather.weather[0].id,
   // desc: weather.weather[0].description,
-  timeStamp: weather.dt,
+  timeStamp: getLocalTimeStamp(),
   pressure: Math.round(weather.main.pressure * 0.75) - 14,
   windSpeed: weather.wind.speed,
   windDirection: weather.wind.deg,
   humidity: weather.main.humidity,
-  sunrise: weather.sys.sunrise,
-  sunset: weather.sys.sunset,
+  sunrise: getLocalTimeStampFromUtc(weather.sys.sunrise * 1000),
+  sunset: getLocalTimeStampFromUtc(weather.sys.sunset * 1000),
 });
 
 

@@ -2,9 +2,9 @@ import dateFns from 'date-fns';
 import messageKeys from 'message_keys'; //eslint-disable-line
 import { conditions, getWindDirectionSymbol, messages } from './weatherAttributeTables';
 import errorHandler, { resetErrors } from './errorHandler';
+// import { getTZOffestInSeconds } from '../lib/time';
 
 const sunStorageKey = 'SunTimes';
-const secondsPerMinute = 60;
 
 const isDayAt = (sunrise, sunset, time) => dateFns
   .isWithinRange(time, sunrise, sunset);
@@ -18,16 +18,9 @@ const getConditionSymbol = (conditionCode, sunrise, sunset, time = new Date()) =
   return symbol;
 };
 
-const getTZOffest = () => new Date().getTimezoneOffset();
+// const getLocalTimeFromUtc = utc => new Date(utc - getTZOffestInSeconds());
 
-const getLocalTimeFromUtc = utc => new Date(utc + getTZOffest() * secondsPerMinute);
-
-const getLocalTimeStamp = () => getLocalTimeFromUtc(Math.round(new Date().getTime() / 1000));
-
-const formatTime = (time, formatString) => {
-  const localTime = getLocalTimeFromUtc(time);
-  return dateFns.format(localTime, formatString);
-};
+const formatTime = (time, formatString) => dateFns.format(time, formatString);
 
 const saveSunTimes = (sunrise, sunset) => {
   const item = { sunrise, sunset };
@@ -37,21 +30,20 @@ const saveSunTimes = (sunrise, sunset) => {
 const getSunTimes = () => JSON.parse(localStorage.getItem(sunStorageKey));
 
 const makeWeather = (weather) => {
-  const sunriseUT = weather.sunrise * 1000;
-  const sunsetUT = weather.sunset * 1000;
-  saveSunTimes(sunriseUT, sunsetUT);
+  const { sunrise, sunset } = weather;
+  saveSunTimes(sunrise, sunset);
   return {
     WeatherMarker: true,
     WeatherTemperature: weather.temperature,
-    WeatherCondition: getConditionSymbol(weather.condition, sunriseUT, sunsetUT),
+    WeatherCondition: getConditionSymbol(weather.condition, sunrise, sunset),
     // timestamp from OWM is toooooo old
-    WeatherTimeStamp: getLocalTimeStamp,
+    WeatherTimeStamp: weather.timeStamp,
     WeatherPressure: weather.pressure,
     WeatherWindSpeed: weather.windSpeed,
     WeatherWindDirection: getWindDirectionSymbol(weather.windDirection),
     WeatherHumidity: weather.humidity,
-    WeatherSunrise: formatTime(weather.sunrise, 'HH:mm'),
-    WeatherSunset: formatTime(weather.sunset, 'HH:mm'),
+    WeatherSunrise: formatTime(sunrise, 'HH:mm'),
+    WeatherSunset: formatTime(sunset, 'HH:mm'),
     WeatherError: messages.weather_ok,
   };
 };
@@ -63,18 +55,16 @@ const makeForecast = (forecast) => {
     const conditionSymbol = getConditionSymbol(item.condition, sunrise, sunset, timeStamp);
     const forecastItem = {
       [messageKeys.ForecastTemperature + index]: item.temperature,
-      // item.timeStamp + 60 means add one minute to timeStamp.
-      // OWM return 59 min in a timestamp and it looks ugly.
-      [messageKeys.ForecastTimeStamp + index]: formatTime(timeStamp + (60 * 1000), 'DD.MM HH:mm'),
+      [messageKeys.ForecastTimeStamp + index]: formatTime(timeStamp, 'DD.MM HH:mm'),
       [messageKeys.ForecastCondition + index]: conditionSymbol,
     };
     return { ...acc, ...forecastItem };
   }, {});
-  const forecastTime = getLocalTimeFromUtc(forecast[0].timeStamp * 1000);
+  // console.log(`fore stamp ${forecast[0].timeStamp}`);
   return {
     WeatherMarkerForecast: true,
     ForecastQty: forecast.length,
-    ForecastTime: Math.round(dateFns.getTime(forecastTime) / 1000),
+    ForecastTime: forecast[0].timeStamp,
     ...forecastData,
     WeatherError: messages.weather_ok,
   };

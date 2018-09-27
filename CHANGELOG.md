@@ -1,5 +1,10 @@
 # Changelog
 
+#### 0.49.0 (beta)
+ - use cached position if GPS failed
+ - fix forecast and weather updates
+ - small bugfixes.
+
 #### 0.48.0 (beta)
  - increase GPS cache timeout to 1 hour
  - bugfixes.

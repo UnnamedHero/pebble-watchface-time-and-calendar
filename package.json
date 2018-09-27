@@ -2,7 +2,7 @@
   "name": "time-and-calendar",
   "author": "Eugene 'EEM' Mikhaylov",
   "description": "Another inplementation of functional watchface with time, calendar and weather",
-  "version": "0.48.0",
+  "version": "0.49.0",
   "license": "GPLv3",
   "keywords": [
     "pebble watchface",
@@ -169,15 +169,15 @@
     }
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-transform-async-to-generator": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/cli": "^7.1.0",
+    "@babel/core": "^7.1.0",
+    "@babel/plugin-transform-async-to-generator": "^7.1.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
     "babel-eslint": "^9.0.0",
-    "eslint": "^5.5.0",
+    "eslint": "^5.6.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-babel": "^5.1.0",
+    "eslint-plugin-babel": "^5.2.0",
     "eslint-plugin-import": "^2.14.0"
   }
 }
