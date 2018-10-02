@@ -2,12 +2,12 @@ export default (url, type = 'GET') => new Promise((resolve) => {
   const xhr = new XMLHttpRequest();
   xhr.onload = () => resolve(xhr.responseText);
   xhr.onerror = () => {
-    // console.log(`error: ${JSON.stringify(xhr)}`);
+    console.log(`error: ${JSON.stringify(xhr)}`);
     resolve(JSON.stringify({ cod: '520' }));
   };
 
   xhr.ontimeout = () => {
-    // console.log('request timeout');
+    console.log('request timeout');
     resolve(JSON.stringify({ cod: '408' }));
   };
   xhr.open(type, url, true);
