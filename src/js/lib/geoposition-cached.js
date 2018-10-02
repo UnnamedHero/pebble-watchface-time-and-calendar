@@ -9,14 +9,22 @@ const loadLocation = () => JSON.parse(localStorage.getItem(locationStorageKey)) 
 export default async (options) => {
   try {
     const location = await getLocation(options);
-    saveLocation(location);
-    return location;
+    const loc = {
+      coords: {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      },
+    };
+    console.log(`save location ${JSON.stringify(loc)}`);
+    saveLocation(loc);
+    return loc;
   } catch (e) {
-    const location = loadLocation();
-    // console.log('use cached location');
-    if (Object.keys(location).length === 0) {
+    const loc = loadLocation();
+    console.log(`use cached location ${JSON.stringify(loc)}`);
+    if (Object.keys(loc).length === 0) {
+      console.log('oops, location cache is empty');
       throw new Error();
     }
-    return location;
+    return loc;
   }
 };
