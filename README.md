@@ -26,7 +26,7 @@ Development versions can be downloaded from [google drive](https://drive.google.
 
 You can check for updates is watchface settings page!
 
-Lastest beta version is [0.51.0](https://drive.google.com/open?id=1oI3QNjqiMafz-2C3CbWkZ_cv3L752GXi) 10/10/2018 (Drive application automatically open pbw file and show its content. To download pbw press down arrow on the top right corner.)
+Lastest beta version is [0.52.0](https://drive.google.com/open?id=1mewHdakIHMIHzo-sjdEE507ZTsgF7sO_) 10/10/2018 (Drive application automatically open pbw file and show its content. To download pbw press down arrow on the top right corner.)
 
 ## Description
 Watchwace mainly designed for Pebble classic watches (I have Pebble classic). Written in C, configuration part in js.
