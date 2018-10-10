@@ -63,3 +63,5 @@ Credits:
 - Digital Font: Digital-7 [official site](http://www.styleseven.com/php/get_product.php?product=Digital-7)
 - Climate icons: based on [Climacons font](https://github.com/christiannaths/Climacons-Font) and [Weather-icons](https://github.com/erikflowers/weather-icons)
 - Question Mark Icon by [Freepik](http://www.freepik.com) [from Flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+- Route icon by [Becris](https://www.iconfinder.com/becris)
+- Calorie(fire) icon [Laura Reen](https://www.iconfinder.com/laurareen)
