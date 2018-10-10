@@ -379,7 +379,7 @@ export default [
             value: 'hb_steps',
           },
           {
-            label: 'distance, km',
+            label: 'distance, meters',
             value: 'hb_dist_m',
           },
           {
