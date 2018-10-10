@@ -752,7 +752,7 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     settings.LeftHealthMetric = get_health_bar_type(left_h_bar);
   }
 
-  Tuple *right_h_bar = dict_find(iter, MESSAGE_KEY_HealthLeftBarType);
+  Tuple *right_h_bar = dict_find(iter, MESSAGE_KEY_HealthRightBarType);
   if (right_h_bar) {
     settings.RightHealthMetric = get_health_bar_type(right_h_bar);
   }
