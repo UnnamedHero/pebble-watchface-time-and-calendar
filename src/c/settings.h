@@ -82,6 +82,13 @@ typedef enum PebbleShakeAction {
   PSA_SECONDS,
 } PEBBLE_SHAKE_ACTION;
 
+typedef enum PebbleHealthMetric {
+  PHM_STEPS,
+  PHM_DISTANCE_KM,
+  PHM_DISTANCE_FEET,
+  PHM_CALORIES,
+} PEBBLE_HEALTH_METRIC;
+
 typedef void (*callback_ptr)();
 
 void init_settings(callback_ptr callback);
@@ -140,6 +147,12 @@ int settings_get_ShiftFontColor();
 bool is_time_to_shift();
 bool settings_get_HealthSteps();
 bool can_update_weather();
+
+#if defined(PBL_HEALTH)
+PEBBLE_HEALTH_METRIC settings_get_LeftHealthMetric();
+PEBBLE_HEALTH_METRIC settings_get_RightHealthMetric();
+#endif
+
 #if defined (PBL_PLATFORM_APLITE)
 bool settings_get_QT();
 uint8_t settings_get_QTHourBegin();

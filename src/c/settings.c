@@ -54,6 +54,8 @@ typedef struct ClaySettings {
   int ShiftFontColorHex;
   int ShiftBackgroundColorHex;
   uint8_t HealthSteps;
+  PEBBLE_HEALTH_METRIC LeftHealthMetric;
+  PEBBLE_HEALTH_METRIC RightHealthMetric;
 } __attribute__((__packed__)) ClaySettings;
 
 static ClaySettings settings;
@@ -90,7 +92,8 @@ static void prv_default_settings() {
   settings.CalendarBoldToday = 0;
   settings.CalendarInvertToday = 1;
   settings.SwitchBackTimeout = 15;
-  //settings.ClockShowSeconds = SEC_DISABLED;
+  settings.LeftHealthMetric = PHM_STEPS;
+  settings.RightHealthMetric = PHM_DISTANCE_KM;
 }
 
 static void increase_current_storage_version(int current) {
@@ -477,6 +480,37 @@ void settings_get_theme(GContext *ctx) {
   return is_time_to_shift() ? get_shifted_theme(ctx) : get_normal_theme(ctx);
 }
 
+#if defined(PBL_HEALTH)
+
+PEBBLE_HEALTH_METRIC settings_get_LeftHealthMetric() {
+  return settings.LeftHealthMetric;
+}
+
+PEBBLE_HEALTH_METRIC settings_get_RightHealthMetric() {
+  return settings.RightHealthMetric;
+}
+
+static PEBBLE_HEALTH_METRIC get_health_bar_type(Tuple *bar_type) {
+  if (strcmp(bar_type->value->cstring, "hb_steps") == 0) {
+    return PHM_STEPS;
+  }
+
+  if (strcmp(bar_type->value->cstring, "hb_dist_m") == 0) {
+    return PHM_DISTANCE_KM;
+  }
+
+  if (strcmp(bar_type->value->cstring, "hb_dist_f") == 0) {
+    return PHM_DISTANCE_FEET;
+  }
+
+  if (strcmp(bar_type->value->cstring, "hb_cal") == 0) {
+    return PHM_CALORIES;
+  }
+
+  return PHM_STEPS;
+}
+#endif
+
 void populate_settings(DictionaryIterator *iter, void *context) {
 
   Tuple *clock_format_t = dict_find(iter, MESSAGE_KEY_ClockFormat);
@@ -711,6 +745,19 @@ void populate_settings(DictionaryIterator *iter, void *context) {
   if (health_steps) {
     settings.HealthSteps = health_steps->value->uint8;
   }
+
+#if defined(PBL_HEALTH)
+  Tuple *left_h_bar = dict_find(iter, MESSAGE_KEY_HealthLeftBarType);
+  if (left_h_bar) {
+    settings.LeftHealthMetric = get_health_bar_type(left_h_bar);
+  }
+
+  Tuple *right_h_bar = dict_find(iter, MESSAGE_KEY_HealthLeftBarType);
+  if (right_h_bar) {
+    settings.RightHealthMetric = get_health_bar_type(right_h_bar);
+  }
+
+#endif
 
   save_settings();
 }
