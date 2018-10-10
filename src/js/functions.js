@@ -144,6 +144,8 @@ export default function (minified) {
       ['ColorTimeShift', 'ColorShiftTimeEnd'],
       ['ColorTimeShift', 'ShiftFontColor'],
       ['ColorTimeShift', 'ShiftBackgroundColor'],
+      ['HealthSteps', 'HealthLeftBarType'],
+      ['HealthSteps', 'HealthRightBarType'],
     ]);
     registerSelectToggles();
   });
