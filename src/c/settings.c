@@ -94,6 +94,7 @@ static void prv_default_settings() {
   settings.SwitchBackTimeout = 15;
   settings.LeftHealthMetric = PHM_STEPS;
   settings.RightHealthMetric = PHM_DISTANCE_M;
+  settings.WeatherStatus = WEATHER_DISABLED;
 }
 
 static void increase_current_storage_version(int current) {
@@ -395,11 +396,11 @@ bool settings_get_HealthSteps() {
 }
 
 bool can_update_weather() {
-   WEATHER_STATUS weather_status = settings_get_WeatherStatus();
+  WEATHER_STATUS weather_status = settings_get_WeatherStatus();
 
   if (weather_status == WEATHER_DISABLED) {
     #if defined (DEBUG)
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather is disabled.");      
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather is disabled: %d", weather_status);      
     #endif
     return false;
   }

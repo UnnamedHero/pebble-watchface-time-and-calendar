@@ -50,6 +50,12 @@ export default (pebbleObject, type) => {
   // console.log(`error: ${WeatherError}`);
   if (maxAttempts[WeatherError] === 1) {
     resetErrors();
+    if (!type) {
+      return {
+        ...pebbleObject,
+        WeatherMarker: true,
+      };
+    }
     return pebbleObject;
   }
 

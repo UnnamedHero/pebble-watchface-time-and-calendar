@@ -1,8 +1,15 @@
 # Changelog
 
+#### 0.52.0 (beta)
+ - bugfixes!!!
+
+#### 0.51.0 (beta)
+ - fix geoposition caching
+ - add option to show health metrics: steps, calories and distance
+
 #### 0.50.0 (beta)
  - fix sunrise and sunset times
- - fix "shale several times" feature
+ - fix "shake several times" feature
  - change new version checking in watchface settings
 
 #### 0.49.0 (beta)

@@ -4,12 +4,14 @@
 include .env
 
 babel:
+	rm -rf src/pkjs
 	npm run build
 
 build: babel
 	pebble build -- --enable-debug
 
 build-release: babel
+	rm -rf build
 	pebble build 
 
 test:	
