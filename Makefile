@@ -4,6 +4,7 @@
 include .env
 
 babel:
+	rm -rf src/pkjs
 	npm run build
 
 build: babel
