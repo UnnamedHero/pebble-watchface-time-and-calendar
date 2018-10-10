@@ -1,5 +1,8 @@
 # Changelog
 
+#### 0.52.0 (beta)
+ - bugfixes!!!
+
 #### 0.51.0 (beta)
  - fix geoposition caching
  - add option to show health metrics: steps, calories and distance
