@@ -78,5 +78,11 @@ export default {
   'Shift background color': 'Альтернативный цвет фона',
   'Shift font color': 'Альтернативный цвет шрифта',
   'Health configuration': 'Настройка показателей активного образа жизни',
-  'Show steps instead of current date': 'Показывать количество пройденных шагов вместо текущей даты',
+  'Show health activity instead of current date': 'Показывать вашу активность вместо текущей даты',
+  'Left bar item:': 'Показатель в левой части:',
+  'Right bar item:': 'Показатель в правой части:',
+  steps: 'шаги',
+  'distance, km': 'пройденное расстояние, км.',
+  'distance, feets': 'пройденное расстояние, футы',
+  calories: 'калории',
 };
