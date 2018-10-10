@@ -15,14 +15,14 @@ export default async (options) => {
         longitude: location.coords.longitude,
       },
     };
-    console.log(`save location ${JSON.stringify(loc)}`);
+    // console.log(`save location ${JSON.stringify(loc)}`);
     saveLocation(loc);
     return loc;
   } catch (e) {
     const loc = loadLocation();
-    console.log(`use cached location ${JSON.stringify(loc)}`);
+    // console.log(`use cached location ${JSON.stringify(loc)}`);
     if (Object.keys(loc).length === 0) {
-      console.log('oops, location cache is empty');
+      // console.log('oops, location cache is empty');
       throw new Error();
     }
     return loc;
