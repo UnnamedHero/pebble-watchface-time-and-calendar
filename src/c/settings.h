@@ -84,7 +84,7 @@ typedef enum PebbleShakeAction {
 
 typedef enum PebbleHealthMetric {
   PHM_STEPS,
-  PHM_DISTANCE_KM,
+  PHM_DISTANCE_M,
   PHM_DISTANCE_FEET,
   PHM_CALORIES,
 } PEBBLE_HEALTH_METRIC;

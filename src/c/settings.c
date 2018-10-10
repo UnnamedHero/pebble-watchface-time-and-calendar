@@ -93,7 +93,7 @@ static void prv_default_settings() {
   settings.CalendarInvertToday = 1;
   settings.SwitchBackTimeout = 15;
   settings.LeftHealthMetric = PHM_STEPS;
-  settings.RightHealthMetric = PHM_DISTANCE_KM;
+  settings.RightHealthMetric = PHM_DISTANCE_M;
 }
 
 static void increase_current_storage_version(int current) {
@@ -496,7 +496,7 @@ static PEBBLE_HEALTH_METRIC get_health_bar_type(Tuple *bar_type) {
   }
 
   if (strcmp(bar_type->value->cstring, "hb_dist_m") == 0) {
-    return PHM_DISTANCE_KM;
+    return PHM_DISTANCE_M;
   }
 
   if (strcmp(bar_type->value->cstring, "hb_dist_f") == 0) {
