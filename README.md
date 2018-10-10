@@ -26,7 +26,7 @@ Development versions can be downloaded from [google drive](https://drive.google.
 
 You can check for updates is watchface settings page!
 
-Lastest beta version is [0.50.0](https://drive.google.com/open?id=1B8SUbY-PAH3il1LC1pXQXV-padXtqWkf) 27/09/2018 (Drive application automatically open pbw file and show its content. To download pbw press down arrow on the top right corner.)
+Lastest beta version is [0.51.0](https://drive.google.com/open?id=1oI3QNjqiMafz-2C3CbWkZ_cv3L752GXi) 10/10/2018 (Drive application automatically open pbw file and show its content. To download pbw press down arrow on the top right corner.)
 
 ## Description
 Watchwace mainly designed for Pebble classic watches (I have Pebble classic). Written in C, configuration part in js.
@@ -63,3 +63,5 @@ Credits:
 - Digital Font: Digital-7 [official site](http://www.styleseven.com/php/get_product.php?product=Digital-7)
 - Climate icons: based on [Climacons font](https://github.com/christiannaths/Climacons-Font) and [Weather-icons](https://github.com/erikflowers/weather-icons)
 - Question Mark Icon by [Freepik](http://www.freepik.com) [from Flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+- Route icon by [Becris](https://www.iconfinder.com/becris)
+- Calorie(fire) icon [Laura Reen](https://www.iconfinder.com/laurareen)

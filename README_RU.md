@@ -55,7 +55,7 @@
 
 Наличие свежей версии можно проверить в настройках циферблата!
 
-Крайняя версия для тестирования [0.50.0](https://drive.google.com/open?id=1B8SUbY-PAH3il1LC1pXQXV-padXtqWkf) 27/09/2018 (Google Drive автоматически показывает содержимое файла. Чтобы скачать циферблат, нажмите на "стрелку вниз" в правом верхнем углу экрана.)
+Крайняя версия для тестирования [0.51.0](https://drive.google.com/open?id=1oI3QNjqiMafz-2C3CbWkZ_cv3L752GXi) 10/10/2018 (Google Drive автоматически показывает содержимое файла. Чтобы скачать циферблат, нажмите на "стрелку вниз" в правом верхнем углу экрана.)
 
 Можете помочь мне погасит ипотеку пораньше -> [Paypal](https://www.paypal.me/eugenemikhaylov)
 
@@ -68,3 +68,5 @@
 - Digital Font: Digital-7 [official site](http://www.styleseven.com/php/get_product.php?product=Digital-7)
 - Иконки для отображения погоды основаны на [Climacons font](https://github.com/christiannaths/Climacons-Font) и [Weather-icons](https://github.com/erikflowers/weather-icons)
 - Значёк вопроса [Freepik](http://www.freepik.com) [from Flaticon.com](https://www.flaticon.com/) лицензирован [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+- Значёк расстояния [Becris](https://www.iconfinder.com/becris)
+- Значёк калорий [Laura Reen](https://www.iconfinder.com/laurareen)
