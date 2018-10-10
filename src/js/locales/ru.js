@@ -82,7 +82,7 @@ export default {
   'Left bar item:': 'Показатель в левой части:',
   'Right bar item:': 'Показатель в правой части:',
   steps: 'шаги',
-  'distance, km': 'пройденное расстояние, км.',
+  'distance, meters': 'пройденное расстояние, метры',
   'distance, feets': 'пройденное расстояние, футы',
   calories: 'калории',
 };
