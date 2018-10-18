@@ -90,18 +90,18 @@ export default [
         options: [
           {
             label: 'Do nothing',
-            value: '0',
+            value: 0,
           },
           {
             label: 'Show forecast',
-            value: '1',
+            value: 1,
           },
           {
             label: 'Show seconds',
-            value: '2',
+            value: 2,
           },
         ],
-        defaultValue: '0',
+        defaultValue: 0,
       },
       {
         type: 'toggle',
@@ -344,6 +344,30 @@ export default [
         messageKey: 'HealthSteps',
         label: 'Show health activity instead of current date',
         defaultValue: false,
+      },
+      {
+        type: 'select',
+        id: 'HealthCustomAlgorithm',
+        messageKey: 'HealthCustomAlgorithm',
+        label: 'Algorithms to calculate distance and calories (read wiki for more details)',
+        options: [
+          {
+            label: 'Use native Pebble algorithms',
+            value: 0,
+          },
+          {
+            label: 'Use custom algorithms',
+            value: 1,
+          },
+        ],
+        defaultValue: 0,
+      },
+      {
+        type: 'input',
+        group: 'HealthCustomAlgorithm',
+        messageKey: 'HealthHeight',
+        label: 'Your height in cm',
+        defaultValue: '',
       },
       {
         type: 'select',

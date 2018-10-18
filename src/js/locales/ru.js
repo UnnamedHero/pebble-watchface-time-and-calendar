@@ -85,4 +85,8 @@ export default {
   'distance, meters': 'пройденное расстояние, метры',
   'distance, feets': 'пройденное расстояние, футы',
   calories: 'калории',
+  'Algorithms to calculate distance and calories (read wiki for more details)': 'Алгоритмы для вычисления расстояния и калорий (см. WIKI)',
+  'Use native Pebble algorithms': 'Алгоритмы Pebble',
+  'Use custom algorithms': 'Сторонние алгоритмы',
+  'Your height in cm': 'Ваш рост в см',
 };

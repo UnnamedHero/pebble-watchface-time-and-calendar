@@ -68,6 +68,19 @@ export default function (minified) {
         },
       },
     },
+    {
+      selectId: 'HealthCustomAlgorithm',
+      values: {
+        0: {
+          hideGroups: ['HealthCustomAlgorithm'],
+          showGroups: [],
+        },
+        1: {
+          hideGroups: [],
+          showGroups: ['HealthCustomAlgorithm'],
+        },
+      },
+    },
   ];
 
   const registerSelectToggles = () => toggleSelectTable
@@ -146,6 +159,8 @@ export default function (minified) {
       ['ColorTimeShift', 'ShiftBackgroundColor'],
       ['HealthSteps', 'HealthLeftBarType'],
       ['HealthSteps', 'HealthRightBarType'],
+      ['HealthSteps', 'HealthCustomAlgorithm'],
+      ['HealthSteps', 'HealthHeight'],
     ]);
     registerSelectToggles();
   });

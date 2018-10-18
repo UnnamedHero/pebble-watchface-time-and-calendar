@@ -47,11 +47,19 @@ static void prv_window_load(Window *window) {
 
   init_calendar_layer(calendar_bounds);
   init_weather_layer(weather_bounds);
+  init_health_layer(date_bounds);
+  init_date_layer(date_bounds);
   if (settings_get_HealthSteps()) {
-    init_health_layer(date_bounds);
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Health to show!");
+    #endif
+    // init_health_layer(date_bounds);
     layer_add_child(window_layer, get_layer_health());
   } else {
-    init_date_layer(date_bounds);
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Date to show!");
+    #endif
+    // init_date_layer(date_bounds);
     layer_add_child(window_layer, get_layer_date());
   }
   layer_add_child(window_layer, get_layer_bluetooth());
@@ -65,11 +73,8 @@ static void prv_window_load(Window *window) {
 static void prv_window_unload(Window *window) {
   deinit_bluetooth_layer();
   deinit_battery_layer();
-  if (settings_get_HealthSteps()) {
-    deinit_health_layer();
-  } else {
-    deinit_date_layer();
-  }  
+  deinit_health_layer();
+  deinit_date_layer();  
   deinit_calendar_layer();
   deinit_weather_layer();
 }
@@ -112,12 +117,15 @@ void simple_weather_update(DictionaryIterator *iter, void *context) {
 }
 
 void time_window_force_redraw() {
+  Layer *window_layer = window_get_root_layer(s_time_window);
   layer_mark_dirty(get_layer_bluetooth());
   layer_mark_dirty(get_layer_battery());
   if (settings_get_HealthSteps()) {
-    layer_mark_dirty(get_layer_health());
+    layer_remove_from_parent(get_layer_date());
+    layer_add_child(window_layer, get_layer_health());
   } else {
-    layer_mark_dirty(get_layer_date());
+    layer_remove_from_parent(get_layer_health());
+    layer_add_child(window_layer, get_layer_date());
   }
   layer_mark_dirty(get_layer_calendar());
   layer_mark_dirty(get_layer_weather());

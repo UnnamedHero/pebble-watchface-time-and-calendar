@@ -144,6 +144,8 @@ uint8_t settings_get_ColorShiftHourEnd();
 uint8_t settings_get_ColorShiftMinuteEnd();
 int settings_get_ShiftBackgroundColor();
 int settings_get_ShiftFontColor();
+bool settings_is_HealthCustomAlgoritm();
+int settings_get_HealhHeight();
 bool is_time_to_shift();
 bool settings_get_HealthSteps();
 bool can_update_weather();
