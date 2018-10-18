@@ -4,16 +4,14 @@
 #include "../settings.h"
 #include "../3rdparty/locale_framework/localize.h"
 
-static Layer *s_this_layer;
+static Layer *s_this_layer = NULL;
 static void prv_populate_this_layer(Layer *, GContext *);
 
 static int days[21];
 static char calendar_values[28][5];
-// static void prv_update_time();
 
 void init_calendar_layer(GRect rect) {
   s_this_layer = layer_create(rect);
-  // prv_update_time();
   layer_set_update_proc(s_this_layer, prv_populate_this_layer);
 
 }
@@ -23,11 +21,6 @@ void deinit_calendar_layer() {
     layer_destroy(s_this_layer);
   }
 }
-
-// static void prv_update_time() {
-//   // time_t temp = time(NULL);
-//   ct = get_Time();//localtime(&temp);
-// }
 
 Layer* get_layer_calendar() {
   return s_this_layer;
@@ -49,9 +42,8 @@ static void fill_dates() {
 
   time_t now, previous_week_start, filler;
   now = time(NULL);
-  // prv_update_time();
   int current_week_day = get_Time()->tm_wday;
-  struct tm *filler_t;//;, *now_test;
+  struct tm *filler_t;
   
   previous_week_start = now - (s_get_calendar_begin() + current_week_day) * SECONDS_PER_DAY;
   if (!settings_get_SundayFirst()) {
