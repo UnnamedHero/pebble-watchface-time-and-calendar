@@ -88,5 +88,6 @@ export default {
   'Algorithms to calculate distance and calories (read wiki for more details)': 'Алгоритмы для вычисления расстояния и калорий (см. WIKI)',
   'Use native Pebble algorithms': 'Алгоритмы Pebble',
   'Use custom algorithms': 'Сторонние алгоритмы',
-  'Your height in cm': 'Ваш рост в см',
+  'Your height in cm': 'Ваш рост в см.',
+  'Your weight in kg': 'Ваш вес в кг.',
 };
