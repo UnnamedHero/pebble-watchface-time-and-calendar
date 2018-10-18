@@ -370,6 +370,13 @@ export default [
         defaultValue: '',
       },
       {
+        type: 'input',
+        group: 'HealthCustomAlgorithm',
+        messageKey: 'HealthWeight',
+        label: 'Your weight in kg',
+        defaultValue: '',
+      },
+      {
         type: 'select',
         messageKey: 'HealthLeftBarType',
         label: 'Left bar item:',
