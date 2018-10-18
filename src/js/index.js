@@ -59,6 +59,7 @@ Pebble.addEventListener('webviewclosed', (e) => { //eslint-disable-line
       messageKeys.PebbleShakeAction,
       messageKeys.HealthCustomAlgorithm,
       messageKeys.HealthHeight,
+      messageKeys.HealthWeight,
     ],
   );
 

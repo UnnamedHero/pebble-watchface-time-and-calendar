@@ -161,6 +161,7 @@ export default function (minified) {
       ['HealthSteps', 'HealthRightBarType'],
       ['HealthSteps', 'HealthCustomAlgorithm'],
       ['HealthSteps', 'HealthHeight'],
+      ['HealthSteps', 'HealthWeight'],
     ]);
     registerSelectToggles();
   });

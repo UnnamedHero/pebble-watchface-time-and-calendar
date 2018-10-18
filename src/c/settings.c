@@ -58,6 +58,7 @@ typedef struct ClaySettings {
   PEBBLE_HEALTH_METRIC RightHealthMetric;
   uint8_t HealthCustomAlgorithm;
   int HealthHeight;
+  int HealthWeight;
 } __attribute__((__packed__)) ClaySettings;
 
 static ClaySettings settings;
@@ -401,8 +402,12 @@ bool settings_is_HealthCustomAlgoritm() {
   return get_bool(settings.HealthCustomAlgorithm);
 }
 
-int settings_get_HealhHeight() {
+int settings_get_HealthHeight() {
   return settings.HealthHeight;
+}
+
+int settings_get_HealthWeight() {
+  return settings.HealthWeight;
 }
 
 bool can_update_weather() {
@@ -777,6 +782,11 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     if (health_height) {
       settings.HealthHeight = health_height->value->int32;
     }
+
+  Tuple *health_weight = dict_find(iter, MESSAGE_KEY_HealthWeight);
+    if (health_weight) {
+      settings.HealthWeight = health_weight->value->int32;
+    }    
 #endif
 
 save_settings();
