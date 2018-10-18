@@ -56,6 +56,8 @@ typedef struct ClaySettings {
   uint8_t HealthSteps;
   PEBBLE_HEALTH_METRIC LeftHealthMetric;
   PEBBLE_HEALTH_METRIC RightHealthMetric;
+  uint8_t HealthCustomAlgorithm;
+  int HealthHeight;
 } __attribute__((__packed__)) ClaySettings;
 
 static ClaySettings settings;
@@ -395,6 +397,14 @@ bool settings_get_HealthSteps() {
   return get_bool(settings.HealthSteps);
 }
 
+bool settings_is_HealthCustomAlgoritm() {
+  return get_bool(settings.HealthCustomAlgorithm);
+}
+
+int settings_get_HealhHeight() {
+  return settings.HealthHeight;
+}
+
 bool can_update_weather() {
   WEATHER_STATUS weather_status = settings_get_WeatherStatus();
 
@@ -444,6 +454,7 @@ static void prv_load_settings() {
   prv_post_load_settings();
 }
 
+
 void save_settings() {
     persist_write_data(SETTINGS_KEY, &settings, sizeof(settings));
     save_settings_seconds();
@@ -454,6 +465,8 @@ void save_settings() {
 void save_settings_seconds() {
   persist_write_int(SETTINGS_SECONDS, (int)seconds_settings);
 }
+
+
 
 static void get_normal_theme(GContext *ctx) {
   graphics_context_set_fill_color(ctx, GColorFromHEX(settings.BackgroundColorHex));
@@ -758,9 +771,18 @@ void populate_settings(DictionaryIterator *iter, void *context) {
     settings.RightHealthMetric = get_health_bar_type(right_h_bar);
   }
 
+  Tuple *custom_health_algo = dict_find(iter, MESSAGE_KEY_HealthCustomAlgorithm);
+  if (custom_health_algo) {
+    settings.HealthCustomAlgorithm = custom_health_algo->value->uint8;
+  }
+
+  Tuple *health_height = dict_find(iter, MESSAGE_KEY_HealthHeight);
+    if (health_height) {
+      settings.HealthHeight = health_height->value->int32;
+    }
 #endif
 
-  save_settings();
+save_settings();
 }
 
 void init_settings(callback_ptr callback) {
