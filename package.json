@@ -104,6 +104,8 @@
       "HealthSteps",
       "HealthLeftBarType",
       "HealthRightBarType",
+      "HealthCustomAlgorithm",
+      "HealthHeight",
       "dummy"
     ],
     "resources": {
