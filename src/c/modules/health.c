@@ -1,18 +1,31 @@
 #include "include/health.h"
 #include "../settings.h"
 #include "../utils/include/timeutils.h"
+#include "../utils/include/timelib.h"
 #include "../utils/include/textutils.h"
 #include "../utils/include/distance.h"
+#include "../utils/include/calories.h"
 
 static Layer *s_this_layer = NULL;
 static void prv_populate_health_layer(Layer *, GContext *);
 static GFont statuses_font;
 
+typedef struct HEALTH_DATA {
+  int steps;
+  int distance;
+  int calories;
+}  __attribute__((__packed__)) HEALTH_DATA;
+
+HEALTH_DATA Health_Data = { 0, 0, 0 };
+
 #if defined(PBL_HEALTH)
 typedef int (*get_distance_ptr)();
-
 static int get_distance_pebble();
 static int get_distance_custom();
+
+typedef int (*get_calories_ptr)();
+static int get_calories_pebble();
+static int get_calories_custom();
 
 static int get_pebble_health_metric(HealthMetric metric);
 
@@ -26,7 +39,14 @@ static get_distance_ptr get_distance_method() {
   #if defined (DEBUG)
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Health: using native distance methods");
   #endif
-  return get_distance_pebble;
+  return get_distance_pebble;  
+}
+
+static get_calories_ptr get_calories_method() {
+  if (settings_is_HealthCustomAlgoritm()) {
+    return get_calories_custom;
+  }
+  return get_calories_pebble;
 }
 
 static int get_distance_pebble() {
@@ -35,12 +55,28 @@ static int get_distance_pebble() {
 }
 
 static int get_distance_custom() {
-  const int height = settings_get_HealhHeight();
-  HealthMetric pbl_metric = HealthMetricStepCount;
-  const int steps = get_pebble_health_metric(pbl_metric);
-  return calculateDistance(steps, height);
+  const int height = settings_get_HealthHeight();
+  return calculateDistance(Health_Data.steps, height);
 }
 
+static int get_calories_pebble() {
+  HealthMetric pbl_metric = HealthMetricActiveKCalories;
+  return get_pebble_health_metric(pbl_metric);
+}
+
+static int get_calories_custom() {
+  int weight = settings_get_HealthWeight();
+  struct tm *now = get_Time();
+  int minutes_of_a_day = get_mins(now->tm_hour, now->tm_min);
+  return calculateCalories(weight, Health_Data.distance, minutes_of_a_day);
+}
+
+static void populate_health_data() {
+  HealthMetric pbl_metric = HealthMetricStepCount;      
+  Health_Data.steps = get_pebble_health_metric(pbl_metric);
+  Health_Data.distance = get_distance_method()();
+  Health_Data.calories = get_calories_method()();
+}
 #endif
 
 // steps, distance m, distance f, calories
@@ -79,21 +115,18 @@ static int get_pebble_health_metric(HealthMetric metric) {
   }
 }
 
-static int get_health_metric(PEBBLE_HEALTH_METRIC metric) {
-  HealthMetric pbl_metric;
+static int get_health_metric(PEBBLE_HEALTH_METRIC metric) {  
   switch(metric) {
     case PHM_STEPS:
-      pbl_metric = HealthMetricStepCount;
-      return get_pebble_health_metric(pbl_metric);
+      return Health_Data.steps;
     case PHM_DISTANCE_M:
       // get_distance_ptr get_distace = get_distance_method();      
-      return get_distance_method()();
+      return Health_Data.distance;
     case PHM_DISTANCE_FEET:
       // get_distance_ptr get_distace = get_distance_method();      
-      return (int)((float)get_distance_method()() * 3.28F);
+      return (int)((float)Health_Data.distance * 3.28F);
     case PHM_CALORIES:      
-      pbl_metric = HealthMetricActiveKCalories;
-      return get_pebble_health_metric(pbl_metric);
+      return Health_Data.calories;
     default:
       return 0;
   }
@@ -126,6 +159,9 @@ static void render_bar(GContext *ctx, GRect bar_rect, PEBBLE_HEALTH_METRIC metri
 }
 
 static void prv_populate_health_layer(Layer *me, GContext *ctx) {
+#if defined(PBL_HEALTH)
+  populate_health_data();
+#endif
   #if defined (DEBUG) 
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Draw: HEALTH");
   #endif  
