@@ -106,6 +106,7 @@
       "HealthRightBarType",
       "HealthCustomAlgorithm",
       "HealthHeight",
+      "HealthWeight",
       "dummy"
     ],
     "resources": {
