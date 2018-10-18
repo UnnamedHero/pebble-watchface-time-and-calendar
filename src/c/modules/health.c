@@ -2,10 +2,46 @@
 #include "../settings.h"
 #include "../utils/include/timeutils.h"
 #include "../utils/include/textutils.h"
+#include "../utils/include/distance.h"
 
-static Layer *s_this_layer;
+static Layer *s_this_layer = NULL;
 static void prv_populate_health_layer(Layer *, GContext *);
 static GFont statuses_font;
+
+#if defined(PBL_HEALTH)
+typedef int (*get_distance_ptr)();
+
+static int get_distance_pebble();
+static int get_distance_custom();
+
+static int get_pebble_health_metric(HealthMetric metric);
+
+static get_distance_ptr get_distance_method() {
+  if (settings_is_HealthCustomAlgoritm()) {
+    #if defined (DEBUG)
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Health: using custom distance methods");
+    #endif
+    return get_distance_custom;
+  }
+  #if defined (DEBUG)
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Health: using native distance methods");
+  #endif
+  return get_distance_pebble;
+}
+
+static int get_distance_pebble() {
+  HealthMetric pbl_metric = HealthMetricWalkedDistanceMeters;
+  return get_pebble_health_metric(pbl_metric);
+}
+
+static int get_distance_custom() {
+  const int height = settings_get_HealhHeight();
+  HealthMetric pbl_metric = HealthMetricStepCount;
+  const int steps = get_pebble_health_metric(pbl_metric);
+  return calculateDistance(steps, height);
+}
+
+#endif
 
 // steps, distance m, distance f, calories
 static const char* icons[] = {"G", "H", "H", "I"};
@@ -50,11 +86,11 @@ static int get_health_metric(PEBBLE_HEALTH_METRIC metric) {
       pbl_metric = HealthMetricStepCount;
       return get_pebble_health_metric(pbl_metric);
     case PHM_DISTANCE_M:
-      pbl_metric = HealthMetricWalkedDistanceMeters;
-      return get_pebble_health_metric(pbl_metric);
+      // get_distance_ptr get_distace = get_distance_method();      
+      return get_distance_method()();
     case PHM_DISTANCE_FEET:
-      pbl_metric = HealthMetricWalkedDistanceMeters;
-      return (int)((float)get_pebble_health_metric(pbl_metric) * 3.28F);
+      // get_distance_ptr get_distace = get_distance_method();      
+      return (int)((float)get_distance_method()() * 3.28F);
     case PHM_CALORIES:      
       pbl_metric = HealthMetricActiveKCalories;
       return get_pebble_health_metric(pbl_metric);
