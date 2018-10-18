@@ -454,7 +454,6 @@ static void prv_load_settings() {
   prv_post_load_settings();
 }
 
-
 void save_settings() {
     persist_write_data(SETTINGS_KEY, &settings, sizeof(settings));
     save_settings_seconds();
@@ -465,8 +464,6 @@ void save_settings() {
 void save_settings_seconds() {
   persist_write_int(SETTINGS_SECONDS, (int)seconds_settings);
 }
-
-
 
 static void get_normal_theme(GContext *ctx) {
   graphics_context_set_fill_color(ctx, GColorFromHEX(settings.BackgroundColorHex));
