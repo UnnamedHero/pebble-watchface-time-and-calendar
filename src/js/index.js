@@ -30,6 +30,13 @@ Pebble.addEventListener('webviewclosed', (e) => { //eslint-disable-line
     }
   });
 
+  const fixIntFields = fields => fields.forEach((field) => {
+    const val = dict[field];
+    if (val) {
+      dict[field] = Number(val);
+    }
+  });
+
   fixTimeField(
     [
       messageKeys.QuietTimeBegin,
@@ -45,14 +52,15 @@ Pebble.addEventListener('webviewclosed', (e) => { //eslint-disable-line
   dict[messageKeys.DateFormat] = newDateFormat;
   dict[messageKeys.ConfigMarker] = true;
 
-  const switchBackTimeout = dict[messageKeys.SwitchBackTimeout];
-  dict[messageKeys.SwitchBackTimeout] = parseInt(switchBackTimeout, 10);
-
-  const switchBackTimeoutSeconds = dict[messageKeys.SwitchBackTimeoutSeconds];
-  dict[messageKeys.SwitchBackTimeoutSeconds] = parseInt(switchBackTimeoutSeconds, 10);
-
-  const pebbleShakeAction = dict[messageKeys.PebbleShakeAction];
-  dict[messageKeys.PebbleShakeAction] = parseInt(pebbleShakeAction, 10);
+  fixIntFields(
+    [
+      messageKeys.SwitchBackTimeout,
+      messageKeys.SwitchBackTimeoutSeconds,
+      messageKeys.PebbleShakeAction,
+      messageKeys.HealthCustomAlgorithm,
+      messageKeys.HealthHeight,
+    ],
+  );
 
   const helperSettings = {
     provider: dict[messageKeys.WeatherProvider],
